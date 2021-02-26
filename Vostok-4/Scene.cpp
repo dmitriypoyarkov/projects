@@ -72,7 +72,10 @@ void Scene::setActiveStarSystem(int id)
 
 void Scene::playerDestroyedEvent()
 {
+
 	Scene *activeScene = getActiveScene();
+	Camera *camera = activeScene->getActiveCamera();
+	camera->setObjectToFollow(nullptr);
 	for (auto bodyPtr = activeScene->bodies.begin(); bodyPtr != activeScene->bodies.end(); ++bodyPtr)
 	{
 		Body *body = *bodyPtr;
@@ -81,11 +84,14 @@ void Scene::playerDestroyedEvent()
 			((EnemyShip *)body)->player = nullptr;
 		}
 	}
+	gameOverEvent();
 }
 
 void Scene::playerSpawnedEvent(PlayerShip *player)
 {
 	Scene *activeScene = getActiveScene();
+	Camera *camera = activeScene->getActiveCamera();
+	camera->setObjectToFollow(player);
 	for (auto bodyPtr = activeScene->bodies.begin(); bodyPtr != activeScene->bodies.end(); ++bodyPtr)
 	{
 		Body *body = *bodyPtr;
@@ -98,8 +104,12 @@ void Scene::playerSpawnedEvent(PlayerShip *player)
 
 void Scene::enemyDestroyedEvent()
 {
+	
+
 	Scene *activeScene = getActiveScene();
 	activeScene->enemiesNumber -= 1;
+
+	std::cout << "Enemies remained: " + std::to_string(activeScene->enemiesNumber) << std::endl;
 
 	if (activeScene->isStage)
 		if (activeScene->enemiesNumber == 0)
@@ -118,6 +128,7 @@ void Scene::stageClearedEvent(Scene *stage)
 		((MiniPlanet *)(stage->associatedBody))->stageIsCleared = true;
 	Scene *starSystem = getSceneByID(getActiveStarSystemID());
 	starSystem->unclearedPlanetsNumber -= 1;
+	std::cout << "Stage cleared! Planets remained: " + std::to_string(starSystem->unclearedPlanetsNumber) << std::endl;
 	if (starSystem->unclearedPlanetsNumber <= 0)
 	{
 		starSystemClearedEvent();
@@ -132,6 +143,21 @@ void Scene::starSystemClearedEvent()
 void Scene::miniPlanetCreatedEvent()
 {
 	getSceneByID(activeStarSystemID)->unclearedPlanetsNumber += 1;
+}
+
+void Scene::gameOverEvent()
+{
+	std::cout << "Game Over!" << std::endl;
+	setActiveScene(activeStarSystemID);
+	Scene *activeScene = getActiveScene();
+	for (auto bodyPtr = activeScene->bodies.begin(); bodyPtr != activeScene->bodies.end(); ++bodyPtr)
+	{
+		Body *body = *bodyPtr;
+		if (typeid(*body) == typeid(MiniPlanet))
+		{
+			((MiniPlanet *)body)->stageIsCleared = false;
+		}
+	}
 }
 
 void Scene::setActiveCamera(Camera * newCamera)

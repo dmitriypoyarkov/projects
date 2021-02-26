@@ -27,9 +27,12 @@ MiniPlanet::MiniPlanet(Vector2 centerObject, float orbit, float speed, int type)
 
 void MiniPlanet::onClick()
 {
-	std::cout << "Click!" << std::endl;
-	if (stageIsCleared) return;
-
+	if (stageIsCleared)
+	{
+		std::cout << "Stage already cleared!" << std::endl;
+		return;
+	}
+	std::cout << "Loading stage..." << std::endl;
 	Scene* stage = SceneConstructor::constructStage(stageSeed);
 	stage->associatedBody = this;
 	Scene::setActiveScene(stage->id);
@@ -42,7 +45,6 @@ void MiniPlanet::setupSpriteList()
 
 void MiniPlanet::update()
 {
-
 	Vector2 radiusVector = position - centerObject;
 	Vector2 tangent = Vector2(radiusVector.y, -radiusVector.x);
 	Vector2 tangentNorm = tangent.normalized();

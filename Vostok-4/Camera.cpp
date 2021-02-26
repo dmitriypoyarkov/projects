@@ -25,7 +25,8 @@ void Camera::setupSpriteList()
 
 void Camera::update()
 {
-	position = *destination;
+	if (destination != nullptr)
+		position = *destination;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Add))
 		scale /= 1.05f;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Subtract))
@@ -33,3 +34,11 @@ void Camera::update()
 }
 
 void Camera::updateSprite() {}
+
+void Camera::setObjectToFollow(Body * objectToFollow)
+{
+	if (objectToFollow == nullptr)
+		destination = nullptr;
+	else
+		destination = &(objectToFollow->position);
+}

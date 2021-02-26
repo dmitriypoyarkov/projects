@@ -31,18 +31,18 @@ void Orbit::drawOrbit(Spaceship * ship)
 		virtualUpdate(planet, &virtualPosition, &virtualVelocity);
 		if ((virtualPosition - planet->position).magnitude() <= planet->getSurfaceRadius())
 		{
-			std::cout << "WARNING: hard landing!" << std::endl;
+			//std::cout << "WARNING: hard landing!" << std::endl;
 			break;
 		}
 		if ((virtualPosition - planet->position).magnitude() >= 2 * planet->getSurfaceRadius())
 		{
-			std::cout << "WARNING: open space!" << std::endl;
+			//std::cout << "WARNING: open space!" << std::endl;
 			break;
 		}
 	}
 }
 
-const int Orbit::orbitLength = 200;
+const int Orbit::orbitLength = 150;
 const sf::Color Orbit::safeColor = sf::Color::Blue;
 const sf::Color Orbit::crashColor = sf::Color::Red;
 const sf::Color Orbit::flyAwayColor = sf::Color::Magenta;

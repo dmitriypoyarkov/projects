@@ -19,8 +19,9 @@ Scene * SceneConstructor::constructStage(int seed)
 	//EnemyShip* enemy1 = new EnemyShip(earth, earth->getSurfaceRadius() + 300);
 	/*EnemyShip* enemy2 = new EnemyShip(earth, earth->getSurfaceRadius() + 500);
 	EnemyShip* enemy3 = new EnemyShip(earth, earth->getSurfaceRadius() + 700);*/
+	Camera* camera = new Camera();
 	Spaceship* ship = new PlayerShip(earth, earth->getSurfaceRadius() + 100);
-	Camera* camera = new Camera(ship);
+
 //	enemy->setScale(0.06f);
 	//enemy1->setScale(0.06f);
 	//enemy2->setScale(0.06f);
@@ -39,10 +40,12 @@ Scene * SceneConstructor::constructStarSystem(int seed)
 	Scene::setActiveScene(starSystem->id);
 	MiniPlanet* sun = new MiniPlanet(screenCenter, 0.0f, 0.0f);
 	sun->getSprite()->setColor(sf::Color::Yellow);
-	MiniPlanet* earth = new MiniPlanet(sun->position, 600.0f, 5);
+	MiniPlanet* earth = new MiniPlanet(sun->position, 600.0f, 5.0f);
+	MiniPlanet* mars = new MiniPlanet(sun->position, 1100.0f, 7.0f);
 
 	Camera *camera = new Camera(sun);
 	
+	std::cout << "Star System initiated. There are " + std::to_string(starSystem->unclearedPlanetsNumber) + " planets in it." << std::endl;
 	return starSystem;
 }
 
@@ -50,7 +53,7 @@ void SceneConstructor::spawnEnemies(int seed, StagePlanet *planet)
 {
 	srand(seed);
 	int enemiesNumber = rand() % MAX_ENEMIES + MIN_ENEMIES;
-	std::cout << enemiesNumber << std::endl;
+	std::cout << "There are " + std::to_string(enemiesNumber) + " enemies on this stage." << std::endl;
 	for (int i = 0; i < enemiesNumber; i++)
 	{
 		EnemyShip *enemy = new EnemyShip(planet, 

@@ -17,7 +17,7 @@ Bullet::Bullet(Vector2 position, float rotation, Vector2 initVelocity, Body *par
 void Bullet::onCollision(Body *other)
 {
 	if (other != parent)
-		health -= 1;
+		health = 0;
 }
 
 void Bullet::setupSpriteList()

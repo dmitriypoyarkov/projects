@@ -27,6 +27,7 @@ public:
 	static void stageClearedEvent(Scene *stage);
 	static void starSystemClearedEvent();
 	static void miniPlanetCreatedEvent();
+	static void gameOverEvent();
 	void setActiveCamera(Camera* newCamera);
 	Camera* getActiveCamera() const;
 	friend bool operator== (const Scene &left, const Scene &right);

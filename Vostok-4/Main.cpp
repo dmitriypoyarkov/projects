@@ -133,8 +133,7 @@ void runGame()
 	//sf::RenderWindow window(sf::VideoMode(Scene::SCREEN_WIDTH, Scene::SCREEN_HEIGHT), "Space!");
 	//window.setActive();
 	Scene::window->setFramerateLimit(60);
-	Scene *star = SceneConstructor::constructStarSystem(1);
-	Scene *stage = SceneConstructor::constructStage(1);
+	Scene *star = SceneConstructor::constructStarSystem(5);
 
 	sf::Event event;
 

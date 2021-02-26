@@ -5,6 +5,7 @@ EnemyShip::EnemyShip(StagePlanet *planet, const float orbit, const float angle, 
 {
 	player = nullptr;
 	Scene::enemySpawnedEvent();
+	dir = clockwise ? 1 : -1;
 }
 
 EnemyShip::~EnemyShip()

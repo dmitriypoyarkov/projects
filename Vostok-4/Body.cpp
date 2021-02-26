@@ -31,7 +31,7 @@ Body::Body()
 	position = Vector2(0, 0);
 	velocity = Vector2(0, 0);
 	rotation = 0.0f;
-	health = 1;
+	health = 2;
 	instantForce = Vector2(0, 0);
 	instantTorque = 0.0f;
 	scale = 1.0f;
@@ -97,6 +97,8 @@ void Body::onCollision(Body * other)
 	if (typeid(*other) == typeid(Bullet) && ((Bullet *)other)->parent == this) return;
 
 	health -= 1;
+	std::string type = typeid(*this).name();
+	std::cout << type + " got 1 damage" << std::endl;
 }
 
 int Body::getLayer() const

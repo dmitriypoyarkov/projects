@@ -4,6 +4,8 @@
 
 class EnemyShip : public Spaceship
 {
+private:
+	int dir;
 public:
 	EnemyShip(StagePlanet *planet, const float orbit, const float angle = 0, const bool clockwise = true);
 	~EnemyShip() override;

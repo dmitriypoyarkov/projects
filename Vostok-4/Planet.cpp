@@ -8,6 +8,8 @@ Planet::Planet(int type)
 	isDynamic = false;
 }
 
+void Planet::onCollision(Body * other) {}
+
 float Planet::getSurfaceRadius() const
 {
 	sf::FloatRect rectangle = sprite.getLocalBounds();

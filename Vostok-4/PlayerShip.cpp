@@ -48,4 +48,16 @@ void PlayerShip::update()
 			drawOrbits = !drawOrbits;
 		}
 	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::K))
+	{
+		float curTime = getTime();
+		if (curTime - lastControl >= controlDelay)
+		{
+			std::cout << "Auto-win invoked" << std::endl;
+			lastControl = curTime;
+			Scene *activeScene = Scene::getActiveScene();
+			if (activeScene->isStage)
+				Scene::stageClearedEvent(activeScene);
+		}
+	}
 }

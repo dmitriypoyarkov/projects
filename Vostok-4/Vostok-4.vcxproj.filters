@@ -99,4 +99,33 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\Planet-mini.png">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="resources\Rocket.png">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="resources\Ship.png">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="resources\test.bmp">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="resources\Bullet.png">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="resources\Cosmos.bmp">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="resources\Cosmos.png">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="resources\Flame.png">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="resources\Planet.png">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+  </ItemGroup>
 </Project>

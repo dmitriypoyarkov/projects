@@ -188,6 +188,17 @@
     <ClInclude Include="StagePlanet.h" />
     <ClInclude Include="Vector2.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\Bullet.png" />
+    <Image Include="resources\Cosmos.bmp" />
+    <Image Include="resources\Cosmos.png" />
+    <Image Include="resources\Flame.png" />
+    <Image Include="resources\Planet-mini.png" />
+    <Image Include="resources\Planet.png" />
+    <Image Include="resources\Rocket.png" />
+    <Image Include="resources\Ship.png" />
+    <Image Include="resources\test.bmp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

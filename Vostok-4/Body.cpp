@@ -173,5 +173,5 @@ const float Body::maxSpeed = 100;
 const float Body::gravityConst = 100.0f;
 const float Body::airResistanceForce = 0.01f;
 const float Body::degToRad = 0.0174533f;
-const std::string Body::RES_PATH = "A:\\CPP\\resources\\";
+const std::string Body::RES_PATH = "resources\\";
 const int Body::WORLD_LIMIT = 40000;

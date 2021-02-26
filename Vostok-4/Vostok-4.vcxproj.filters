@@ -54,6 +54,9 @@
     <ClCompile Include="StagePlanet.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="Orbit.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene.h">
@@ -90,6 +93,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="StagePlanet.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Orbit.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

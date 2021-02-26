@@ -2,7 +2,7 @@
 #include "Body.h"
 #include "Scene.h"
 #include "SceneConstructor.h"
-std::string RES_PATH = "A:\\images\\resources\\";
+#include "Orbit.h"
 
 void destroyScene(int id)
 {
@@ -106,6 +106,12 @@ void processGraphics(sf::RenderWindow* window)
 
 		body->updateSprite();
 		window->draw(*(body->getSprite()));
+
+		if (typeid(*body) == typeid(PlayerShip))
+		{
+			if (((PlayerShip *)body)->drawOrbits == true)
+				Orbit::drawOrbit(((Spaceship *)body));
+		}
 	}
 	Camera* camera = activeScene->getActiveCamera();
 	if (camera)

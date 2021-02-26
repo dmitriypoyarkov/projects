@@ -6,16 +6,18 @@ Spaceship::Spaceship()
 	setupSprite();
 	isDynamic = true;
 	lastShot = 0.0f;
+	drawOrbits = false;
 }
 
-Spaceship::Spaceship(StagePlanet* planet, const float orbit) : Spaceship()
+Spaceship::Spaceship(StagePlanet* planet, const float orbit, const float angle, const bool clockwise) : Spaceship()
 {
-	position = planet->position - Vector2(0, orbit);
+	position = planet->position - Vector2(orbit * sin(angle), orbit * cos(angle));
 	this->planet = planet;
 	isDynamic = true;
 	Vector2 radius = position - planet->position;
 	Vector2 tangent = getOrbitTangent();
-	velocity = tangent * planet->getFirstCosmic(orbit);
+	int dir = clockwise ? 1 : -1;
+	velocity = tangent * planet->getFirstCosmic(orbit) * (float)dir;
 }
 
 Spaceship::~Spaceship()
@@ -53,7 +55,8 @@ void Spaceship::tryShoot()
 	}
 }
 
-const float Spaceship::reloadTime = 1.0f;
+
+const float Spaceship::reloadTime = 0.3f;
 const float Spaceship::gunForce = 100.0f;
 const float Spaceship::engineTorque = 0.1f;
 const float Spaceship::engineForce = 0.05f;

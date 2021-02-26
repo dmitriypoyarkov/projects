@@ -9,6 +9,8 @@ StagePlanet::StagePlanet(Vector2 position, int type) : StagePlanet()
 	this->position = position;
 }
 
+void StagePlanet::update() {}
+
 void StagePlanet::setupSpriteList()
 {
 	spriteList[0] = RES_PATH + "Planet.png";

@@ -1,7 +1,7 @@
 #include "EnemyShip.h"
 #include <iostream>
 #include "Scene.h"
-EnemyShip::EnemyShip(StagePlanet *planet, const float orbit) : Spaceship(planet, orbit)
+EnemyShip::EnemyShip(StagePlanet *planet, const float orbit, const float angle, const bool clockwise) : Spaceship(planet, orbit, angle, clockwise)
 {
 	player = nullptr;
 	Scene::enemySpawnedEvent();
@@ -18,7 +18,6 @@ void EnemyShip::update()
 
 	rotation = Vector2::AngleDeg(Vector2(1,0), getOrbitTangent());
 
-	std::cout << sprite.getRotation() << std::endl;
 	if (player == nullptr) return;
 
 	Vector2 playerVector = player->position - position;

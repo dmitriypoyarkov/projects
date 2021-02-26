@@ -1,4 +1,5 @@
 #include "SceneConstructor.h"
+#include <iostream>
 #include "EnemyShip.h"
 #include "MiniPlanet.h"
 
@@ -13,13 +14,14 @@ Scene * SceneConstructor::constructStage(int seed)
 	StagePlanet* earth = new StagePlanet(screenCenter);
 
 	earth->setScale(1.0f);
-	EnemyShip* enemy = new EnemyShip(earth, earth->getSurfaceRadius() + 300);
+	spawnEnemies(seed, earth);
+	//EnemyShip* enemy = new EnemyShip(earth, earth->getSurfaceRadius() + 300);
 	//EnemyShip* enemy1 = new EnemyShip(earth, earth->getSurfaceRadius() + 300);
 	/*EnemyShip* enemy2 = new EnemyShip(earth, earth->getSurfaceRadius() + 500);
 	EnemyShip* enemy3 = new EnemyShip(earth, earth->getSurfaceRadius() + 700);*/
 	Spaceship* ship = new PlayerShip(earth, earth->getSurfaceRadius() + 100);
 	Camera* camera = new Camera(ship);
-	enemy->setScale(0.06f);
+//	enemy->setScale(0.06f);
 	//enemy1->setScale(0.06f);
 	//enemy2->setScale(0.06f);
 	//enemy3->setScale(0.06f);
@@ -36,10 +38,29 @@ Scene * SceneConstructor::constructStarSystem(int seed)
 		Scene::setActiveStarSystem(starSystem->id);
 	Scene::setActiveScene(starSystem->id);
 	MiniPlanet* sun = new MiniPlanet(screenCenter, 0.0f, 0.0f);
-	sun->getSprite()->setColor(sf::Color::Red);
+	sun->getSprite()->setColor(sf::Color::Yellow);
 	MiniPlanet* earth = new MiniPlanet(sun->position, 600.0f, 5);
 
 	Camera *camera = new Camera(sun);
 	
 	return starSystem;
 }
+
+void SceneConstructor::spawnEnemies(int seed, StagePlanet *planet)
+{
+	srand(seed);
+	int enemiesNumber = rand() % MAX_ENEMIES + MIN_ENEMIES;
+	std::cout << enemiesNumber << std::endl;
+	for (int i = 0; i < enemiesNumber; i++)
+	{
+		EnemyShip *enemy = new EnemyShip(planet, 
+			planet->getSurfaceRadius() + MIN_ORBIT + rand() % MAX_ORBIT,
+			rand() % 10 * 0.628f, rand() % 2);
+		enemy->setScale(0.06f);
+	}
+}
+
+const int SceneConstructor::MIN_ENEMIES = 2;
+const int SceneConstructor::MAX_ENEMIES = 3;
+const int SceneConstructor::MIN_ORBIT = 80;
+const int SceneConstructor::MAX_ORBIT = 500;

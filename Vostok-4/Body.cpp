@@ -78,6 +78,7 @@ void Body::travel()
 
 void Body::update()
 {
+
 	if (health <= 0)
 		isDestroyed = true;
 	if (position.x + position.y >= WORLD_LIMIT)
@@ -133,6 +134,11 @@ Vector2 Body::getMovingDirection() const
 	return Vector2(cos(degToRad*rotation), sin(degToRad*rotation));
 }
 
+Vector2 Body::getVelocity() const
+{
+	return velocity;
+}
+
 void Body::addForce(const Vector2 force)
 {
 	instantForce += force;
@@ -160,9 +166,10 @@ float Body::getTime()
 	return clock.getElapsedTime().asSeconds();
 }
 
+const float Body::controlDelay = 0.2f;
 const float Body::maxSpeed = 100;
 const float Body::gravityConst = 100.0f;
 const float Body::airResistanceForce = 0.01f;
 const float Body::degToRad = 0.0174533f;
-const std::string Body::RES_PATH = "A:\\images\\resources\\";
+const std::string Body::RES_PATH = "A:\\CPP\\resources\\";
 const int Body::WORLD_LIMIT = 40000;

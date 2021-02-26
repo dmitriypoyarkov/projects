@@ -42,6 +42,7 @@ public:
 	sf::Sprite *getSprite();
 	float getColliderSize();
 	Vector2 getMovingDirection() const;
+	Vector2 getVelocity() const;
 
 	void addForce(const Vector2 force);
 	void addTorque(const float torque);
@@ -61,4 +62,5 @@ public:
 	static const float airResistanceForce;
 	static const std::string RES_PATH;
 	static const int WORLD_LIMIT;
+	static const float controlDelay;
 };

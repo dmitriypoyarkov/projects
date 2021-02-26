@@ -6,16 +6,18 @@
 class Spaceship : public Body
 {
 protected:
-	StagePlanet* planet;
+	float lastControl;
 	void tryShoot();
 public:
+	StagePlanet* planet;
 	Spaceship();
-	Spaceship(StagePlanet* planet, const float orbit);
+	Spaceship(StagePlanet* planet, const float orbit, const float angle = 0, const bool clockwise = true);
 	virtual ~Spaceship();
 	void setupSpriteList() override;
 	void update() override;
 	Vector2 getOrbitTangent() const;
 	float lastShot;
+	bool drawOrbits;
 
 	static const float reloadTime;
 	static const float gunForce;

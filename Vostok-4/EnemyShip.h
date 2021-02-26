@@ -5,7 +5,7 @@
 class EnemyShip : public Spaceship
 {
 public:
-	EnemyShip(StagePlanet *planet, const float orbit);
+	EnemyShip(StagePlanet *planet, const float orbit, const float angle = 0, const bool clockwise = true);
 	~EnemyShip() override;
 	void update() override;
 	PlayerShip *player;

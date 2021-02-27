@@ -1,5 +1,6 @@
 #include "Spaceship.h"
 #include "Bullet.h"
+#include "Trash.h"
 
 Spaceship::Spaceship()
 {
@@ -22,6 +23,12 @@ Spaceship::Spaceship(StagePlanet* planet, const float orbit, const float angle, 
 
 Spaceship::~Spaceship()
 {
+	
+}
+
+void Spaceship::onDestroy()
+{
+	produceTrash();
 }
 
 void Spaceship::setupSpriteList()
@@ -32,10 +39,7 @@ void Spaceship::setupSpriteList()
 void Spaceship::update()
 {
 	Body::update();
-	Vector2 radius = planet->position - position;
-	Vector2 normal = radius.normalized();
-	if (radius.magnitude() != 0)
-		addForce(normal * planet->mass * gravityConst / pow(radius.magnitude(), 2));
+	attractTo(planet);
 	addTorque(getAirRotationResistance());
 }
 
@@ -43,6 +47,13 @@ Vector2 Spaceship::getOrbitTangent() const
 {
 	Vector2 radius = planet->position - position;
 	return Vector2(radius.y, -radius.x).normalized();
+}
+
+void Spaceship::produceTrash()
+{
+	int trashNumber = rand() % 2 + 2;
+	for (int i = 0; i < trashNumber; i++)
+		new Trash(this);
 }
 
 void Spaceship::tryShoot()

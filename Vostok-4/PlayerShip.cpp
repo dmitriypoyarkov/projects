@@ -15,6 +15,12 @@ PlayerShip::PlayerShip(StagePlanet *planet, const float orbit) : Spaceship(plane
 
 PlayerShip::~PlayerShip()
 {
+	
+}
+
+void PlayerShip::onDestroy()
+{
+	Spaceship::onDestroy();
 	Scene::playerDestroyedEvent();
 }
 
@@ -61,3 +67,5 @@ void PlayerShip::update()
 		}
 	}
 }
+
+

@@ -9,10 +9,15 @@ private:
 	Camera* activeCamera;
 	static int activeSceneID;
 	static int activeStarSystemID;
+
+	int getNextSceneID();
+	static int getNextID();
+	static bool sceneWasRemoved;
 public:
-	static std::vector<Scene*> scenes;
+	static std::list<Scene*> scenes;
 	Scene(Body *associatedBody = nullptr);
 	~Scene();
+	void onDestroy();
 	static void destroy(Body *body);
 	static void setActiveScene(int id);
 	static int getActiveSceneID();
@@ -26,8 +31,11 @@ public:
 	static void enemySpawnedEvent();
 	static void stageClearedEvent(Scene *stage);
 	static void starSystemClearedEvent();
+	static void stageEscapedEvent(Scene *stage);
 	static void miniPlanetCreatedEvent();
 	static void gameOverEvent();
+	static void destroyScene(Scene *scene);
+	static bool sceneWasRemovedCheck();
 	void setActiveCamera(Camera* newCamera);
 	Camera* getActiveCamera() const;
 	friend bool operator== (const Scene &left, const Scene &right);
@@ -40,6 +48,7 @@ public:
 	int unclearedPlanetsNumber;
 	bool isStage;
 	bool isCleared;
+	bool isDestroyed;
 	std::list<Body*> bodies;
 
 	static sf::RenderWindow *window;

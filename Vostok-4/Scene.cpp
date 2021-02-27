@@ -7,31 +7,55 @@ int Scene::activeSceneID = -1;
 int Scene::activeStarSystemID = -1;
 const int Scene::SCREEN_HEIGHT = 800;
 const int Scene::SCREEN_WIDTH = 1200;
-std::vector<Scene*> Scene::scenes;
+bool Scene::sceneWasRemoved;
+std::list<Scene*> Scene::scenes;
 sf::RenderWindow* Scene::window = nullptr;
+
+int Scene::getNextSceneID()
+{
+	static int sceneid = -1;
+	sceneid += 1;
+	return sceneid;
+}
+
+int Scene::getNextID()
+{
+	static int id = -1;
+	id += 1;
+	return id;
+}
 
 Scene::Scene(Body *associatedBody)
 {
-	id = scenes.size();
+	id = getNextID();
 	this->associatedBody = associatedBody;
 	scenes.push_back(this);
 	if (activeSceneID < 0)
 		setActiveScene(id);
-	int enemiesNumber = 0;
-	int unclearedPlanetsNumber = 0;
-	bool isStage = false;
-	bool isCleared = false;
+	enemiesNumber = 0;
+	unclearedPlanetsNumber = 0;
+	isStage = false;
+	isCleared = false;
+	sceneWasRemoved = false;
 	activeCamera = nullptr;
 }
 
 Scene::~Scene()
 {
-	bodies.clear();
-	std::remove(scenes.begin(), scenes.end(), this);
+	while (bodies.size() > 0)
+	{
+		bodies.erase(bodies.begin());
+	}
+	Scene::scenes.remove(this);
 }
+
+void Scene::onDestroy() {}
 
 void Scene::destroy(Body * destroyedBody)
 {
+	destroyedBody->onDestroy();
+	getActiveScene()->bodies.remove(destroyedBody);
+	delete destroyedBody;
 }
 
 void Scene::setActiveScene(int id)
@@ -51,8 +75,12 @@ Scene* Scene::getSceneByID(int id)
 		std::cout << "Can't get scene by id < 0" << std::endl;
 		exit(1);
 	}
-	return scenes[id];
-	//return scenes[0];
+	for (Scene *scene : scenes)
+		if (scene->id == id)
+			return scene;
+
+	std::cout << "No such scene!" << std::endl;
+	return nullptr;
 }
 
 Scene* Scene::getActiveScene()
@@ -72,7 +100,6 @@ void Scene::setActiveStarSystem(int id)
 
 void Scene::playerDestroyedEvent()
 {
-
 	Scene *activeScene = getActiveScene();
 	Camera *camera = activeScene->getActiveCamera();
 	camera->setObjectToFollow(nullptr);
@@ -104,9 +131,8 @@ void Scene::playerSpawnedEvent(PlayerShip *player)
 
 void Scene::enemyDestroyedEvent()
 {
-	
-
 	Scene *activeScene = getActiveScene();
+	if (activeScene == nullptr) return;
 	activeScene->enemiesNumber -= 1;
 
 	std::cout << "Enemies remained: " + std::to_string(activeScene->enemiesNumber) << std::endl;
@@ -123,9 +149,10 @@ void Scene::enemySpawnedEvent()
 
 void Scene::stageClearedEvent(Scene *stage)
 {
-	setActiveScene(activeStarSystemID);
 	if (stage->associatedBody)
 		((MiniPlanet *)(stage->associatedBody))->stageIsCleared = true;
+	stage->isDestroyed = true;
+	setActiveScene(activeStarSystemID);
 	Scene *starSystem = getSceneByID(getActiveStarSystemID());
 	starSystem->unclearedPlanetsNumber -= 1;
 	std::cout << "Stage cleared! Planets remained: " + std::to_string(starSystem->unclearedPlanetsNumber) << std::endl;
@@ -140,6 +167,11 @@ void Scene::starSystemClearedEvent()
 	std::cout << "Star System is cleared! Congratulations!" << std::endl;
 }
 
+void Scene::stageEscapedEvent(Scene *stage)
+{
+	delete stage;
+}
+
 void Scene::miniPlanetCreatedEvent()
 {
 	getSceneByID(activeStarSystemID)->unclearedPlanetsNumber += 1;
@@ -148,6 +180,7 @@ void Scene::miniPlanetCreatedEvent()
 void Scene::gameOverEvent()
 {
 	std::cout << "Game Over!" << std::endl;
+	getActiveScene()->isDestroyed = true;
 	setActiveScene(activeStarSystemID);
 	Scene *activeScene = getActiveScene();
 	for (auto bodyPtr = activeScene->bodies.begin(); bodyPtr != activeScene->bodies.end(); ++bodyPtr)
@@ -155,9 +188,26 @@ void Scene::gameOverEvent()
 		Body *body = *bodyPtr;
 		if (typeid(*body) == typeid(MiniPlanet))
 		{
-			((MiniPlanet *)body)->stageIsCleared = false;
+			if (((MiniPlanet *)body)->stageIsCleared == true)
+			{
+				((MiniPlanet *)body)->stageIsCleared = false;
+				activeScene->unclearedPlanetsNumber += 1;
+			}
 		}
 	}
+}
+
+void Scene::destroyScene(Scene *scene)
+{
+	scenes.remove(scene);
+	delete scene;
+}
+
+bool Scene::sceneWasRemovedCheck()
+{
+	bool initValue = sceneWasRemoved;
+	sceneWasRemoved = false;
+	return initValue;
 }
 
 void Scene::setActiveCamera(Camera * newCamera)
@@ -173,7 +223,7 @@ Camera * Scene::getActiveCamera() const
 int Scene::AddBody(Body* newBody)
 {
 	bodies.push_back(newBody);
-	int bodyID =  (int)bodies.size() - 1;
+	int bodyID = getNextSceneID();
 
 	return bodyID;
 }

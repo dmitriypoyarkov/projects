@@ -17,6 +17,20 @@ float Body::getAirRotationResistance()
 		return 0.0f;
 }
 
+void Body::attractTo(Body *bplanet)
+{
+	if (bplanet == nullptr)
+	{
+		std::cout << "Object has no planet!" << std::endl;
+		return;
+	}
+	StagePlanet *planet = (StagePlanet *)bplanet;
+	Vector2 radius = planet->position - position;
+	Vector2 normal = radius.normalized();
+	if (radius.magnitude() != 0)
+		addForce(normal * planet->mass * gravityConst / pow(radius.magnitude(), 2));
+}
+
 void Body::loadSprite(std::string spritePath)
 {
 	if (!texture.loadFromFile(spritePath))
@@ -52,6 +66,8 @@ Body::Body(Vector2 position) : Body()
 
 Body::~Body() {}
 
+void Body::onDestroy() {}
+
 void Body::setupSprite()
 {
 	setupSpriteList();
@@ -64,11 +80,6 @@ void Body::setupSprite()
 
 	colliderSize = spriteSize.magnitude() / (float)sqrt(2);
 }
-
-//void Body::setupSpriteList() 
-//{
-//	spriteList[0] = "";
-//}
 
 void Body::travel()
 {
@@ -99,6 +110,11 @@ void Body::onCollision(Body * other)
 	health -= 1;
 	std::string type = typeid(*this).name();
 	std::cout << type + " got 1 damage" << std::endl;
+}
+
+int Body::getSceneID() const
+{
+	return sceneID;
 }
 
 int Body::getLayer() const

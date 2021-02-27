@@ -10,6 +10,11 @@ EnemyShip::EnemyShip(StagePlanet *planet, const float orbit, const float angle, 
 
 EnemyShip::~EnemyShip()
 {
+}
+
+void EnemyShip::onDestroy()
+{
+	Spaceship::onDestroy();
 	Scene::enemyDestroyedEvent();
 }
 

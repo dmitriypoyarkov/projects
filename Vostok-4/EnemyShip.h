@@ -9,6 +9,7 @@ private:
 public:
 	EnemyShip(StagePlanet *planet, const float orbit, const float angle = 0, const bool clockwise = true);
 	~EnemyShip() override;
+	void onDestroy() override;
 	void update() override;
 	PlayerShip *player;
 

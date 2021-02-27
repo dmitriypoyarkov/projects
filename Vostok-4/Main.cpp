@@ -29,36 +29,44 @@ void detectCollision(Body *body, Scene *activeScene)
 		float distance = (other->position - body->position).magnitude();
 		if (distance <= (other->getColliderSize() + body->getColliderSize()) / 2)
 		{
+
 			body->onCollision(other);
 		}
 	}
 }
-
-void eraseDestroyed(std::list<Body *> *bodies)
+template <typename T>
+void eraseDestroyed(std::list<T *> *items)
 {
 	bool increment = true;
 	bool begin = true;
-	auto bodyPtr = bodies->begin();
-	Body *body;
+	auto itemPtr = items->begin();
+	T *item;
 	while (true)
 	{
 		if (begin)
 			begin = false;
 		else if (increment)
-			++bodyPtr;
+			++itemPtr;
 		else
 			increment = true;
-		if (bodyPtr == bodies->end())
+		if (itemPtr == items->end())
 			break;
-		body = *bodyPtr;
+		item = *itemPtr;
 
-		if (body->isDestroyed)
+		if (item->isDestroyed)
 		{
-			delete body;
-			bodyPtr = bodies->erase(bodyPtr);
+			if (typeid(*item) == typeid(Scene))
+			{
+
+			}
+
+			item->onDestroy();
+			auto ptr = items->erase(itemPtr);
+
+			itemPtr = ptr;
 			increment = false;
 		}
-	} 
+	}
 }
 
 void manageScene()
@@ -69,6 +77,9 @@ void manageScene()
 void processPhysics()
 {
 	Scene* activeScene = Scene::getActiveScene();
+
+	
+
 	for (auto bodyPtr = activeScene->bodies.begin();
 		bodyPtr != activeScene->bodies.end();
 		++bodyPtr)
@@ -82,14 +93,20 @@ void processPhysics()
 	{
 		Body* body = *bodyPtr;
 		body->update();
+		if (Scene::sceneWasRemovedCheck())
+		{
+			goto endOfCycle;
+		}
 		if (!body->isDynamic) continue;
 
 		body->applyForces();
 		
 		body->travel();
 	}
-
 	eraseDestroyed(&(activeScene->bodies));
+	eraseDestroyed(&(Scene::scenes));
+
+endOfCycle:;
 }
 
 void processGraphics(sf::RenderWindow* window)

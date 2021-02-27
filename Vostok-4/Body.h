@@ -21,6 +21,7 @@ protected:
 	float getTime();
 	Vector2 getAirResistance();
 	float getAirRotationResistance();
+	void attractTo(Body *planet);
 	void loadSprite(std::string spritePath);
 	virtual void setupSpriteList() = 0;
 	sf::Clock clock;
@@ -28,6 +29,7 @@ public:
 	Body();
 	Body(Vector2 position);
 	virtual ~Body();
+	virtual void onDestroy();
 	void setupSprite();
 
 	void travel();
@@ -35,6 +37,7 @@ public:
 	virtual void updateSprite();
 	virtual void onCollision(Body *other);
 
+	int getSceneID() const;
 	int getLayer() const;
 	void setLayer(const int newLayer);
 	float getScale() const;
@@ -47,7 +50,6 @@ public:
 	void addForce(const Vector2 force);
 	void addTorque(const float torque);
 	void applyForces();
-
 
 	Vector2 position;
 	float rotation;

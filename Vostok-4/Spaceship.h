@@ -2,7 +2,6 @@
 #include "Body.h"
 #include "StagePlanet.h"
 
-
 class Spaceship : public Body
 {
 protected:
@@ -13,9 +12,12 @@ public:
 	Spaceship();
 	Spaceship(StagePlanet* planet, const float orbit, const float angle = 0, const bool clockwise = true);
 	virtual ~Spaceship();
+	void onDestroy() override;
 	void setupSpriteList() override;
 	void update() override;
 	Vector2 getOrbitTangent() const;
+	void produceTrash();
+
 	float lastShot;
 	bool drawOrbits;
 

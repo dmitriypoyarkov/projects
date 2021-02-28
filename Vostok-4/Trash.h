@@ -10,10 +10,10 @@ public:
 
 	StagePlanet *planet;
 protected:
-	int originID;
-
 	void update() override;
 	void onCollision(Body *other) override;
 	void setupSpriteList() override;
+private:
+	int originID;
 };
 

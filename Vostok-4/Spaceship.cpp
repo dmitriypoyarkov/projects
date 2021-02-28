@@ -5,26 +5,22 @@
 Spaceship::Spaceship()
 {
 	setupSprite();
-	isDynamic = true;
+	setIsDynamic(true);
 	lastShot = 0.0f;
-	drawOrbits = false;
+	isDrawingOrbits = false;
 }
 
 Spaceship::Spaceship(StagePlanet* planet, const float orbit, const float angle, const bool clockwise) : Spaceship()
 {
 	position = planet->position - Vector2(orbit * sin(angle), orbit * cos(angle));
 	this->planet = planet;
-	isDynamic = true;
 	Vector2 radius = position - planet->position;
 	Vector2 tangent = getOrbitTangent();
 	int dir = clockwise ? 1 : -1;
-	velocity = tangent * planet->getFirstCosmic(orbit) * (float)dir;
+	setVelocity(tangent * planet->getFirstCosmic(orbit) * (float)dir);
 }
 
-Spaceship::~Spaceship()
-{
-	
-}
+Spaceship::~Spaceship() {}
 
 void Spaceship::onDestroy()
 {
@@ -33,7 +29,7 @@ void Spaceship::onDestroy()
 
 void Spaceship::setupSpriteList()
 {
-	spriteList[0] = Body::RES_PATH + "Rocket.png";
+	addToSpriteList(RES_PATH + "Rocket.png");
 }
 
 void Spaceship::update()
@@ -58,12 +54,17 @@ void Spaceship::produceTrash()
 
 void Spaceship::tryShoot()
 {
-	float curTime = getTime();
+	float curTime = getLifetime();
 	if (curTime - lastShot >= reloadTime)
 	{
-		Bullet *bullet = new Bullet(position, rotation, velocity + getMovingDirection() * gunForce, this);
+		Bullet *bullet = new Bullet(position, rotation, getVelocity() + getMovingDirection() * gunForce, this);
 		lastShot = curTime;
 	}
+}
+
+bool Spaceship::checkIsDrawingOrbits()
+{
+	return isDrawingOrbits;
 }
 
 

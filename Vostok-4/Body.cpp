@@ -2,19 +2,23 @@
 #include <iostream>
 #include "Scene.h"
 #include "Bullet.h"
-Vector2 Body::getAirResistance()
-{
-	float forceX = -(pow(position.x, 3) / abs(position.x));
-	float forceY = -(pow(position.y, 3) / abs(position.y));
-	return Vector2(forceX, forceY) * airResistanceForce;
-}
 
-float Body::getAirRotationResistance()
+float Body::getAirRotationResistance() const
 {
 	if (rotationSpeed != 0)
 		return -pow(rotationSpeed, 3) / abs(rotationSpeed) * airResistanceForce;
 	else
 		return 0.0f;
+}
+
+bool Body::checkIsMaterial() const
+{
+	return isMaterial;
+}
+
+void Body::setIsMaterial(bool newState)
+{
+	isMaterial = newState;
 }
 
 void Body::attractTo(Body *bplanet)
@@ -28,7 +32,7 @@ void Body::attractTo(Body *bplanet)
 	Vector2 radius = planet->position - position;
 	Vector2 normal = radius.normalized();
 	if (radius.magnitude() != 0)
-		addForce(normal * planet->mass * gravityConst / pow(radius.magnitude(), 2));
+		addForce(normal * planet->getMass() * gravityConst / pow(radius.magnitude(), 2));
 }
 
 void Body::loadSprite(std::string spritePath)
@@ -51,7 +55,6 @@ Body::Body()
 	scale = 1.0f;
 	colliderSize = 0.0f;
 	layer = 0;
-	type = 0;
 	isMaterial = true;
 	isDestroyed = false;
 	isDynamic = false;
@@ -68,17 +71,37 @@ Body::~Body() {}
 
 void Body::onDestroy() {}
 
+void Body::addToSpriteList(std::string spritePath)
+{
+	spriteList.push_back(spritePath);
+}
+
 void Body::setupSprite()
 {
 	setupSpriteList();
 
-	spritePath = spriteList[type];
+	spritePath = spriteList.front();
 	loadSprite(spritePath);
 	sf::FloatRect rectangle = sprite.getLocalBounds();
 	Vector2 spriteSize = Vector2(rectangle.width, rectangle.height);
 	sprite.setOrigin(spriteSize / 2);
 
 	colliderSize = spriteSize.magnitude() / (float)sqrt(2);
+}
+
+int Body::getHealth() const
+{
+	return health;
+}
+
+void Body::decreaseHealth()
+{
+	health -= 1;
+}
+
+void Body::setHealthToZero()
+{
+	health = 0;
 }
 
 void Body::travel()
@@ -89,7 +112,6 @@ void Body::travel()
 
 void Body::update()
 {
-
 	if (health <= 0)
 		isDestroyed = true;
 	if (position.x + position.y >= WORLD_LIMIT)
@@ -105,7 +127,7 @@ void Body::updateSprite()
 
 void Body::onCollision(Body * other)
 {
-	if (typeid(*other) == typeid(Bullet) && ((Bullet *)other)->parent == this) return;
+	if (typeid(*other) == typeid(Bullet) && ((Bullet *)other)->getParent() == this) return;
 
 	health -= 1;
 	std::string type = typeid(*this).name();
@@ -157,6 +179,11 @@ Vector2 Body::getVelocity() const
 	return velocity;
 }
 
+void Body::setVelocity(Vector2 newVelocity)
+{
+	velocity = newVelocity;
+}
+
 void Body::addForce(const Vector2 force)
 {
 	instantForce += force;
@@ -179,10 +206,32 @@ void Body::applyForces()
 	instantTorque = 0.0f;
 }
 
-float Body::getTime()
+bool Body::checkIsDestroyed() const
+{
+	return isDestroyed;
+}
+
+void Body::setIsDestroyed(bool newState)
+{
+	isDestroyed = newState;
+}
+
+bool Body::checkIsDynamic() const
+{
+	return isDynamic;
+}
+
+void Body::setIsDynamic(bool newState)
+{
+	isDynamic = newState;
+}
+
+float Body::getLifetime() const
 {
 	return clock.getElapsedTime().asSeconds();
 }
+
+std::list<std::string> spriteList;
 
 const float Body::controlDelay = 0.2f;
 const float Body::maxSpeed = 100;

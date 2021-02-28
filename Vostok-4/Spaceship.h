@@ -4,9 +4,6 @@
 
 class Spaceship : public Body
 {
-protected:
-	float lastControl;
-	void tryShoot();
 public:
 	StagePlanet* planet;
 	Spaceship();
@@ -16,10 +13,14 @@ public:
 	void setupSpriteList() override;
 	void update() override;
 	Vector2 getOrbitTangent() const;
+	bool checkIsDrawingOrbits();
 	void produceTrash();
+protected:
+	void tryShoot();
 
+	float lastControl;
+	bool isDrawingOrbits;
 	float lastShot;
-	bool drawOrbits;
 
 	static const float reloadTime;
 	static const float gunForce;

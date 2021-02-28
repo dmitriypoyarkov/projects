@@ -3,7 +3,7 @@
 Trash::Trash() : Body()
 {
 	setupSprite();
-	isDynamic = true;
+	setIsDynamic(true);
 }
 
 Trash::Trash(Spaceship *origin) : Trash()
@@ -13,7 +13,7 @@ Trash::Trash(Spaceship *origin) : Trash()
 	planet = origin->planet;
 	float originSpeed = (origin->getVelocity() * 3).magnitude();
 	float angle = (rand() % 10) * 0.628f;
-	velocity = Vector2(cos(angle)*originSpeed, sin(angle)*originSpeed);
+	setVelocity(Vector2(cos(angle)*originSpeed, sin(angle)*originSpeed));
 }
 
 void Trash::update()
@@ -26,10 +26,10 @@ void Trash::update()
 void Trash::onCollision(Body * other)
 {
 	if (typeid(*other) == typeid(Trash) && ((Trash *)other)->originID == originID) return;
-	health = 0;
+	setHealthToZero();
 }
 
 void Trash::setupSpriteList()
 {
-	spriteList[0] = RES_PATH + "Trash.png";
+	addToSpriteList(RES_PATH + "Trash.png");
 }

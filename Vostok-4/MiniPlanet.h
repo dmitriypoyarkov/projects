@@ -8,17 +8,18 @@ private:
 	float orbit;
 	float angle;
 	float speed;
+	int planetStageSeed;
 public:
-	MiniPlanet(int type = 0);
-	MiniPlanet(Vector2 centerObject, float orbit, float speed, int type = 0);
+	MiniPlanet();
+	MiniPlanet(Vector2 centerObject, float orbit, float speed);
 
 	void onClick();
 	void setupSpriteList() override;
 	void update() override;
 
-	int stageSeed;
-	bool stageIsCleared;
-
-	
+	int getPlanetStageSeed();
+	bool checkPlanetStageIsCleared();
+	void setPlanetStageIsCleared(bool newState);
+	bool planetStageIsCleared;
 };
 

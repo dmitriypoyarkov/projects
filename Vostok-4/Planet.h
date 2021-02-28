@@ -3,15 +3,15 @@
 
 class Planet : public Body
 {
-private:
-	float size;
 public:
-	Planet(int type = 0);
+	Planet();
 
 	void onCollision(Body *other) override;
 
-	float getSurfaceRadius() const;
+	float getSurfaceRadius();
 	float getFirstCosmic(float orbit) const;
-
+	float getMass() const;
+private:
+	float size;
 	float mass;
 };

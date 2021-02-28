@@ -7,7 +7,6 @@ public:
 	~PlayerShip() override;
 	void onDestroy() override;
 	void update() override;
-
 private:
 	static const sf::Keyboard::Key gunKey;
 	static const sf::Keyboard::Key engineKey;

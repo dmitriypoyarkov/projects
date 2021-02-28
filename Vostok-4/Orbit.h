@@ -9,11 +9,11 @@ private:
 	const static sf::Color safeColor;
 	const static sf::Color crashColor;
 	const static sf::Color flyAwayColor;
+	sf::Color orbitColor;
 public:
-	bool isDrawingOrbit;
-	sf::Color orbitSafety;
+	void setOrbitColor(const sf::Color orbitColor);
+	sf::Color getOrbitColor();
 	static void drawOrbit(Spaceship *ship);
 	static const int orbitLength;
-
 };
 

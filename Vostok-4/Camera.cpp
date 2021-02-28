@@ -3,9 +3,9 @@
 
 Camera::Camera()
 {
-	isMaterial = false;
+	setIsMaterial(false);
 	destination = nullptr;
-	scale = 500.0f;
+	setScale(500.0f);
 	Scene* activeScene = Scene::getActiveScene();
 	if (activeScene->getActiveCamera() == nullptr)
 	{
@@ -20,7 +20,7 @@ Camera::Camera(Body * objectToFollow) : Camera()
 
 void Camera::setupSpriteList()
 {
-	spriteList[0] = "";
+	addToSpriteList("");
 }
 
 void Camera::update()
@@ -28,9 +28,9 @@ void Camera::update()
 	if (destination != nullptr)
 		position = *destination;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Add))
-		scale /= 1.05f;
+		setScale(getScale() / 1.05f);
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Subtract))
-		scale *= 1.05f;
+		setScale(getScale() * 1.05f);;
 }
 
 void Camera::updateSprite() {}

@@ -2,7 +2,7 @@
 #include <iostream>
 Orbit::Orbit()
 {
-	orbitSafety = safeColor;
+	orbitColor = safeColor;
 }
 
 void Orbit::virtualUpdate(const StagePlanet *virtualPlanet, Vector2 *virtualPosition, Vector2 *virtualVelocity)
@@ -10,8 +10,18 @@ void Orbit::virtualUpdate(const StagePlanet *virtualPlanet, Vector2 *virtualPosi
 	Vector2 radius = virtualPlanet->position - *virtualPosition;
 	Vector2 normal = radius.normalized();
 	if (radius.magnitude() != 0)
-		*virtualVelocity += normal * virtualPlanet->mass * Body::gravityConst / pow(radius.magnitude(), 2) * 10;
+		*virtualVelocity += normal * virtualPlanet->getMass() * Body::gravityConst / pow(radius.magnitude(), 2) * 10;
 	*virtualPosition += *virtualVelocity * 10;
+}
+
+void Orbit::setOrbitColor(const sf::Color orbitColor)
+{
+	this->orbitColor = orbitColor;
+}
+
+sf::Color Orbit::getOrbitColor()
+{
+	return orbitColor;
 }
 
 void Orbit::drawOrbit(Spaceship * ship)

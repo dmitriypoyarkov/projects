@@ -7,7 +7,6 @@ int Scene::activeSceneID = -1;
 int Scene::activeStarSystemID = -1;
 const int Scene::SCREEN_HEIGHT = 800;
 const int Scene::SCREEN_WIDTH = 1200;
-bool Scene::sceneWasRemoved;
 std::list<Scene*> Scene::scenes;
 sf::RenderWindow* Scene::window = nullptr;
 
@@ -36,7 +35,6 @@ Scene::Scene(Body *associatedBody)
 	unclearedPlanetsNumber = 0;
 	isStage = false;
 	isCleared = false;
-	sceneWasRemoved = false;
 	activeCamera = nullptr;
 }
 
@@ -108,7 +106,7 @@ void Scene::playerDestroyedEvent()
 		Body *body = *bodyPtr;
 		if (typeid(*body) == typeid(EnemyShip))
 		{
-			((EnemyShip *)body)->player = nullptr;
+			((EnemyShip *)body)->setPlayer(nullptr);
 		}
 	}
 	gameOverEvent();
@@ -124,7 +122,7 @@ void Scene::playerSpawnedEvent(PlayerShip *player)
 		Body *body = *bodyPtr;
 		if (typeid(*body) == typeid(EnemyShip))
 		{
-			((EnemyShip *)body)->player = player;
+			((EnemyShip *)body)->setPlayer(player);
 		}
 	}
 }
@@ -150,7 +148,7 @@ void Scene::enemySpawnedEvent()
 void Scene::stageClearedEvent(Scene *stage)
 {
 	if (stage->associatedBody)
-		((MiniPlanet *)(stage->associatedBody))->stageIsCleared = true;
+		((MiniPlanet *)(stage->associatedBody))->setPlanetStageIsCleared(true);
 	stage->isDestroyed = true;
 	setActiveScene(activeStarSystemID);
 	Scene *starSystem = getSceneByID(getActiveStarSystemID());
@@ -165,11 +163,6 @@ void Scene::stageClearedEvent(Scene *stage)
 void Scene::starSystemClearedEvent()
 {
 	std::cout << "Star System is cleared! Congratulations!" << std::endl;
-}
-
-void Scene::stageEscapedEvent(Scene *stage)
-{
-	delete stage;
 }
 
 void Scene::miniPlanetCreatedEvent()
@@ -188,9 +181,9 @@ void Scene::gameOverEvent()
 		Body *body = *bodyPtr;
 		if (typeid(*body) == typeid(MiniPlanet))
 		{
-			if (((MiniPlanet *)body)->stageIsCleared == true)
+			if (((MiniPlanet *)body)->checkPlanetStageIsCleared() == true)
 			{
-				((MiniPlanet *)body)->stageIsCleared = false;
+				((MiniPlanet *)body)->setPlanetStageIsCleared(false);
 				activeScene->unclearedPlanetsNumber += 1;
 			}
 		}
@@ -203,13 +196,6 @@ void Scene::destroyScene(Scene *scene)
 	delete scene;
 }
 
-bool Scene::sceneWasRemovedCheck()
-{
-	bool initValue = sceneWasRemoved;
-	sceneWasRemoved = false;
-	return initValue;
-}
-
 void Scene::setActiveCamera(Camera * newCamera)
 {
 	activeCamera = newCamera;
@@ -218,6 +204,61 @@ void Scene::setActiveCamera(Camera * newCamera)
 Camera * Scene::getActiveCamera() const
 {
 	return activeCamera;
+}
+
+bool Scene::checkIsDestroyed() const
+{
+	return isDestroyed;
+}
+
+void Scene::setIsDestroyed(bool newState)
+{
+	isDestroyed = newState;
+}
+
+bool Scene::checkIsCleared() const
+{
+	return isCleared;
+}
+
+void Scene::setIsCleared(bool newState)
+{
+	isCleared = newState;
+}
+
+int Scene::getUnclearedPlanetsNumber() const
+{
+	return unclearedPlanetsNumber;
+}
+
+void Scene::incrementUnclearedPlanetsNumber()
+{
+	unclearedPlanetsNumber++;
+}
+
+int Scene::getID() const
+{
+	return id;
+}
+
+Body * Scene::getAssociatedBody() const
+{
+	return associatedBody;
+}
+
+void Scene::setAssociatedBody(Body *associatedBody)
+{
+	this->associatedBody = associatedBody;
+}
+
+bool Scene::checkIsStage() const
+{
+	return isStage;
+}
+
+void Scene::setIsStage(bool newState)
+{
+	isStage = newState;
 }
 
 int Scene::AddBody(Body* newBody)

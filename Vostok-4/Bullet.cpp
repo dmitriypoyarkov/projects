@@ -3,24 +3,34 @@
 Bullet::Bullet()
 {
 	setupSprite();
-	isDynamic = true;
+	setIsDynamic(true);
 }
 
 Bullet::Bullet(Vector2 position, float rotation, Vector2 initVelocity, Body *parent) : Bullet()
 {
 	this->position = position;
 	this->rotation = rotation;
-	velocity = initVelocity;
+	setVelocity(initVelocity);
 	this->parent = parent;
 }
 
 void Bullet::onCollision(Body *other)
 {
 	if (other != parent)
-		health = 0;
+		setHealthToZero();
+}
+
+Body * Bullet::getParent()
+{
+	return parent;
+}
+
+void Bullet::setParent(Body * parent)
+{
+	this->parent = parent;
 }
 
 void Bullet::setupSpriteList()
 {
-	spriteList[0] = RES_PATH + "Bullet.png";
+	addToSpriteList(RES_PATH + "Bullet.png");
 }

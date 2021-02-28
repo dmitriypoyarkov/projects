@@ -6,8 +6,8 @@
 Scene * SceneConstructor::constructStage(int seed)
 {
 	Scene *stage = new Scene();
-	stage->isStage = true;
-	Scene::setActiveScene(stage->id);
+	stage->setIsStage(true);
+	Scene::setActiveScene(stage->getID());
 
 	Vector2 screenCenter = Vector2(Scene::SCREEN_WIDTH / 2.0f, Scene::SCREEN_HEIGHT / 2.0f);
 
@@ -15,17 +15,9 @@ Scene * SceneConstructor::constructStage(int seed)
 
 	earth->setScale(1.0f);
 	spawnEnemies(seed, earth);
-	//EnemyShip* enemy = new EnemyShip(earth, earth->getSurfaceRadius() + 300);
-	//EnemyShip* enemy1 = new EnemyShip(earth, earth->getSurfaceRadius() + 300);
-	/*EnemyShip* enemy2 = new EnemyShip(earth, earth->getSurfaceRadius() + 500);
-	EnemyShip* enemy3 = new EnemyShip(earth, earth->getSurfaceRadius() + 700);*/
 	Camera* camera = new Camera();
 	Spaceship* ship = new PlayerShip(earth, earth->getSurfaceRadius() + 100);
 
-//	enemy->setScale(0.06f);
-	//enemy1->setScale(0.06f);
-	//enemy2->setScale(0.06f);
-	//enemy3->setScale(0.06f);
 	ship->setScale(0.06f);
 	return stage;
 }
@@ -34,10 +26,10 @@ Scene * SceneConstructor::constructStarSystem(int seed)
 {
 	Vector2 screenCenter = Vector2(Scene::SCREEN_WIDTH / 2.0f, Scene::SCREEN_HEIGHT / 2.0f);
 	Scene *starSystem = new Scene();
-	starSystem->isStage = false;
+	starSystem->setIsStage(false);
 	if (Scene::getActiveStarSystemID() < 0)
-		Scene::setActiveStarSystem(starSystem->id);
-	Scene::setActiveScene(starSystem->id);
+		Scene::setActiveStarSystem(starSystem->getID());
+	Scene::setActiveScene(starSystem->getID());
 	MiniPlanet* sun = new MiniPlanet(screenCenter, 0.0f, 0.0f);
 	sun->getSprite()->setColor(sf::Color::Yellow);
 	MiniPlanet* earth = new MiniPlanet(sun->position, 600.0f, 5.0f);
@@ -45,7 +37,7 @@ Scene * SceneConstructor::constructStarSystem(int seed)
 
 	Camera *camera = new Camera(sun);
 	
-	std::cout << "Star System initiated. There are " + std::to_string(starSystem->unclearedPlanetsNumber) + " planets in it." << std::endl;
+	std::cout << "Star System initiated. There are " + std::to_string(starSystem->getUnclearedPlanetsNumber()) + " planets in it." << std::endl;
 	return starSystem;
 }
 

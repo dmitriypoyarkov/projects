@@ -2,9 +2,8 @@
 #include <iostream>
 #include "SceneConstructor.h"
 
-MiniPlanet::MiniPlanet(int type)
+MiniPlanet::MiniPlanet()
 {
-	this->type = type;
 	setupSprite();
 
 	Scene::miniPlanetCreatedEvent();
@@ -12,11 +11,11 @@ MiniPlanet::MiniPlanet(int type)
 	orbit = 0.0f;
 	angle = 0.0f;
 	speed = 0.0f;
-	stageSeed = rand()%20000;
-	stageIsCleared = false;
+	planetStageSeed = rand()%20000;
+	setPlanetStageIsCleared(false);
 }
 
-MiniPlanet::MiniPlanet(Vector2 centerObject, float orbit, float speed, int type) : MiniPlanet(type)
+MiniPlanet::MiniPlanet(Vector2 centerObject, float orbit, float speed) : MiniPlanet()
 {
 	this->centerObject = centerObject;
 	this->orbit = orbit;
@@ -27,20 +26,20 @@ MiniPlanet::MiniPlanet(Vector2 centerObject, float orbit, float speed, int type)
 
 void MiniPlanet::onClick()
 {
-	if (stageIsCleared)
+	if (planetStageIsCleared)
 	{
 		std::cout << "Stage already cleared!" << std::endl;
 		return;
 	}
 	std::cout << "Loading stage..." << std::endl;
-	Scene* stage = SceneConstructor::constructStage(stageSeed);
-	stage->associatedBody = this;
-	Scene::setActiveScene(stage->id);
+	Scene* stage = SceneConstructor::constructStage(planetStageSeed);
+	stage->setAssociatedBody(this);
+	Scene::setActiveScene(stage->getID());
 }
 
 void MiniPlanet::setupSpriteList()
 {
-	spriteList[0] = RES_PATH + "Planet-mini.png";
+	addToSpriteList(RES_PATH + "Planet-mini.png");
 }
 
 void MiniPlanet::update()
@@ -55,7 +54,22 @@ void MiniPlanet::update()
 		sf::Vector2i sfMousePos = sf::Mouse::getPosition(*(Scene::window));
 		sf::Vector2f worldPos = (*(Scene::window)).mapPixelToCoords(sfMousePos);
 		Vector2 mousePos = Vector2(worldPos.x, worldPos.y);
-		if ((position - mousePos).magnitude() < colliderSize)
+		if ((position - mousePos).magnitude() < getColliderSize())
 			onClick();
 	}
+}
+
+int MiniPlanet::getPlanetStageSeed()
+{
+	return planetStageSeed;
+}
+
+bool MiniPlanet::checkPlanetStageIsCleared()
+{
+	return planetStageIsCleared;
+}
+
+void MiniPlanet::setPlanetStageIsCleared(bool newState)
+{
+	planetStageIsCleared = newState;
 }

@@ -1,23 +1,27 @@
 #include "Planet.h"
 
-Planet::Planet(int type)
+Planet::Planet()
 {
-	this->type = type;
 	size = 1.0f;
 	mass = 1000.0f;
-	isDynamic = false;
+	setIsDynamic(false);
 }
 
 void Planet::onCollision(Body * other) {}
 
-float Planet::getSurfaceRadius() const
+float Planet::getSurfaceRadius()
 {
-	sf::FloatRect rectangle = sprite.getLocalBounds();
-	return rectangle.height * scale / 2;
+	sf::FloatRect rectangle = getSprite()->getLocalBounds();
+	return rectangle.height * getScale() / 2;
 }
 
 float Planet::getFirstCosmic(float orbit) const
 {
 	return sqrt(Body::gravityConst * mass / (orbit));
+}
+
+float Planet::getMass() const
+{
+	return mass;
 }
 

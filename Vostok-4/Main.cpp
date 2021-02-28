@@ -127,7 +127,7 @@ void showStartMessage()
 		<< "Ship control: Accelerate: LShift" << std::endl
 		<< "Shoot: Space" << std::endl
 		<< "Rotate: A D" <<std::endl
-		<< "Enable\disable orbit drawing: O" << std::endl;
+		<< "Enable\\disable orbit drawing: O" << std::endl;
 }
 void runGame()
 {

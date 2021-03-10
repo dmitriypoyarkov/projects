@@ -2,12 +2,18 @@
 #include "Bullet.h"
 #include "Trash.h"
 
-Spaceship::Spaceship()
+Spaceship::Spaceship() : Body()
 {
 	setupSprite();
 	setIsDynamic(true);
 	lastShot = 0.0f;
 	isDrawingOrbits = false;
+}
+
+Spaceship::Spaceship(Vector2 position, Vector2 velocity) : Spaceship()
+{
+	this->position = position;
+	setVelocity(velocity);
 }
 
 Spaceship::Spaceship(StagePlanet* planet, const float orbit, const float angle, const bool clockwise) : Spaceship()

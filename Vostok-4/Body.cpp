@@ -46,8 +46,16 @@ void Body::loadSprite(std::string spritePath)
 
 Body::Body()
 {
+	Scene* activeScene = Scene::getActiveScene();
+	if (activeScene == nullptr)
+	{
+		std::cout << "Can't create body: No active scene!" << std::endl;
+		exit(1);
+	}
+	sceneID = activeScene->AddBody(this);
 	position = Vector2(0, 0);
 	velocity = Vector2(0, 0);
+	rotationSpeed = 0.0f;
 	rotation = 0.0f;
 	health = 2;
 	instantForce = Vector2(0, 0);
@@ -58,8 +66,6 @@ Body::Body()
 	isMaterial = true;
 	isDestroyed = false;
 	isDynamic = false;
-	Scene* activeScene = Scene::getActiveScene();
-	sceneID = activeScene->AddBody(this);
 }
 
 Body::Body(Vector2 position) : Body()

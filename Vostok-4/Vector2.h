@@ -26,6 +26,8 @@ public:
 
     Vector2 normalized();
 
+	friend bool operator == (const Vector2 left, const Vector2 right);
+
     float Dot(const Vector2& A) const;
 	static float Angle(const Vector2 a, const Vector2 b);
 	static float AngleDeg(const Vector2 a, const Vector2 b);

@@ -95,3 +95,11 @@
 	{
 		return sf::Vector2f(x, y);
 	}
+	
+	bool operator == (const Vector2 left, const Vector2 right)
+	{
+		if (left.x == right.x && left.y == right.y)
+			return true;
+		else
+			return false;
+	}

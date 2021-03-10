@@ -13,7 +13,7 @@ void detectCollision(Body *body, Scene *activeScene)
 		++bodyPtr)
 	{
 		Body* other = *bodyPtr;
-		if (other == body or !other->checkIsMaterial()) continue;
+		if (other == body || !other->checkIsMaterial()) continue;
 
 		float distance = (other->position - body->position).magnitude();
 		if (distance <= (other->getColliderSize() + body->getColliderSize()) / 2)
@@ -127,7 +127,7 @@ void showStartMessage()
 		<< "Ship control: Accelerate: LShift" << std::endl
 		<< "Shoot: Space" << std::endl
 		<< "Rotate: A D" <<std::endl
-		<< "Enable\disable orbit drawing: O" << std::endl;
+		<< "Enable\\disable orbit drawing: O" << std::endl;
 }
 void runGame()
 {
@@ -147,7 +147,7 @@ void runGame()
 			else if (event.type == sf::Event::Resized)
 				Scene::window->setView(sf::View(sf::FloatRect(0, 0, (float)event.size.width, (float)event.size.height)));
 		}
-		processPhysics();
+		Scene::processPhysics();
 		processGraphics(Scene::window);
 	}
 	delete Scene::window;

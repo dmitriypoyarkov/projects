@@ -7,6 +7,7 @@ class Spaceship : public Body
 public:
 	StagePlanet* planet;
 	Spaceship();
+	Spaceship(Vector2 position, Vector2 velocity);
 	Spaceship(StagePlanet* planet, const float orbit, const float angle = 0, const bool clockwise = true);
 	virtual ~Spaceship();
 	void onDestroy() override;

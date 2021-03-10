@@ -33,10 +33,57 @@ Scene::Scene(Body *associatedBody)
 		setActiveScene(id);
 	enemiesNumber = 0;
 	unclearedPlanetsNumber = 0;
+	isDestroyed = false;
 	isStage = false;
 	isCleared = false;
 	activeCamera = nullptr;
 }
+
+void Scene::detectCollision(Body *body, Scene *activeScene)
+{
+	if (body->checkIsMaterial() == false) return;
+	for (auto bodyPtr = activeScene->bodies.begin();
+		bodyPtr != activeScene->bodies.end();
+		++bodyPtr)
+	{
+		Body* other = *bodyPtr;
+		if (other == body || !other->checkIsMaterial()) continue;
+
+		float distance = (other->position - body->position).magnitude();
+		if (distance <= (other->getColliderSize() + body->getColliderSize()) / 2)
+		{
+			body->onCollision(other);
+		}
+	}
+}
+
+void Scene::processPhysics()
+{
+	Scene* activeScene = getActiveScene();
+	for (auto bodyPtr = activeScene->bodies.begin();
+		bodyPtr != activeScene->bodies.end();
+		++bodyPtr)
+	{
+		detectCollision(*bodyPtr, activeScene);
+	}
+
+	for (auto bodyPtr = activeScene->bodies.begin();
+		bodyPtr != activeScene->bodies.end();
+		++bodyPtr)
+	{
+		Body* body = *bodyPtr;
+		body->update();
+		if (!body->checkIsDynamic()) continue;
+
+		body->applyForces();
+
+		body->travel();
+	}
+	eraseDestroyed(&(activeScene->bodies));
+	eraseDestroyed(&(Scene::scenes));
+}
+
+
 
 Scene::~Scene()
 {

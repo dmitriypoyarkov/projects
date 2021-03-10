@@ -10,6 +10,45 @@ public:
 	Scene(Body *associatedBody = nullptr);
 	~Scene();
 	void onDestroy();
+
+	template <typename T>
+	static void eraseDestroyed(std::list<T *> *items)
+	{
+		bool increment = true;
+		bool begin = true;
+		auto itemPtr = items->begin();
+		T *item;
+		while (true)
+		{
+			if (begin)
+				begin = false;
+			else if (increment)
+				++itemPtr;
+			else
+				increment = true;
+			if (itemPtr == items->end())
+				break;
+			item = *itemPtr;
+
+			if (item->checkIsDestroyed())
+			{
+				if (typeid(*item) == typeid(Scene))
+				{
+
+				}
+
+				item->onDestroy();
+				auto ptr = items->erase(itemPtr);
+
+				itemPtr = ptr;
+				increment = false;
+			}
+		}
+	}
+
+	static void detectCollision(Body *body, Scene *activeScene);
+	static void processPhysics();
+
 	static void destroy(Body *body);
 	static void setActiveScene(int id);
 	static int getActiveSceneID();
@@ -26,6 +65,7 @@ public:
 	static void starSystemClearedEvent();
 	static void miniPlanetCreatedEvent();
 	static void gameOverEvent();
+
 	static void destroyScene(Scene *scene);
 	void setActiveCamera(Camera* newCamera);
 	Camera* getActiveCamera() const;

@@ -1,7 +1,6 @@
 #include "SceneConstructor.h"
 #include <iostream>
 #include "EnemyShip.h"
-#include "MiniPlanet.h"
 
 Scene * SceneConstructor::constructStage(int seed)
 {
@@ -22,21 +21,18 @@ Scene * SceneConstructor::constructStage(int seed)
 	return stage;
 }
 
+
+
 Scene * SceneConstructor::constructStarSystem(int seed)
 {
 	Vector2 screenCenter = Vector2(Scene::SCREEN_WIDTH / 2.0f, Scene::SCREEN_HEIGHT / 2.0f);
 	Scene *starSystem = new Scene();
 	starSystem->setIsStage(false);
 	Scene::setActiveStarSystem(starSystem->getID());
-	if (Scene::getActiveStarSystemID() < 0)
-		Scene::setActiveStarSystem(starSystem->getID());
 	Scene::setActiveScene(starSystem->getID());
-	MiniPlanet* sun = new MiniPlanet(screenCenter, 0.0f, 0.0f);
-	sun->getSprite()->setColor(sf::Color::Yellow);
-	new MiniPlanet(sun->position, 600.0f, 5.0f);
-	new MiniPlanet(sun->position, 1100.0f, 7.0f);
-
-	new Camera(sun);
+	MiniPlanet *star = createStar(seed);
+	createMiniPlanets(seed, star);
+	new Camera(star);
 	
 	std::cout << "Star System initiated. There are " + std::to_string(starSystem->getUnclearedPlanetsNumber()) + " planets in it." << std::endl;
 	return starSystem;
@@ -56,7 +52,37 @@ void SceneConstructor::spawnEnemies(int seed, StagePlanet *planet)
 	}
 }
 
+MiniPlanet* SceneConstructor::createStar(unsigned seed)
+{
+	MiniPlanet *star = new MiniPlanet(Vector2(0, 0), 0, 0);
+	return star;
+}
+
+void SceneConstructor::createMiniPlanets(int seed, MiniPlanet *star)
+{
+	srand(seed);
+	int planetsNumber = rand() % MAX_PLANETS + MIN_PLANETS;
+	int prevOrbit = 0;
+	int prevSurfaceRadius = (int) star->getSurfaceRadius();
+	for (int i = 0; i < planetsNumber; i++)
+	{
+		int curOrbit = prevOrbit + prevSurfaceRadius +
+			MIN_PLANET_DISTANCE + rand() % MAX_PLANET_DISTANCE;
+		int speed = MIN_PLANET_SPEED + rand() % MAX_PLANET_SPEED;
+		MiniPlanet *planet = new MiniPlanet(star->position, curOrbit, speed);
+
+		prevOrbit = curOrbit;
+		prevSurfaceRadius = (int) planet->getSurfaceRadius();
+	}
+}
+
 const int SceneConstructor::MIN_ENEMIES = 2;
 const int SceneConstructor::MAX_ENEMIES = 3;
 const int SceneConstructor::MIN_ORBIT = 80;
 const int SceneConstructor::MAX_ORBIT = 500;
+const int SceneConstructor::MIN_PLANETS = 2;
+const int SceneConstructor::MAX_PLANETS = 5;
+const int SceneConstructor::MIN_PLANET_DISTANCE = 100;
+const int SceneConstructor::MAX_PLANET_DISTANCE = 300;
+const int SceneConstructor::MIN_PLANET_SPEED = 3;
+const int SceneConstructor::MAX_PLANET_SPEED = 10;

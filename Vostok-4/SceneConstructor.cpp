@@ -15,7 +15,7 @@ Scene * SceneConstructor::constructStage(int seed)
 
 	earth->setScale(1.0f);
 	spawnEnemies(seed, earth);
-	Camera* camera = new Camera();
+	new Camera();
 	Spaceship* ship = new PlayerShip(earth, earth->getSurfaceRadius() + 100);
 
 	ship->setScale(0.06f);
@@ -27,15 +27,16 @@ Scene * SceneConstructor::constructStarSystem(int seed)
 	Vector2 screenCenter = Vector2(Scene::SCREEN_WIDTH / 2.0f, Scene::SCREEN_HEIGHT / 2.0f);
 	Scene *starSystem = new Scene();
 	starSystem->setIsStage(false);
+	Scene::setActiveStarSystem(starSystem->getID());
 	if (Scene::getActiveStarSystemID() < 0)
 		Scene::setActiveStarSystem(starSystem->getID());
 	Scene::setActiveScene(starSystem->getID());
 	MiniPlanet* sun = new MiniPlanet(screenCenter, 0.0f, 0.0f);
 	sun->getSprite()->setColor(sf::Color::Yellow);
-	MiniPlanet* earth = new MiniPlanet(sun->position, 600.0f, 5.0f);
-	MiniPlanet* mars = new MiniPlanet(sun->position, 1100.0f, 7.0f);
+	new MiniPlanet(sun->position, 600.0f, 5.0f);
+	new MiniPlanet(sun->position, 1100.0f, 7.0f);
 
-	Camera *camera = new Camera(sun);
+	new Camera(sun);
 	
 	std::cout << "Star System initiated. There are " + std::to_string(starSystem->getUnclearedPlanetsNumber()) + " planets in it." << std::endl;
 	return starSystem;

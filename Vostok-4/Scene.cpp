@@ -2,6 +2,8 @@
 #include <iostream>
 #include "EnemyShip.h"
 #include "MiniPlanet.h"
+#include "Orbit.h"
+#include "SceneConstructor.h"
 
 int Scene::activeSceneID = -1;
 int Scene::activeStarSystemID = -1;
@@ -83,15 +85,52 @@ void Scene::processPhysics()
 	eraseDestroyed(&(Scene::scenes));
 }
 
+void Scene::processGraphics()
+{
+	window->clear(sf::Color::Black);
+
+	Scene* activeScene = Scene::getActiveScene();
+	if (activeScene == nullptr)
+		return;
+	for (auto bodyPtr = activeScene->bodies.begin();
+		bodyPtr != activeScene->bodies.end();
+		++bodyPtr)
+	{
+		Body* body = *bodyPtr;
+
+		body->updateSprite();
+		window->draw(*(body->getSprite()));
+
+		if (typeid(*body) == typeid(PlayerShip))
+		{
+			if (((PlayerShip *)body)->checkIsDrawingOrbits() == true)
+				Orbit::drawOrbit(((Spaceship *)body));
+		}
+	}
+	Camera* camera = activeScene->getActiveCamera();
+	if (camera)
+	{
+		sf::View view = window->getView();
+		view.setCenter(camera->position);
+		sf::Vector2f scale = view.getSize();
+		scale = Vector2(scale.x, scale.y).normalized() * camera->getScale();
+		view.setSize(scale);
+		window->setView(view);
+	}
+
+	window->display();
+}
+
 
 
 Scene::~Scene()
 {
 	while (bodies.size() > 0)
 	{
+		Body *first = bodies.front();
 		bodies.erase(bodies.begin());
+		delete first;
 	}
-	Scene::scenes.remove(this);
 }
 
 void Scene::onDestroy() {}
@@ -101,6 +140,14 @@ void Scene::destroy(Body * destroyedBody)
 	destroyedBody->onDestroy();
 	getActiveScene()->bodies.remove(destroyedBody);
 	delete destroyedBody;
+}
+
+void Scene::destroyAllScenes()
+{
+	for (auto ptr = scenes.begin(); ptr != scenes.end(); ++ptr)
+	{
+		(*ptr)->setIsDestroyed(true);
+	}
 }
 
 void Scene::setActiveScene(int id)
@@ -210,6 +257,10 @@ void Scene::stageClearedEvent(Scene *stage)
 void Scene::starSystemClearedEvent()
 {
 	std::cout << "Star System is cleared! Congratulations!" << std::endl;
+	getActiveScene()->setIsDestroyed(true);
+	Scene *newStarSystem = SceneConstructor::constructStarSystem(rand()%100);
+	setActiveStarSystem(newStarSystem->getID());
+	setActiveScene(newStarSystem->getID());
 }
 
 void Scene::miniPlanetCreatedEvent()

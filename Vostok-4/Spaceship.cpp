@@ -63,7 +63,7 @@ void Spaceship::tryShoot()
 	float curTime = getLifetime();
 	if (curTime - lastShot >= reloadTime)
 	{
-		Bullet *bullet = new Bullet(position, rotation, getVelocity() + getMovingDirection() * gunForce, this);
+		new Bullet(position, rotation, getVelocity() + getMovingDirection() * gunForce, this);
 		lastShot = curTime;
 	}
 }

@@ -73,7 +73,10 @@ Body::Body(Vector2 position) : Body()
 	this->position = position;
 }
 
-Body::~Body() {}
+Body::~Body() 
+{
+	spriteList.clear();
+}
 
 void Body::onDestroy() {}
 

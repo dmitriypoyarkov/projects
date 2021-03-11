@@ -32,14 +32,9 @@ public:
 
 			if (item->checkIsDestroyed())
 			{
-				if (typeid(*item) == typeid(Scene))
-				{
-
-				}
-
 				item->onDestroy();
 				auto ptr = items->erase(itemPtr);
-
+				delete item;
 				itemPtr = ptr;
 				increment = false;
 			}
@@ -48,8 +43,10 @@ public:
 
 	static void detectCollision(Body *body, Scene *activeScene);
 	static void processPhysics();
+	static void processGraphics();
 
 	static void destroy(Body *body);
+	static void destroyAllScenes();
 	static void setActiveScene(int id);
 	static int getActiveSceneID();
 	static Scene* getSceneByID(int id);

@@ -66,6 +66,9 @@
     <ClCompile Include="..\Vostok-4\Vector2.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="..\Vostok-4\Statistics.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -112,6 +115,9 @@
     </ClInclude>
     <ClInclude Include="..\Vostok-4\Vector2.h">
       <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Vostok-4\Statistics.h">
+      <Filter>Исходные файлы</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

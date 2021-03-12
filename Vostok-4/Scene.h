@@ -45,7 +45,6 @@ public:
 	static void processPhysics();
 	static void processGraphics();
 
-	static void destroy(Body *body);
 	static void destroyAllScenes();
 	static void setActiveScene(int id);
 	static int getActiveSceneID();

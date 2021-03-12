@@ -1,9 +1,10 @@
 #include "Bullet.h"
 
-Bullet::Bullet()
+Bullet::Bullet() : Body()
 {
 	setupSprite();
 	setIsDynamic(true);
+	parent = nullptr;
 }
 
 Bullet::Bullet(Vector2 position, float rotation, Vector2 initVelocity, Body *parent) : Bullet()

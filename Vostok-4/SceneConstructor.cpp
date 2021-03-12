@@ -69,7 +69,7 @@ void SceneConstructor::createMiniPlanets(int seed, MiniPlanet *star)
 		int curOrbit = prevOrbit + prevSurfaceRadius +
 			MIN_PLANET_DISTANCE + rand() % MAX_PLANET_DISTANCE;
 		int speed = MIN_PLANET_SPEED + rand() % MAX_PLANET_SPEED;
-		MiniPlanet *planet = new MiniPlanet(star->position, curOrbit, speed);
+		MiniPlanet *planet = new MiniPlanet(star->position, (float)curOrbit, (float)speed);
 
 		prevOrbit = curOrbit;
 		prevSurfaceRadius = (int) planet->getSurfaceRadius();

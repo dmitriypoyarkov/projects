@@ -4,6 +4,7 @@
 #include "MiniPlanet.h"
 #include "Orbit.h"
 #include "SceneConstructor.h"
+#include "Statistics.h"
 
 int Scene::activeSceneID = -1;
 int Scene::activeStarSystemID = -1;
@@ -135,13 +136,6 @@ Scene::~Scene()
 
 void Scene::onDestroy() {}
 
-void Scene::destroy(Body * destroyedBody)
-{
-	destroyedBody->onDestroy();
-	getActiveScene()->bodies.remove(destroyedBody);
-	delete destroyedBody;
-}
-
 void Scene::destroyAllScenes()
 {
 	for (auto ptr = scenes.begin(); ptr != scenes.end(); ++ptr)
@@ -171,7 +165,6 @@ Scene* Scene::getSceneByID(int id)
 		if (scene->id == id)
 			return scene;
 
-	std::cout << "No such scene!" << std::endl;
 	return nullptr;
 }
 
@@ -226,6 +219,7 @@ void Scene::enemyDestroyedEvent()
 	Scene *activeScene = getActiveScene();
 	if (activeScene == nullptr) return;
 	activeScene->enemiesNumber -= 1;
+	Statistics::addDestroyedEnemy();
 
 	std::cout << "Enemies remained: " + std::to_string(activeScene->enemiesNumber) << std::endl;
 
@@ -247,6 +241,7 @@ void Scene::stageClearedEvent(Scene *stage)
 	setActiveScene(activeStarSystemID);
 	Scene *starSystem = getSceneByID(getActiveStarSystemID());
 	starSystem->unclearedPlanetsNumber -= 1;
+	Statistics::addClearedStage();
 	std::cout << "Stage cleared! Planets remained: " + std::to_string(starSystem->unclearedPlanetsNumber) << std::endl;
 	if (starSystem->unclearedPlanetsNumber <= 0)
 	{
@@ -258,6 +253,7 @@ void Scene::starSystemClearedEvent()
 {
 	std::cout << "Star System is cleared! Congratulations!" << std::endl;
 	getActiveScene()->setIsDestroyed(true);
+	Statistics::addClearedStarSystem();
 	Scene *newStarSystem = SceneConstructor::constructStarSystem(rand()%100);
 	setActiveStarSystem(newStarSystem->getID());
 	setActiveScene(newStarSystem->getID());
@@ -270,6 +266,8 @@ void Scene::miniPlanetCreatedEvent()
 
 void Scene::gameOverEvent()
 {
+	Statistics::show();
+	Statistics::reset();
 	std::cout << "Game Over!" << std::endl;
 	getActiveScene()->isDestroyed = true;
 	setActiveScene(activeStarSystemID);

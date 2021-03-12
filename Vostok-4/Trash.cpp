@@ -2,6 +2,8 @@
 
 Trash::Trash() : Body()
 {
+	originID = -1;
+	planet = nullptr;
 	setupSprite();
 	setIsDynamic(true);
 }

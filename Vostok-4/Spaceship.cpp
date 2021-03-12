@@ -7,7 +7,9 @@ Spaceship::Spaceship() : Body()
 	setupSprite();
 	setIsDynamic(true);
 	lastShot = 0.0f;
+	lastControl = 0.0f;
 	isDrawingOrbits = false;
+	planet = nullptr;
 }
 
 Spaceship::Spaceship(Vector2 position, Vector2 velocity) : Spaceship()

@@ -12,7 +12,7 @@ MiniPlanet::MiniPlanet()
 	angle = 0.0f;
 	speed = 0.0f;
 	planetStageSeed = rand()%20000;
-	setPlanetStageIsCleared(false);
+	planetStageIsCleared = false;
 }
 
 MiniPlanet::MiniPlanet(Vector2 centerObject, float orbit, float speed) : MiniPlanet()

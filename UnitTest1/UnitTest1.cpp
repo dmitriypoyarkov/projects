@@ -14,12 +14,16 @@ template<> static std::wstring Microsoft::VisualStudio::CppUnitTestFramework::To
 	std::wstring str = L"(" + std::to_wstring(V.x) + L", " + std::to_wstring(V.y) + L")";
 	return str;
 }
+
+class T1 { int x; public: T1(int x) :x(x) {} };
+
 TEST_CLASS(Physics)
 {
 public:
 		
 	TEST_METHOD(Ship)
 	{
+
 		Scene *stage = new Scene();
 		stage->setIsStage(true);
 		Scene::setActiveScene(stage->getID());

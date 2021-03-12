@@ -175,6 +175,7 @@
     <ClCompile Include="..\Vostok-4\SceneConstructor.cpp" />
     <ClCompile Include="..\Vostok-4\Spaceship.cpp" />
     <ClCompile Include="..\Vostok-4\StagePlanet.cpp" />
+    <ClCompile Include="..\Vostok-4\Statistics.cpp" />
     <ClCompile Include="..\Vostok-4\Trash.cpp" />
     <ClCompile Include="..\Vostok-4\Vector2.cpp" />
     <ClCompile Include="pch.cpp">
@@ -198,6 +199,7 @@
     <ClInclude Include="..\Vostok-4\SceneConstructor.h" />
     <ClInclude Include="..\Vostok-4\Spaceship.h" />
     <ClInclude Include="..\Vostok-4\StagePlanet.h" />
+    <ClInclude Include="..\Vostok-4\Statistics.h" />
     <ClInclude Include="..\Vostok-4\Trash.h" />
     <ClInclude Include="..\Vostok-4\Vector2.h" />
     <ClInclude Include="pch.h" />

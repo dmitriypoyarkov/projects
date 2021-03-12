@@ -1,6 +1,7 @@
 #include "PlayerShip.h"
 #include <iostream>
 #include "Scene.h"
+#include "Statistics.h"
 
 const sf::Keyboard::Key PlayerShip::gunKey = sf::Keyboard::Space;
 const sf::Keyboard::Key PlayerShip::engineKey = sf::Keyboard::LShift;
@@ -59,6 +60,7 @@ void PlayerShip::update()
 		float curTime = getLifetime();
 		if (curTime - lastControl >= controlDelay)
 		{
+			Statistics::setCheatUsingState(true);
 			std::cout << "Auto-win invoked" << std::endl;
 			lastControl = curTime;
 			Scene *activeScene = Scene::getActiveScene();

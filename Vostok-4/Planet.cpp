@@ -1,10 +1,9 @@
 #include "Planet.h"
 
-Planet::Planet()
+Planet::Planet() : Body()
 {
 	size = 1.0f;
 	mass = 1000.0f;
-	setIsDynamic(false);
 }
 
 void Planet::onCollision(Body * other) {}

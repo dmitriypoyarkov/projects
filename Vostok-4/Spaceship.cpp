@@ -25,7 +25,7 @@ Spaceship::Spaceship(Planet* planet, const float orbit, const float angle, const
 	Vector2 radius = position - planet->position;
 	Vector2 tangent = getOrbitTangent();
 	int dir = clockwise ? 1 : -1;
-	setVelocity(tangent * planet->getFirstCosmic(orbit) * (float)dir);
+	setVelocity(planet->getVelocity() + tangent * planet->getFirstCosmic(orbit) * (float)dir);
 }
 
 Spaceship::~Spaceship() {}

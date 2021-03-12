@@ -32,7 +32,7 @@ Scene * SceneConstructor::constructStarSystem(int seed)
 	Scene::setActiveScene(starSystem->getID());
 	MiniPlanet *star = createStar(seed);
 	star->setScale(2.0);
-	//createMiniPlanets(seed, star);
+	createMiniPlanets(seed, star);
 	Camera *camera = new Camera();
 	PlayerShip *player = new PlayerShip(star, star->getSurfaceRadius() + 300);
 	std::cout << "Star System initiated. There are " + std::to_string(starSystem->getUnclearedPlanetsNumber()) + " planets in it." << std::endl;

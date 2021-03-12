@@ -13,19 +13,18 @@ void Orbit::virtualUpdate(Vector2 *virtualPosition, Vector2 *virtualVelocity)
 	for (auto ptr = VirtualPlanet::virtualPlanets.begin(); ptr != VirtualPlanet::virtualPlanets.end(); ++ptr)
 	{
 		VirtualPlanet *planet = *ptr;
-		planet->update(orbitScale);
-		sf::CircleShape point;
+		/*sf::CircleShape point;
 		point.setPosition(planet->position);
 		point.setRadius(50.0f);
 		point.setPointCount(3);
-		Scene::window->draw(point);
+		Scene::window->draw(point);*/
 		Vector2 radius = planet->position - *virtualPosition;
 		Vector2 normal = radius.normalized();
 		if (radius.magnitude() != 0)
 			*virtualVelocity += normal * planet->mass * Body::gravityConst / pow(radius.magnitude(), 2) * orbitScale;
-		*virtualPosition += *virtualVelocity * orbitScale;
+		planet->update(orbitScale);
 	}
-
+	*virtualPosition += *virtualVelocity * orbitScale;
 }
 
 void Orbit::setOrbitColor(const sf::Color orbitColor)
@@ -57,8 +56,8 @@ void Orbit::drawOrbit(Spaceship * ship)
 	}
 }
 
-const int Orbit::orbitLength = 150;
-const float Orbit::orbitScale = 60.0f;
+const int Orbit::orbitLength = 600;
+const float Orbit::orbitScale = 15.0f;
 const sf::Color Orbit::safeColor = sf::Color::Blue;
 const sf::Color Orbit::crashColor = sf::Color::Red;
 const sf::Color Orbit::flyAwayColor = sf::Color::Magenta;

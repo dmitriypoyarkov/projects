@@ -8,7 +8,7 @@ public:
 	Trash();
 	Trash(Spaceship *origin);
 
-	StagePlanet *planet;
+	Planet *planet;
 protected:
 	void update() override;
 	void onCollision(Body *other) override;

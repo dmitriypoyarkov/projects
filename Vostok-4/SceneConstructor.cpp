@@ -31,9 +31,10 @@ Scene * SceneConstructor::constructStarSystem(int seed)
 	Scene::setActiveStarSystem(starSystem->getID());
 	Scene::setActiveScene(starSystem->getID());
 	MiniPlanet *star = createStar(seed);
-	createMiniPlanets(seed, star);
-	new Camera(star);
-	
+	star->setScale(2.0);
+	//createMiniPlanets(seed, star);
+	Camera *camera = new Camera();
+	PlayerShip *player = new PlayerShip(star, star->getSurfaceRadius() + 300);
 	std::cout << "Star System initiated. There are " + std::to_string(starSystem->getUnclearedPlanetsNumber()) + " planets in it." << std::endl;
 	return starSystem;
 }
@@ -66,11 +67,10 @@ void SceneConstructor::createMiniPlanets(int seed, MiniPlanet *star)
 	int prevSurfaceRadius = (int) star->getSurfaceRadius();
 	for (int i = 0; i < planetsNumber; i++)
 	{
-		int curOrbit = prevOrbit + prevSurfaceRadius +
+		int curOrbit = prevOrbit + 2 * prevSurfaceRadius +
 			MIN_PLANET_DISTANCE + rand() % MAX_PLANET_DISTANCE;
 		int speed = MIN_PLANET_SPEED + rand() % MAX_PLANET_SPEED;
 		MiniPlanet *planet = new MiniPlanet(star->position, (float)curOrbit, (float)speed);
-
 		prevOrbit = curOrbit;
 		prevSurfaceRadius = (int) planet->getSurfaceRadius();
 	}
@@ -80,9 +80,9 @@ const int SceneConstructor::MIN_ENEMIES = 2;
 const int SceneConstructor::MAX_ENEMIES = 3;
 const int SceneConstructor::MIN_ORBIT = 80;
 const int SceneConstructor::MAX_ORBIT = 500;
-const int SceneConstructor::MIN_PLANETS = 2;
-const int SceneConstructor::MAX_PLANETS = 5;
-const int SceneConstructor::MIN_PLANET_DISTANCE = 100;
+const int SceneConstructor::MIN_PLANETS = 1;
+const int SceneConstructor::MAX_PLANETS = 1;
+const int SceneConstructor::MIN_PLANET_DISTANCE = 7000;
 const int SceneConstructor::MAX_PLANET_DISTANCE = 300;
 const int SceneConstructor::MIN_PLANET_SPEED = 3;
-const int SceneConstructor::MAX_PLANET_SPEED = 10;
+const int SceneConstructor::MAX_PLANET_SPEED = 1;

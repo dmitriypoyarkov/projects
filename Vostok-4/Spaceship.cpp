@@ -18,7 +18,7 @@ Spaceship::Spaceship(Vector2 position, Vector2 velocity) : Spaceship()
 	setVelocity(velocity);
 }
 
-Spaceship::Spaceship(StagePlanet* planet, const float orbit, const float angle, const bool clockwise) : Spaceship()
+Spaceship::Spaceship(Planet* planet, const float orbit, const float angle, const bool clockwise) : Spaceship()
 {
 	position = planet->position - Vector2(orbit * sin(angle), orbit * cos(angle));
 	this->planet = planet;
@@ -37,13 +37,13 @@ void Spaceship::onDestroy()
 
 void Spaceship::setupSpriteList()
 {
-	addToSpriteList(RES_PATH + "Rocket.png");
+	addToSpriteList(RES_PATH + "Rocket1.png");
 }
 
 void Spaceship::update()
 {
 	Body::update();
-	attractTo(planet);
+	attractToPlanets();
 	addTorque(getAirRotationResistance());
 }
 

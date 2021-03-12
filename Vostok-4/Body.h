@@ -57,6 +57,7 @@ protected:
 	float getLifetime() const;
 	float getAirRotationResistance() const;
 	void attractTo(Body *planet);
+	void attractToPlanets();
 private:
 	int sceneID;
 	std::string spritePath;

@@ -2,6 +2,7 @@
 #include <iostream>
 #include "Scene.h"
 #include "Bullet.h"
+#include "MiniPlanet.h"
 
 float Body::getAirRotationResistance() const
 {
@@ -33,6 +34,22 @@ void Body::attractTo(Body *bplanet)
 	Vector2 normal = radius.normalized();
 	if (radius.magnitude() != 0)
 		addForce(normal * planet->getMass() * gravityConst / pow(radius.magnitude(), 2));
+}
+
+void Body::attractToPlanets()
+{
+	Scene *activeScene = Scene::getActiveScene();
+	for (auto ptr = activeScene->bodies.begin(); ptr != activeScene->bodies.end(); ++ptr)
+	{
+		Body *body = *ptr;
+		if (typeid(*body) != typeid(MiniPlanet)) continue;
+
+		MiniPlanet *planet = (MiniPlanet*) body;
+		Vector2 radius = planet->position - position;
+		Vector2 normal = radius.normalized();
+		if (radius.magnitude() != 0)
+			addForce(normal * planet->getMass() * gravityConst / pow(radius.magnitude(), 2));
+	}
 }
 
 void Body::loadSprite(std::string spritePath)
@@ -248,4 +265,4 @@ const float Body::gravityConst = 100.0f;
 const float Body::airResistanceForce = 0.01f;
 const float Body::degToRad = 0.0174533f;
 const std::string Body::RES_PATH = "resources\\";
-const int Body::WORLD_LIMIT = 40000;
+const int Body::WORLD_LIMIT = 1000000;

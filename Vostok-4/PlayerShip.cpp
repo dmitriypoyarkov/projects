@@ -9,7 +9,7 @@ const sf::Keyboard::Key PlayerShip::rotateUpKey = sf::Keyboard::D;
 const sf::Keyboard::Key PlayerShip::rotateDownKey = sf::Keyboard::A;
 const sf::Keyboard::Key PlayerShip::toggleOrbitDrawingKey = sf::Keyboard::O;
 
-PlayerShip::PlayerShip(StagePlanet *planet, const float orbit) : Spaceship(planet, orbit)
+PlayerShip::PlayerShip(Planet *planet, const float orbit) : Spaceship(planet, orbit)
 {
 	Scene::playerSpawnedEvent(this);
 }

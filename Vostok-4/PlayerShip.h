@@ -3,7 +3,7 @@
 class PlayerShip : public Spaceship
 {
 public:
-	PlayerShip(StagePlanet *planet, const float orbit);
+	PlayerShip(Planet *planet, const float orbit);
 	~PlayerShip() override;
 	void onDestroy() override;
 	void update() override;

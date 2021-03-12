@@ -6,6 +6,7 @@
 #include "SceneConstructor.h"
 #include "Statistics.h"
 
+PlayerShip* Scene::player = nullptr;
 int Scene::activeSceneID = -1;
 int Scene::activeStarSystemID = -1;
 const int Scene::SCREEN_HEIGHT = 800;
@@ -40,6 +41,7 @@ Scene::Scene(Body *associatedBody)
 	isStage = false;
 	isCleared = false;
 	activeCamera = nullptr;
+	player = nullptr;
 }
 
 void Scene::detectCollision(Body *body, Scene *activeScene)
@@ -63,6 +65,8 @@ void Scene::detectCollision(Body *body, Scene *activeScene)
 void Scene::processPhysics()
 {
 	Scene* activeScene = getActiveScene();
+	if (activeScene == nullptr) return;
+
 	for (auto bodyPtr = activeScene->bodies.begin();
 		bodyPtr != activeScene->bodies.end();
 		++bodyPtr)
@@ -88,11 +92,12 @@ void Scene::processPhysics()
 
 void Scene::processGraphics()
 {
+
 	window->clear(sf::Color::Black);
 
 	Scene* activeScene = Scene::getActiveScene();
-	if (activeScene == nullptr)
-		return;
+	if (activeScene == nullptr) return;
+
 	for (auto bodyPtr = activeScene->bodies.begin();
 		bodyPtr != activeScene->bodies.end();
 		++bodyPtr)
@@ -203,7 +208,9 @@ void Scene::playerSpawnedEvent(PlayerShip *player)
 {
 	Scene *activeScene = getActiveScene();
 	Camera *camera = activeScene->getActiveCamera();
-	camera->setObjectToFollow(player);
+	Scene::player = player;
+	if (camera != nullptr)
+		camera->setObjectToFollow(player);
 	for (auto bodyPtr = activeScene->bodies.begin(); bodyPtr != activeScene->bodies.end(); ++bodyPtr)
 	{
 		Body *body = *bodyPtr;
@@ -269,8 +276,6 @@ void Scene::gameOverEvent()
 	Statistics::show();
 	Statistics::reset();
 	std::cout << "Game Over!" << std::endl;
-	getActiveScene()->isDestroyed = true;
-	setActiveScene(activeStarSystemID);
 	Scene *activeScene = getActiveScene();
 	for (auto bodyPtr = activeScene->bodies.begin(); bodyPtr != activeScene->bodies.end(); ++bodyPtr)
 	{
@@ -290,6 +295,11 @@ void Scene::destroyScene(Scene *scene)
 {
 	scenes.remove(scene);
 	delete scene;
+}
+
+PlayerShip *Scene::getPlayer()
+{
+	return player;
 }
 
 void Scene::setActiveCamera(Camera * newCamera)

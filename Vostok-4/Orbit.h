@@ -5,7 +5,7 @@ class Orbit
 {
 	Orbit();
 private:
-	static void virtualUpdate(const StagePlanet *virtualPlanet, Vector2 *virtualPosition, Vector2 *virtualVelocity);
+	static void virtualUpdate(Vector2 *virtualPosition, Vector2 *virtualVelocity);
 	const static sf::Color safeColor;
 	const static sf::Color crashColor;
 	const static sf::Color flyAwayColor;
@@ -15,5 +15,6 @@ public:
 	sf::Color getOrbitColor();
 	static void drawOrbit(Spaceship *ship);
 	static const int orbitLength;
+	static const float orbitScale;
 };
 

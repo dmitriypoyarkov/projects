@@ -63,6 +63,7 @@ public:
 	static void gameOverEvent();
 
 	static void destroyScene(Scene *scene);
+	static PlayerShip *getPlayer();
 	void setActiveCamera(Camera* newCamera);
 	Camera* getActiveCamera() const;
 	bool checkIsDestroyed() const;
@@ -90,6 +91,7 @@ private:
 	bool isStage;
 	bool isCleared;
 	bool isDestroyed;
+	static PlayerShip *player;
 	static int activeSceneID;
 	static int activeStarSystemID;
 	int enemiesNumber;

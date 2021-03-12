@@ -12,5 +12,5 @@ void StagePlanet::update() {}
 
 void StagePlanet::setupSpriteList()
 {
-	addToSpriteList(RES_PATH + "Planet.png");
+	addToSpriteList(RES_PATH + "Planet1.png");
 }

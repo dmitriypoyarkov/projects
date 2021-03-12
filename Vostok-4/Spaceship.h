@@ -5,10 +5,10 @@
 class Spaceship : public Body
 {
 public:
-	StagePlanet* planet;
+	Planet* planet;
 	Spaceship();
 	Spaceship(Vector2 position, Vector2 velocity);
-	Spaceship(StagePlanet* planet, const float orbit, const float angle = 0, const bool clockwise = true);
+	Spaceship(Planet* planet, const float orbit, const float angle = 0, const bool clockwise = true);
 	virtual ~Spaceship();
 	void onDestroy() override;
 	void setupSpriteList() override;

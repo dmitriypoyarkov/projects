@@ -6,10 +6,9 @@ Camera::Camera()
 	setIsMaterial(false);
 	destination = nullptr;
 	setScale(500.0f);
-	Scene* activeScene = Scene::getActiveScene();
-	if (activeScene->getActiveCamera() == nullptr)
+	if (Scene::getActiveCamera() == nullptr)
 	{
-		activeScene->setActiveCamera(this);
+		Scene::setActiveCamera(this);
 	}
 }
 

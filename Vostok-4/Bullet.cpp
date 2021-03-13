@@ -21,6 +21,15 @@ void Bullet::onCollision(Body *other)
 		setHealthToZero();
 }
 
+void Bullet::update()
+{
+	Body::update();
+	if (getLifetime() >= 5)
+	{
+		setHealthToZero();
+	}
+}
+
 Body * Bullet::getParent()
 {
 	return parent;

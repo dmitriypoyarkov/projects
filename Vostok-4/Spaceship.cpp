@@ -78,6 +78,4 @@ bool Spaceship::checkIsDrawingOrbits()
 
 const float Spaceship::reloadTime = 0.3f;
 const float Spaceship::gunForce = 100.0f;
-const float Spaceship::engineTorque = 1.0f;
-const float Spaceship::engineForce = 0.05f;
 

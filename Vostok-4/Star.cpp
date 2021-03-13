@@ -8,6 +8,7 @@ Star::Star()
 	setIsDynamic(false);
 	MiniPlanet::refreshPlanetList();
 }
+
 Star::Star(Vector2 position) : Star()
 {
 	this->position = position;

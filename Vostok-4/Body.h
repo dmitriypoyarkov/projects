@@ -1,8 +1,9 @@
 #pragma once
 #include <string>
 #include <list>
+#include "Drawable.h"
 #include "Vector2.h"
-class Body
+class Body : public Drawable
 {
 public:
 	Vector2 position;
@@ -16,15 +17,10 @@ public:
 	void travel();
 	virtual void update();
 	virtual void updateSprite();
+	virtual void draw();
 	virtual void onCollision(Body *other);
 
 	int getSceneID() const;
-	int getLayer() const;
-	void setLayer(const int newLayer);
-	float getScale() const;
-	void setScale(const float newScale);
-	sf::Sprite *getSprite();
-	float getColliderSize();
 	Vector2 getMovingDirection() const;
 	Vector2 getVelocity() const;
 	void setVelocity(Vector2 newVelocity);
@@ -43,14 +39,10 @@ public:
 	static const float gravityConst;
 	static const float degToRad;
 	static const float airResistanceForce;
-	static const std::string RES_PATH;
 	static const int WORLD_LIMIT;
 	static const float controlDelay;
 protected:
-	virtual void setupSpriteList() = 0;
-	void loadSprite(std::string spritePath);
-	void addToSpriteList(std::string spritePath);
-	void setupSprite();
+	void setupSpriteList() = 0;
 	int getHealth() const;
 	void decreaseHealth();
 	void setHealthToZero();
@@ -60,12 +52,6 @@ protected:
 	void attractToPlanets();
 private:
 	int sceneID;
-	std::string spritePath;
-	std::list<std::string> spriteList;
-	sf::Texture texture;
-	sf::Sprite sprite;
-	float scale;
-	int layer;
 	Vector2 velocity;
 	int health;
 	float rotationSpeed;

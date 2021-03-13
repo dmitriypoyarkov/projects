@@ -26,6 +26,7 @@ protected:
 	static const float reloadTime;
 	static const float gunForce;
 	static const float engineForce;
+	static const float interplanetaryEngineForce;
 	static const float engineTorque;
 };
 

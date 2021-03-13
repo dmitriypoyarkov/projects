@@ -65,8 +65,7 @@ void MiniPlanet::setTangentVelocity()
 void MiniPlanet::refreshPlanetList()
 {
 	planets.clear();
-	Scene *activeScene = Scene::getActiveScene();
-	for (auto ptr = activeScene->bodies.begin(); ptr != activeScene->bodies.end(); ++ptr)
+	for (auto ptr = Scene::bodies.begin(); ptr != Scene::bodies.end(); ++ptr)
 	{
 		Body *body = *ptr;
 		if (typeid(*body) != typeid(MiniPlanet)) continue;

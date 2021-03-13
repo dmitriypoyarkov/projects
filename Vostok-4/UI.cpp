@@ -1,7 +1,7 @@
 #include "UI.h"
 #include "Scene.h"
 
-const int UI::aimDistance = 5;
+const int UI::aimDistance = 12;
 
 void UI::draw()
 {
@@ -12,7 +12,7 @@ void UI::drawAim()
 {
 	Vector2 playerPosition = Scene::getPlayer()->position;
 	Vector2 playerDirection = Scene::getPlayer()->getMovingDirection();
-	float aimScale = 0.002f*Scene::window->getView().getSize().x;
+	float aimScale = 0.0015f*Scene::window->getView().getSize().x;
 	Vector2 aimPosition = playerPosition + playerDirection * aimDistance * aimScale;
 	
 	

@@ -38,8 +38,7 @@ void Body::attractTo(Body *bplanet)
 
 void Body::attractToPlanets()
 {
-	Scene *activeScene = Scene::getActiveScene();
-	for (auto ptr = activeScene->bodies.begin(); ptr != activeScene->bodies.end(); ++ptr)
+	for (auto ptr = Scene::bodies.begin(); ptr != Scene::bodies.end(); ++ptr)
 	{
 		Body *body = *ptr;
 		if (typeid(*body) != typeid(MiniPlanet) && typeid(*body) != typeid(Star)) continue;
@@ -52,24 +51,9 @@ void Body::attractToPlanets()
 	}
 }
 
-void Body::loadSprite(std::string spritePath)
+Body::Body() : Drawable()
 {
-	if (!texture.loadFromFile(spritePath))
-	{
-		std::cout << "failed to load file from " + spritePath;
-	}
-	sprite.setTexture(texture);
-}
-
-Body::Body()
-{
-	Scene* activeScene = Scene::getActiveScene();
-	if (activeScene == nullptr)
-	{
-		std::cout << "Can't create body: No active scene!" << std::endl;
-		exit(1);
-	}
-	sceneID = activeScene->AddBody(this);
+	sceneID = Scene::AddBody(this);
 	position = Vector2(0, 0);
 	velocity = Vector2(0, 0);
 	rotationSpeed = 0.0f;
@@ -77,9 +61,7 @@ Body::Body()
 	health = 2;
 	instantForce = Vector2(0, 0);
 	instantTorque = 0.0f;
-	scale = 1.0f;
 	colliderSize = 0.0f;
-	layer = 0;
 	isMaterial = true;
 	isDestroyed = false;
 	isDynamic = false;
@@ -92,28 +74,9 @@ Body::Body(Vector2 position) : Body()
 
 Body::~Body() 
 {
-	spriteList.clear();
 }
 
 void Body::onDestroy() {}
-
-void Body::addToSpriteList(std::string spritePath)
-{
-	spriteList.push_back(spritePath);
-}
-
-void Body::setupSprite()
-{
-	setupSpriteList();
-
-	spritePath = spriteList.front();
-	loadSprite(spritePath);
-	sf::FloatRect rectangle = sprite.getLocalBounds();
-	Vector2 spriteSize = Vector2(rectangle.width, rectangle.height);
-	sprite.setOrigin(spriteSize / 2);
-
-	colliderSize = spriteSize.magnitude() / (float)sqrt(2);
-}
 
 int Body::getHealth() const
 {
@@ -146,9 +109,15 @@ void Body::update()
 
 void Body::updateSprite()
 {
-	sprite.setPosition(position);
-	sprite.setRotation(rotation);
-	sprite.setScale(scale, scale);
+	getSprite()->setPosition(position);
+	getSprite()->setRotation(rotation);
+	getSprite()->setScale(getScale(), getScale());
+}
+
+void Body::draw()
+{
+	updateSprite();
+	Scene::window->draw(*getSprite());
 }
 
 void Body::onCollision(Body * other)
@@ -163,36 +132,6 @@ void Body::onCollision(Body * other)
 int Body::getSceneID() const
 {
 	return sceneID;
-}
-
-int Body::getLayer() const
-{
-	return layer;
-}
-
-void Body::setLayer(const int newLayer)
-{
-	layer = newLayer;
-}
-
-float Body::getScale() const
-{
-	return scale;
-}
-
-void Body::setScale(const float newScale)
-{
-	scale = newScale;
-}
-
-sf::Sprite* Body::getSprite()
-{
-	return &sprite;
-}
-
-float Body::getColliderSize()
-{
-	return scale * colliderSize;
 }
 
 Vector2 Body::getMovingDirection() const
@@ -257,12 +196,9 @@ float Body::getLifetime() const
 	return clock.getElapsedTime().asSeconds();
 }
 
-std::list<std::string> spriteList;
-
-const float Body::controlDelay = 0.2f;
-const float Body::maxSpeed = 100;
+const float Body::controlDelay = 0.1f;
+const float Body::maxSpeed = 100000;
 const float Body::gravityConst = 100.0f;
 const float Body::airResistanceForce = 0.5f;
 const float Body::degToRad = 0.0174533f;
-const std::string Body::RES_PATH = "resources\\";
 const int Body::WORLD_LIMIT = 1000000;

@@ -5,9 +5,9 @@
 class SceneConstructor
 {
 public:
-	static Scene *constructStage(int seed);
+	static void constructStage(int seed);
 	static void constructStarSystem(int seed);
-	static Scene *initiateGameWithStarSystem(int seed);
+	static void initiateGameWithStarSystem(int seed);
 private:
 	static void spawnEnemies(int seed, Planet *planet);
 	static Star *createStar(unsigned seed);
@@ -19,7 +19,7 @@ private:
 	static const int MIN_ENEMIES;
 	static const int MAX_ENEMIES;
 	static const int MIN_ORBIT;
-	static const int MAX_ORBIT;
+	static const int ORBIT_GAP;
 	static const int MIN_PLANETS;
 	static const int MAX_PLANETS;
 	static const int PLANET_SPRITE_SIZE;

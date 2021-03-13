@@ -6,12 +6,13 @@
 void showStartMessage()
 {
 	std::cout << "\tVOSTOK-4" << std::endl
-		<< "Click on a planet to start." << std::endl
+		<< "Press Shift to accelerate, A/D - rotate" << std::endl
 		<< "Camera control: \"+\" and \"-\"" << std::endl
 		<< "Ship control: Accelerate: LShift" << std::endl
-		<< "Shoot: Space" << std::endl
-		<< "Rotate: A D" <<std::endl
-		<< "Enable\\disable orbit drawing: O" << std::endl;
+		<< "Destroy everyone in this star system!" << std::endl
+		<< "Use Space to shoot." << std::endl
+		<< "Enable\\disable orbit drawing: O" << std::endl
+		<< "Switch between engines with R, T, Y." << std::endl;
 }
 void runGame()
 {
@@ -29,13 +30,16 @@ void runGame()
 			if (event.type == sf::Event::Closed)
 			{
 				Scene::window->close();
-				Scene::destroyAllScenes();
+				Scene::onDestroy();
 			}
 			else if (event.type == sf::Event::Resized)
 				Scene::window->setView(sf::View(sf::FloatRect(0, 0, (float)event.size.width, (float)event.size.height)));
 		}
 		Scene::processPhysics();
 		Scene::processGraphics();
+
+		if (Scene::checkGameOver())
+			Scene::gameOverEvent();
 	}
 	delete Scene::window;
 }

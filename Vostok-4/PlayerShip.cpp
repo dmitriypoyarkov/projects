@@ -12,12 +12,16 @@ const sf::Keyboard::Key PlayerShip::toggleOrbitDrawingKey = sf::Keyboard::O;
 
 PlayerShip::PlayerShip(Planet *planet, const float orbit) : Spaceship(planet, orbit)
 {
+	setupEngines();
+	currentEngine = *engines.begin();
 	Scene::playerSpawnedEvent(this);
 }
 
 PlayerShip::~PlayerShip()
 {
-	
+	for (Engine *engine : engines)
+		delete engine;
+	engines.clear();
 }
 
 void PlayerShip::onDestroy()
@@ -30,17 +34,19 @@ void PlayerShip::update()
 {
 	Spaceship::update();
 	Vector2 movingDirection = getMovingDirection();
+	currentEngine->idle();
+	float curTime = getLifetime();
 	if (sf::Keyboard::isKeyPressed(engineKey))
 	{
-		addForce(movingDirection * engineForce);
+		currentEngine->thrust(this);
 	}
 	if (sf::Keyboard::isKeyPressed(rotateUpKey))
 	{
-		addTorque(engineTorque);
+		currentEngine->rotate(this, true);
 	}
 	if (sf::Keyboard::isKeyPressed(rotateDownKey))
 	{
-		addTorque(-engineTorque);
+		currentEngine->rotate(this, false);
 	}
 	if (sf::Keyboard::isKeyPressed(gunKey))
 	{
@@ -48,7 +54,6 @@ void PlayerShip::update()
 	}
 	if (sf::Keyboard::isKeyPressed(toggleOrbitDrawingKey))
 	{
-		float curTime = getLifetime();
 		if (curTime - lastControl >= controlDelay)
 		{
 			std::cout << "Orbit drawing toggled" << std::endl;
@@ -58,14 +63,12 @@ void PlayerShip::update()
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::K))
 	{
-		float curTime = getLifetime();
 		if (curTime - lastControl >= controlDelay)
 		{
 			Statistics::setCheatUsingState(true);
 			std::cout << "Auto-win invoked" << std::endl;
 			lastControl = curTime;
-			Scene *activeScene = Scene::getActiveScene();
-			for (auto ptr = activeScene->bodies.begin(); ptr != activeScene->bodies.end(); ++ptr)
+			for (auto ptr = Scene::bodies.begin(); ptr != Scene::bodies.end(); ++ptr)
 			{
 				Body *body = *ptr;
 				if (typeid(*body) == typeid(EnemyShip))
@@ -73,6 +76,37 @@ void PlayerShip::update()
 					body->setIsDestroyed(true);
 				}
 			}
+		}
+	}
+	if (curTime - lastControl >= controlDelay)
+	{
+		lastControl = curTime;
+		switchEngines();
+	}
+}
+
+void PlayerShip::draw()
+{
+	Body::draw();
+	currentEngine->updateSprite(this);
+	Scene::window->draw(*(currentEngine->getSprite()));
+}
+
+void PlayerShip::setupEngines()
+{
+	engines.push_back(new Engine(0.05f, 1.0f, "Regular", sf::Keyboard::R));
+	engines.push_back(new Engine(1.0f, 1.0f, "Interplanetary", sf::Keyboard::T));
+	engines.push_back(new Engine(10.0f, 1.0f, "Interstellar", sf::Keyboard::Y));
+}
+
+void PlayerShip::switchEngines()
+{
+	for (Engine *engine : engines)
+	{
+		if (sf::Keyboard::isKeyPressed(engine->getKey()))
+		{
+			currentEngine = engine;
+			currentEngine->idle();
 		}
 	}
 }

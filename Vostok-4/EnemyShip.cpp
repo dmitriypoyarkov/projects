@@ -1,10 +1,10 @@
 #include "EnemyShip.h"
 #include <iostream>
 #include "Scene.h"
-EnemyShip::EnemyShip(StagePlanet *planet, const float orbit, const float angle, const bool clockwise) : Spaceship(planet, orbit, angle, clockwise)
+EnemyShip::EnemyShip(Planet *planet, const float orbit, const float angle, const bool clockwise) : Spaceship(planet, orbit, angle, clockwise)
 {
 	player = nullptr;
-	Scene::enemySpawnedEvent();
+	Scene::enemySpawnedEvent(planet);
 	dir = clockwise ? 1 : -1;
 }
 
@@ -15,12 +15,15 @@ EnemyShip::~EnemyShip()
 void EnemyShip::onDestroy()
 {
 	Spaceship::onDestroy();
-	Scene::enemyDestroyedEvent();
+	Scene::enemyDestroyedEvent(planet);
 }
 
 void EnemyShip::update()
 {
-	Spaceship::update();
+	Body::update();
+	attractTo(planet);
+	addTorque(getAirRotationResistance());
+
 	rotation = Vector2::AngleDeg(Vector2(1,0), getOrbitTangent()) + (dir == -1 ? 180 : 0);
 	if (player == nullptr) return;
 

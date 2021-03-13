@@ -5,8 +5,10 @@
 #include "Orbit.h"
 #include "SceneConstructor.h"
 #include "Statistics.h"
+#include "UI.h"
 
 PlayerShip* Scene::player = nullptr;
+Star* Scene::activeStar = nullptr;
 int Scene::activeSceneID = -1;
 int Scene::activeStarSystemID = -1;
 const int Scene::SCREEN_HEIGHT = 800;
@@ -87,7 +89,6 @@ void Scene::processPhysics()
 		body->travel();
 	}
 	eraseDestroyed(&(activeScene->bodies));
-	eraseDestroyed(&(Scene::scenes));
 }
 
 void Scene::processGraphics()
@@ -112,6 +113,7 @@ void Scene::processGraphics()
 			if (((PlayerShip *)body)->checkIsDrawingOrbits() == true)
 				Orbit::drawOrbit(((Spaceship *)body));
 		}
+		UI::draw();
 	}
 	Camera* camera = activeScene->getActiveCamera();
 	if (camera)
@@ -169,13 +171,24 @@ Scene* Scene::getSceneByID(int id)
 	for (Scene *scene : scenes)
 		if (scene->id == id)
 			return scene;
-
 	return nullptr;
 }
 
 Scene* Scene::getActiveScene()
 {
 	return getSceneByID(activeSceneID);
+}
+
+Star * Scene::getActiveStar()
+{
+	return activeStar;
+}
+
+void Scene::setActiveStar(Star *star)
+{
+	if (activeStar != nullptr)
+		activeStar->setIsDestroyed(true);
+	activeStar = star;
 }
 
 int Scene::getActiveStarSystemID()
@@ -221,22 +234,19 @@ void Scene::playerSpawnedEvent(PlayerShip *player)
 	}
 }
 
-void Scene::enemyDestroyedEvent()
+void Scene::enemyDestroyedEvent(Planet *planet)
 {
+	Statistics::addDestroyedEnemy();
 	Scene *activeScene = getActiveScene();
 	if (activeScene == nullptr) return;
-	activeScene->enemiesNumber -= 1;
-	Statistics::addDestroyedEnemy();
-
-	std::cout << "Enemies remained: " + std::to_string(activeScene->enemiesNumber) << std::endl;
-
-	if (activeScene->isStage)
-		if (activeScene->enemiesNumber == 0)
-			stageClearedEvent(activeScene);
+	activeScene->enemiesNumber--;
+	((MiniPlanet *)planet)->decrementEnemyCount();
+	std::cout << "Total enemies remained: " + std::to_string(activeScene->enemiesNumber) << std::endl;
 }
 
-void Scene::enemySpawnedEvent()
+void Scene::enemySpawnedEvent(Planet *planet)
 {
+	((MiniPlanet *)planet)->incrementEnemyCount();
 	getActiveScene()->enemiesNumber += 1;
 }
 
@@ -256,19 +266,30 @@ void Scene::stageClearedEvent(Scene *stage)
 	}
 }
 
-void Scene::starSystemClearedEvent()
+void Scene::planetClearedEvent(Planet * planet)
 {
-	std::cout << "Star System is cleared! Congratulations!" << std::endl;
-	getActiveScene()->setIsDestroyed(true);
-	Statistics::addClearedStarSystem();
-	Scene *newStarSystem = SceneConstructor::constructStarSystem(rand()%100);
-	setActiveStarSystem(newStarSystem->getID());
-	setActiveScene(newStarSystem->getID());
+	getActiveScene()->unclearedPlanetsNumber--;
+	if (getActiveScene()->unclearedPlanetsNumber <= 0)
+		starSystemClearedEvent();
 }
 
-void Scene::miniPlanetCreatedEvent()
+void Scene::starSystemClearedEvent()
+{
+	Statistics::addClearedStarSystem();
+
+	std::cout << "Star System is cleared! Congratulations!" << std::endl;
+	SceneConstructor::constructStarSystem(rand() % 100);
+}
+
+void Scene::miniPlanetCreatedEvent(Planet *planet, Star *star)
 {
 	getSceneByID(activeStarSystemID)->unclearedPlanetsNumber += 1;
+	star->addPlanet(planet);
+}
+
+void Scene::starCreatedEvent()
+{
+
 }
 
 void Scene::gameOverEvent()

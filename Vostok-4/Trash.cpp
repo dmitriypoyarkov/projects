@@ -23,6 +23,8 @@ void Trash::update()
 	Body::update();
 	attractTo(planet);
 	addTorque(getAirRotationResistance());
+	if (getLifetime() >= timeToLive)
+		setIsDestroyed(true);
 }
 
 void Trash::onCollision(Body * other)
@@ -35,3 +37,5 @@ void Trash::setupSpriteList()
 {
 	addToSpriteList(RES_PATH + "Trash.png");
 }
+
+const float Trash::timeToLive = 30.0f;

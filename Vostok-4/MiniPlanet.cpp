@@ -2,18 +2,11 @@
 #include <iostream>
 #include "SceneConstructor.h"
 
-//void MiniPlanet::changeSpeedForPlayerDistance()
-//{
-//	distanceToPlayer = 
-//	if ((Scene::getPlayer()->position - position))
-//}
-
 MiniPlanet::MiniPlanet() : Planet()
 {
 	setupSprite();
-	Scene::miniPlanetCreatedEvent();
 	MiniPlanet::refreshPlanetList();
-	centerObject = Vector2(0, 0);
+	centerObject = nullptr;
 	orbit = 0.0f;
 	angle = 0.0f;
 	speed = 0.0f;
@@ -23,19 +16,22 @@ MiniPlanet::MiniPlanet() : Planet()
 	setIsDynamic(true);
 }
 
-MiniPlanet::MiniPlanet(Vector2 centerObject, float orbit, float speed) : MiniPlanet()
+MiniPlanet::MiniPlanet(Star * centerObject, float orbit, float speed, float angle) : MiniPlanet()
 {
 	this->centerObject = centerObject;
 	this->orbit = orbit;
 	this->speed = speed;
 
-	position = centerObject + Vector2(orbit * cos(angle), orbit * sin(angle));
+	position = centerObject->position + Vector2(orbit * cos(angle), orbit * sin(angle));
+	setTangentVelocity();
+
+	Scene::miniPlanetCreatedEvent(this, centerObject);
 }
 
 void MiniPlanet::copyParameters(Vector2 *position, Vector2 *centerObject, float *orbit, float *angle, float *speed, float *mass) const
 {
 	*position = this->position;
-	*centerObject = this->centerObject;
+	*centerObject = this->centerObject->position;
 	*orbit = this->orbit;
 	*angle = this->angle;
 	*speed = this->speed;
@@ -51,9 +47,16 @@ void MiniPlanet::setupSpriteList()
 	addToSpriteList(RES_PATH + "Planet1.png");
 }
 
+
+
 void MiniPlanet::update()
 {
-	Vector2 radiusVector = position - centerObject;
+	setTangentVelocity();
+}
+
+void MiniPlanet::setTangentVelocity()
+{
+	Vector2 radiusVector = position - centerObject->position;
 	Vector2 tangent = Vector2(radiusVector.y, -radiusVector.x);
 	Vector2 tangentNorm = tangent.normalized();
 	setVelocity(tangentNorm * speed);
@@ -67,8 +70,9 @@ void MiniPlanet::refreshPlanetList()
 	{
 		Body *body = *ptr;
 		if (typeid(*body) != typeid(MiniPlanet)) continue;
-
+		
 		MiniPlanet *planet = (MiniPlanet*)body;
+		if (planet->checkIsDestroyed()) continue;
 		planets.push_back(planet);
 	}
 }
@@ -86,6 +90,18 @@ bool MiniPlanet::checkPlanetStageIsCleared()
 void MiniPlanet::setPlanetStageIsCleared(bool newState)
 {
 	planetStageIsCleared = newState;
+}
+
+void MiniPlanet::incrementEnemyCount()
+{
+	enemyCount++;
+}
+
+void MiniPlanet::decrementEnemyCount()
+{
+	enemyCount--;
+	if (enemyCount <= 0)
+		Scene::planetClearedEvent(this);
 }
 
 std::list<MiniPlanet *> MiniPlanet::planets;

@@ -24,3 +24,8 @@ float Planet::getMass() const
 	return mass;
 }
 
+void Planet::setMass(float mass)
+{
+	this->mass = mass;
+}
+

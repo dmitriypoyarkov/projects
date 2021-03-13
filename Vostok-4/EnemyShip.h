@@ -8,7 +8,7 @@ private:
 	int dir;
 	PlayerShip *player;
 public:
-	EnemyShip(StagePlanet *planet, const float orbit, const float angle = 0, const bool clockwise = true);
+	EnemyShip(Planet *planet, const float orbit, const float angle = 0, const bool clockwise = true);
 	~EnemyShip() override;
 	void onDestroy() override;
 	void update() override;

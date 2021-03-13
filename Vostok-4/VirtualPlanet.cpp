@@ -1,5 +1,5 @@
 #include "VirtualPlanet.h"
-
+#include "Scene.h"
 std::list<VirtualPlanet *> VirtualPlanet::virtualPlanets;
 
 VirtualPlanet::VirtualPlanet()
@@ -33,7 +33,6 @@ void VirtualPlanet::update(float scale)
 
 void VirtualPlanet::refreshVirtualPlanets()
 {
-
 	while (virtualPlanets.size() > 0)
 	{
 		delete *virtualPlanets.begin();
@@ -41,7 +40,8 @@ void VirtualPlanet::refreshVirtualPlanets()
 	}
 	for (auto ptr = MiniPlanet::planets.begin(); ptr != MiniPlanet::planets.end(); ++ptr)
 	{
-		new VirtualPlanet(*ptr);
+		if (*ptr != nullptr)
+			new VirtualPlanet(*ptr);
 	}
 
 }

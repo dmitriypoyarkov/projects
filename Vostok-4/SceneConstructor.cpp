@@ -15,51 +15,62 @@ Scene * SceneConstructor::constructStage(int seed)
 	earth->setScale(1.0f);
 	spawnEnemies(seed, earth);
 	new Camera();
-	Spaceship* ship = new PlayerShip(earth, earth->getSurfaceRadius() + 100);
 
-	ship->setScale(0.06f);
+	Spaceship* ship = new PlayerShip(earth, earth->getSurfaceRadius() + 100);
 	return stage;
 }
 
-
-
-Scene * SceneConstructor::constructStarSystem(int seed)
+Scene *SceneConstructor::initiateGameWithStarSystem(int seed)
 {
-	Vector2 screenCenter = Vector2(Scene::SCREEN_WIDTH / 2.0f, Scene::SCREEN_HEIGHT / 2.0f);
 	Scene *starSystem = new Scene();
-	starSystem->setIsStage(false);
-	Scene::setActiveStarSystem(starSystem->getID());
+	
 	Scene::setActiveScene(starSystem->getID());
-	MiniPlanet *star = createStar(seed);
-	star->setScale(2.0);
-	createMiniPlanets(seed, star);
+	Scene::setActiveStarSystem(starSystem->getID());
+	starSystem->setIsStage(false);
 	Camera *camera = new Camera();
-	PlayerShip *player = new PlayerShip(star, star->getSurfaceRadius() + 300);
-	std::cout << "Star System initiated. There are " + std::to_string(starSystem->getUnclearedPlanetsNumber()) + " planets in it." << std::endl;
+	Star *star = createStar(seed);
+	Scene::setActiveStar(star);
+	createMiniPlanets(seed, star);
+	PlayerShip *player = new PlayerShip(star, star->getSurfaceRadius() + 800);
+	starSystemMessage();
+
 	return starSystem;
 }
 
-void SceneConstructor::spawnEnemies(int seed, StagePlanet *planet)
+void SceneConstructor::constructStarSystem(int seed)
+{
+	Scene *starSystem = Scene::getActiveScene();
+	float randomAngle = 6.28f * 0.01f * (rand() % 100);
+	Vector2 randomDir = Vector2(cos(randomAngle), sin(randomAngle));
+	currentStarPosition += randomDir * FAR_AWAY_DISTANCE;
+	Star *star = createStar(seed);
+	createMiniPlanets(seed, star);
+	starSystemMessage();
+}
+
+void SceneConstructor::spawnEnemies(int seed, Planet *planet)
 {
 	srand(seed);
 	int enemiesNumber = rand() % MAX_ENEMIES + MIN_ENEMIES;
-	std::cout << "There are " + std::to_string(enemiesNumber) + " enemies on this stage." << std::endl;
 	for (int i = 0; i < enemiesNumber; i++)
 	{
 		EnemyShip *enemy = new EnemyShip(planet, 
 			planet->getSurfaceRadius() + MIN_ORBIT + rand() % MAX_ORBIT,
 			rand() % 10 * 0.628f, rand() % 2);
-		enemy->setScale(0.06f);
 	}
 }
 
-MiniPlanet* SceneConstructor::createStar(unsigned seed)
+Star* SceneConstructor::createStar(unsigned seed)
 {
-	MiniPlanet *star = new MiniPlanet(Vector2(0, 0), 0, 0);
+	srand(seed);
+	float scale = (float)(MIN_STAR_SCALE + rand() % MAX_STAR_SCALE);
+	Star *star = new Star(currentStarPosition);
+	star->setScale(scale);
+	star->setMass(scale * PLANET_MASS_UNIT);
 	return star;
 }
 
-void SceneConstructor::createMiniPlanets(int seed, MiniPlanet *star)
+void SceneConstructor::createMiniPlanets(int seed, Star *star)
 {
 	srand(seed);
 	int planetsNumber = rand() % MAX_PLANETS + MIN_PLANETS;
@@ -67,22 +78,47 @@ void SceneConstructor::createMiniPlanets(int seed, MiniPlanet *star)
 	int prevSurfaceRadius = (int) star->getSurfaceRadius();
 	for (int i = 0; i < planetsNumber; i++)
 	{
-		int curOrbit = prevOrbit + 2 * prevSurfaceRadius +
-			MIN_PLANET_DISTANCE + rand() % MAX_PLANET_DISTANCE;
 		int speed = MIN_PLANET_SPEED + rand() % MAX_PLANET_SPEED;
-		MiniPlanet *planet = new MiniPlanet(star->position, (float)curOrbit, (float)speed);
+		float scale = (float) (MIN_PLANET_SCALE + rand() % MAX_PLANET_SCALE);
+		int curOrbit = prevOrbit + prevSurfaceRadius +
+			PLANET_SPRITE_SIZE * (MAX_PLANET_SCALE + MIN_PLANET_SCALE +
+			MIN_PLANET_DISTANCE_SCALE + rand() % MAX_PLANET_DISTANCE_SCALE);
+		float angle = 6.28f * (rand() % 11 * 0.1f);
+		int mass = scale * PLANET_MASS_UNIT;
+		MiniPlanet *planet = new MiniPlanet(star, (float)curOrbit, (float)speed / 3, angle);
+		planet->setScale(scale);
+		planet->setMass(mass);
+		
+		spawnEnemies(planet->getPlanetStageSeed(), planet);
+
 		prevOrbit = curOrbit;
 		prevSurfaceRadius = (int) planet->getSurfaceRadius();
 	}
 }
 
+void SceneConstructor::starSystemMessage()
+{
+	std::cout << "Star System initiated. There are " + std::to_string(Scene::getActiveScene()->getUnclearedPlanetsNumber()) + " planets in it." << std::endl;
+}
+
+
+Vector2 SceneConstructor::currentStarPosition = Vector2(0,0);
+
+const int SceneConstructor::FAR_AWAY_DISTANCE = 200000;
+
 const int SceneConstructor::MIN_ENEMIES = 2;
-const int SceneConstructor::MAX_ENEMIES = 3;
-const int SceneConstructor::MIN_ORBIT = 80;
-const int SceneConstructor::MAX_ORBIT = 500;
-const int SceneConstructor::MIN_PLANETS = 1;
-const int SceneConstructor::MAX_PLANETS = 1;
-const int SceneConstructor::MIN_PLANET_DISTANCE = 7000;
-const int SceneConstructor::MAX_PLANET_DISTANCE = 300;
-const int SceneConstructor::MIN_PLANET_SPEED = 3;
+const int SceneConstructor::MAX_ENEMIES = 2;
+const int SceneConstructor::MIN_ORBIT = 200;
+const int SceneConstructor::MAX_ORBIT = 400;
+const int SceneConstructor::MIN_PLANETS = 3;
+const int SceneConstructor::MAX_PLANETS = 3;
+const int SceneConstructor::PLANET_SPRITE_SIZE = 1000;
+const int SceneConstructor::MIN_PLANET_DISTANCE_SCALE = 13;
+const int SceneConstructor::MAX_PLANET_DISTANCE_SCALE = 1;
+const int SceneConstructor::MIN_PLANET_SPEED = 1;
 const int SceneConstructor::MAX_PLANET_SPEED = 1;
+const int SceneConstructor::MIN_STAR_SCALE = 7;
+const int SceneConstructor::MAX_STAR_SCALE = 4;
+const int SceneConstructor::MIN_PLANET_SCALE = 3;
+const int SceneConstructor::MAX_PLANET_SCALE = 2;
+const int SceneConstructor::PLANET_MASS_UNIT = 50;

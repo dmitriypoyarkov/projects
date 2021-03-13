@@ -11,6 +11,7 @@ public:
 	float getSurfaceRadius();
 	float getFirstCosmic(float orbit) const;
 	float getMass() const;
+	void setMass(float mass);
 private:
 	float size;
 	float mass;

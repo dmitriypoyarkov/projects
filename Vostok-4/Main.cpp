@@ -18,10 +18,9 @@ void runGame()
 	Scene::window = new sf::RenderWindow(sf::VideoMode(Scene::SCREEN_WIDTH, Scene::SCREEN_HEIGHT), "Space!");
 	Scene::window->setFramerateLimit(60);
 	srand(0);
-	SceneConstructor::constructStarSystem(rand());
-
 	showStartMessage();
-
+	SceneConstructor::initiateGameWithStarSystem(rand());
+	
 	sf::Event event;
 	while (Scene::window->isOpen())
 	{

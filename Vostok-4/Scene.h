@@ -2,6 +2,7 @@
 #include <list>
 #include "Camera.h"
 #include "PlayerShip.h"
+#include "Star.h"
 
 class Scene
 {
@@ -50,16 +51,20 @@ public:
 	static int getActiveSceneID();
 	static Scene* getSceneByID(int id);
 	static Scene* getActiveScene();
+	static Star *getActiveStar();
+	static void setActiveStar(Star *star);
 	static int getActiveStarSystemID();
 	static void setActiveStarSystem(int id);
 
 	static void playerDestroyedEvent();
 	static void playerSpawnedEvent(PlayerShip *ship);
-	static void enemyDestroyedEvent();
-	static void enemySpawnedEvent();
+	static void enemyDestroyedEvent(Planet *planet);
+	static void enemySpawnedEvent(Planet *planet);
 	static void stageClearedEvent(Scene *stage);
+	static void planetClearedEvent(Planet *planet);
 	static void starSystemClearedEvent();
-	static void miniPlanetCreatedEvent();
+	static void miniPlanetCreatedEvent(Planet *planet, Star *star);
+	static void starCreatedEvent();
 	static void gameOverEvent();
 
 	static void destroyScene(Scene *scene);
@@ -92,6 +97,7 @@ private:
 	bool isCleared;
 	bool isDestroyed;
 	static PlayerShip *player;
+	static Star *activeStar;
 	static int activeSceneID;
 	static int activeStarSystemID;
 	int enemiesNumber;

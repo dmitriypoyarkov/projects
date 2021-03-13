@@ -2,6 +2,7 @@
 #include <iostream>
 #include "Scene.h"
 #include "Statistics.h"
+#include "EnemyShip.h"
 
 const sf::Keyboard::Key PlayerShip::gunKey = sf::Keyboard::Space;
 const sf::Keyboard::Key PlayerShip::engineKey = sf::Keyboard::LShift;
@@ -64,8 +65,14 @@ void PlayerShip::update()
 			std::cout << "Auto-win invoked" << std::endl;
 			lastControl = curTime;
 			Scene *activeScene = Scene::getActiveScene();
-			if (activeScene->checkIsStage())
-				Scene::stageClearedEvent(activeScene);
+			for (auto ptr = activeScene->bodies.begin(); ptr != activeScene->bodies.end(); ++ptr)
+			{
+				Body *body = *ptr;
+				if (typeid(*body) == typeid(EnemyShip))
+				{
+					body->setIsDestroyed(true);
+				}
+			}
 		}
 	}
 }

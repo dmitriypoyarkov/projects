@@ -15,5 +15,6 @@ protected:
 	void setupSpriteList() override;
 private:
 	int originID;
+	static const float timeToLive;
 };
 

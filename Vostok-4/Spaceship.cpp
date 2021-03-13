@@ -25,6 +25,7 @@ Spaceship::Spaceship(Planet* planet, const float orbit, const float angle, const
 	Vector2 radius = position - planet->position;
 	Vector2 tangent = getOrbitTangent();
 	int dir = clockwise ? 1 : -1;
+
 	setVelocity(planet->getVelocity() + tangent * planet->getFirstCosmic(orbit) * (float)dir);
 }
 
@@ -75,9 +76,8 @@ bool Spaceship::checkIsDrawingOrbits()
 	return isDrawingOrbits;
 }
 
-
 const float Spaceship::reloadTime = 0.3f;
 const float Spaceship::gunForce = 100.0f;
-const float Spaceship::engineTorque = 0.1f;
+const float Spaceship::engineTorque = 1.0f;
 const float Spaceship::engineForce = 0.05f;
 

@@ -7,3 +7,4 @@ How to play:
 - Use Space to shoot.
 - Enable\disable orbit drawing: O
 - Switch between engines with R, T, Y.
+- To invoke auto-win press 

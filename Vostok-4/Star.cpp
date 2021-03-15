@@ -58,4 +58,4 @@ void Star::deletePlanets()
 	planets.clear();
 }
 
-const float Star::starSystemRadius = 200000.0f;
+const float Star::starSystemRadius = 1000000.0f;

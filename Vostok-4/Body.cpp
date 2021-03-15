@@ -97,8 +97,6 @@ void Body::update()
 {
 	if (health <= 0)
 		isDestroyed = true;
-	if (position.x + position.y >= WORLD_LIMIT)
-		isDestroyed = true;
 }
 
 void Body::updateSprite()
@@ -220,4 +218,3 @@ const float Body::maxSpeed = 100000;
 const float Body::gravityConst = 100.0f;
 const float Body::airResistanceForce = 0.5f;
 const float Body::degToRad = 0.0174533f;
-const int Body::WORLD_LIMIT = 1000000;

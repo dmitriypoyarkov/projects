@@ -16,7 +16,7 @@ void SceneConstructor::constructStarSystem(int seed)
 {
 	float randomAngle = 6.28f * 0.01f * (rand() % 100);
 	Vector2 randomDir = Vector2(cos(randomAngle), sin(randomAngle));
-	currentStarPosition += randomDir * FAR_AWAY_DISTANCE_SCALE * PLANET_SPRITE_SIZE;
+	currentStarPosition += randomDir * (float)(FAR_AWAY_DISTANCE_SCALE * PLANET_SPRITE_SIZE);
 	Star *star = createStar(seed);
 	createMiniPlanets(seed, star);
 	starSystemMessage();
@@ -28,7 +28,7 @@ void SceneConstructor::spawnEnemies(int seed, Planet *planet)
 	int enemiesNumber = rand() % MAX_ENEMIES + MIN_ENEMIES;
 	for (int i = 0; i < enemiesNumber; i++)
 	{
-		EnemyShip *enemy = new EnemyShip(planet, 
+		new EnemyShip(planet, 
 			planet->getSurfaceRadius() + MIN_ORBIT + 2 * i * ORBIT_GAP + rand() % ORBIT_GAP,
 			rand() % 10 * 0.628f, rand() % 2);
 	}

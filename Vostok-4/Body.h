@@ -40,7 +40,6 @@ public:
 	static const float gravityConst;
 	static const float degToRad;
 	static const float airResistanceForce;
-	static const int WORLD_LIMIT;
 	static const float controlDelay;
 protected:
 	int getHealth() const;

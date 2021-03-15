@@ -39,7 +39,6 @@ sf::Color Orbit::getOrbitColor()
 
 void Orbit::drawOrbit(Spaceship * ship)
 {
-	Planet *planet = ship->planet;
 	Vector2 virtualPosition = Vector2(ship->getPosition());
 	Vector2 virtualVelocity = Vector2(ship->getVelocity());
 	VirtualPlanet::refreshVirtualPlanets();

@@ -67,7 +67,6 @@ void Scene::processPhysics()
 
 void Scene::processGraphics()
 {
-
 	window->clear(sf::Color::Black);
 	for (auto bodyPtr = Scene::bodies.begin();
 		bodyPtr != Scene::bodies.end();
@@ -95,6 +94,20 @@ void Scene::processGraphics()
 	}
 
 	window->display();
+}
+
+void Scene::manageScene()
+{
+	if (gameOver)
+	{
+		gameOverEvent();
+		return;
+	}
+	if (createNewStar)
+	{
+		tryCreateNewStar();
+		return;
+	}
 }
 
 void Scene::tryCreateNewStar()
@@ -191,7 +204,6 @@ void Scene::starSystemClearedEvent()
 	std::cout << "Star System is cleared! Congratulations!" << std::endl;
 	std::cout << "You may now press Y to activate interstellar engine." << std::endl;
 	createNewStar = true;
-	tryCreateNewStar();
 }
 
 void Scene::miniPlanetCreatedEvent(Planet *planet, Star *star)
@@ -218,8 +230,6 @@ void Scene::starCreatedEvent()
 void Scene::starDestroyedEvent()
 {
 	starsNumber--;
-	if (createNewStar)
-		tryCreateNewStar();
 }
 
 void Scene::gameOverEvent()

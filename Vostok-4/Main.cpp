@@ -38,9 +38,7 @@ void runGame()
 		}
 		Scene::processPhysics();
 		Scene::processGraphics();
-
-		if (Scene::checkGameOver())
-			Scene::gameOverEvent();
+		Scene::manageScene();
 	}
 	delete Scene::window;
 }

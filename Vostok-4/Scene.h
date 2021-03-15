@@ -42,6 +42,7 @@ public:
 	static void detectCollision(Body *body);
 	static void processPhysics();
 	static void processGraphics();
+	static void manageScene();
 	static void tryCreateNewStar();
 
 	static int getNextSceneID();

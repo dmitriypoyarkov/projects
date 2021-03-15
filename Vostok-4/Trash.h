@@ -1,11 +1,10 @@
 #pragma once
 #include "Body.h"
-#include "StagePlanet.h"
 #include "Spaceship.h"
 class Trash : public Body
 {
 public:
-	Trash();
+	Trash(Vector2 position = Vector2(0,0));
 	Trash(Spaceship *origin);
 
 	Planet *planet;

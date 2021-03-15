@@ -1,12 +1,12 @@
 #pragma once
 #include "Body.h"
-#include "StagePlanet.h"
+#include "Planet.h"
 
 class Spaceship : public Body
 {
 public:
 	Planet* planet;
-	Spaceship();
+	Spaceship(Vector2 position = Vector2(0,0));
 	Spaceship(Vector2 position, Vector2 velocity);
 	Spaceship(Planet* planet, const float orbit, const float angle = 0, const bool clockwise = true);
 	virtual ~Spaceship();

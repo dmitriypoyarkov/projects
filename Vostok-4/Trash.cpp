@@ -1,6 +1,6 @@
 #include "Trash.h"
 
-Trash::Trash() : Body()
+Trash::Trash(Vector2 position) : Body(position)
 {
 	originID = -1;
 	planet = nullptr;
@@ -8,10 +8,9 @@ Trash::Trash() : Body()
 	setIsDynamic(true);
 }
 
-Trash::Trash(Spaceship *origin) : Trash()
+Trash::Trash(Spaceship *origin) : Trash(origin->getPosition())
 {
 	originID = origin->getSceneID();
-	position = origin->position;
 	planet = origin->planet;
 	float originSpeed = (origin->getVelocity() * 3).magnitude();
 	float angle = (rand() % 10) * 0.628f;
@@ -35,7 +34,6 @@ void Trash::onCollision(Body * other)
 
 void Trash::setupSpriteList()
 {
-	addToSpriteList(RES_PATH + "Trash.png");
+	classSpriteList = { "Trash.png" };
 }
-
 const float Trash::timeToLive = 30.0f;

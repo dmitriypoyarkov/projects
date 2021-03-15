@@ -6,11 +6,7 @@
 class Body : public Drawable
 {
 public:
-	Vector2 position;
-	float rotation;
-
-	Body();
-	Body(Vector2 position);
+	Body(Vector2 position = Vector2(0,0));
 	virtual ~Body();
 	virtual void onDestroy();
 
@@ -21,6 +17,11 @@ public:
 	virtual void onCollision(Body *other);
 
 	int getSceneID() const;
+	Vector2 getPosition() const;
+	void move(Vector2 shift);
+	float getRotation();
+	void setRotation(float rotation);
+	void rotate(float angle);
 	Vector2 getMovingDirection() const;
 	Vector2 getVelocity() const;
 	void setVelocity(Vector2 newVelocity);
@@ -42,7 +43,6 @@ public:
 	static const int WORLD_LIMIT;
 	static const float controlDelay;
 protected:
-	void setupSpriteList() = 0;
 	int getHealth() const;
 	void decreaseHealth();
 	void setHealthToZero();
@@ -52,12 +52,13 @@ protected:
 	void attractToPlanets();
 private:
 	int sceneID;
-	Vector2 velocity;
 	int health;
+	Vector2 position;
+	float rotation;
+	Vector2 velocity;
 	float rotationSpeed;
 	Vector2 instantForce;
 	float instantTorque;
-	float colliderSize;
 	sf::Clock clock;
 	bool isDestroyed;
 	bool isDynamic;

@@ -5,7 +5,6 @@
 class SceneConstructor
 {
 public:
-	static void constructStage(int seed);
 	static void constructStarSystem(int seed);
 	static void initiateGameWithStarSystem(int seed);
 private:
@@ -15,7 +14,7 @@ private:
 	static void starSystemMessage();
 
 	static Vector2 currentStarPosition;
-	static const int FAR_AWAY_DISTANCE;
+	static const int FAR_AWAY_DISTANCE_SCALE;
 	static const int MIN_ENEMIES;
 	static const int MAX_ENEMIES;
 	static const int MIN_ORBIT;

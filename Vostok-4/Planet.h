@@ -4,7 +4,7 @@
 class Planet : public Body
 {
 public:
-	Planet();
+	Planet(Vector2 position = Vector2(0,0));
 
 	void onCollision(Body *other) override;
 

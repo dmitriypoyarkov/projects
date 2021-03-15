@@ -14,18 +14,18 @@ Camera::Camera()
 
 Camera::Camera(Body * objectToFollow) : Camera()
 {
-	destination = &(objectToFollow->position);
+	this->objectToFollow = objectToFollow;
 }
 
 void Camera::setupSpriteList()
 {
-	addToSpriteList("");
+	classSpriteList = { "" };
 }
 
 void Camera::update()
 {
-	if (destination != nullptr)
-		position = *destination;
+	if (objectToFollow != nullptr)
+		move((objectToFollow->getPosition() - getPosition()) * smoothness);
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Add))
 		setScale(getScale() / 1.05f);
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Subtract))
@@ -36,8 +36,7 @@ void Camera::updateSprite() {}
 
 void Camera::setObjectToFollow(Body * objectToFollow)
 {
-	if (objectToFollow == nullptr)
-		destination = nullptr;
-	else
-		destination = &(objectToFollow->position);
+	this->objectToFollow = objectToFollow;
 }
+
+const float Camera::smoothness = 0.8f;

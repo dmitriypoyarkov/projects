@@ -2,7 +2,7 @@
 #include <iostream>
 #include "SceneConstructor.h"
 
-MiniPlanet::MiniPlanet() : Planet()
+MiniPlanet::MiniPlanet(Vector2 position) : Planet(position)
 {
 	setupSprite();
 	MiniPlanet::refreshPlanetList();
@@ -16,38 +16,31 @@ MiniPlanet::MiniPlanet() : Planet()
 	setIsDynamic(true);
 }
 
-MiniPlanet::MiniPlanet(Star * centerObject, float orbit, float speed, float angle) : MiniPlanet()
+MiniPlanet::MiniPlanet(Star * centerObject, float orbit, float speed, float angle) 
+	: MiniPlanet(centerObject->getPosition() + Vector2(orbit * cos(angle), orbit * sin(angle)))
 {
 	this->centerObject = centerObject;
 	this->orbit = orbit;
 	this->speed = speed;
 
-	position = centerObject->position + Vector2(orbit * cos(angle), orbit * sin(angle));
 	setTangentVelocity();
-
 	Scene::miniPlanetCreatedEvent(this, centerObject);
 }
 
 void MiniPlanet::copyParameters(Vector2 *position, Vector2 *centerObject, float *orbit, float *angle, float *speed, float *mass) const
 {
-	*position = this->position;
-	*centerObject = this->centerObject->position;
+	*position = this->getPosition();
+	*centerObject = this->centerObject->getPosition();
 	*orbit = this->orbit;
 	*angle = this->angle;
 	*speed = this->speed;
 	*mass = this->getMass();
 }
 
-void MiniPlanet::onClick()
-{
-}
-
 void MiniPlanet::setupSpriteList()
 {
-	addToSpriteList(RES_PATH + "Planet1.png");
+	classSpriteList = { "Planet.png" };
 }
-
-
 
 void MiniPlanet::update()
 {
@@ -56,7 +49,7 @@ void MiniPlanet::update()
 
 void MiniPlanet::setTangentVelocity()
 {
-	Vector2 radiusVector = position - centerObject->position;
+	Vector2 radiusVector = getPosition() - centerObject->getPosition();
 	Vector2 tangent = Vector2(radiusVector.y, -radiusVector.x);
 	Vector2 tangentNorm = tangent.normalized();
 	setVelocity(tangentNorm * speed);

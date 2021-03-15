@@ -10,7 +10,7 @@ void UI::draw()
 
 void UI::drawAim()
 {
-	Vector2 playerPosition = Scene::getPlayer()->position;
+	Vector2 playerPosition = Scene::getPlayer()->getPosition();
 	Vector2 playerDirection = Scene::getPlayer()->getMovingDirection();
 	float aimScale = 0.0015f*Scene::window->getView().getSize().x;
 	Vector2 aimPosition = playerPosition + playerDirection * aimDistance * aimScale;

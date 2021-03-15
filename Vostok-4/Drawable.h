@@ -13,21 +13,29 @@ public:
 	void setLayer(const int newLayer);
 	float getColliderSize();
 	void setScale(const float newScale);
-
+	static void loadSprites();
 	static const std::string RES_PATH;
 protected:
 	virtual void setupSpriteList() = 0;
 	void loadSprite(std::string spritePath);
-	void addToSpriteList(std::string spritePath);
 	void setupSprite();
+	int findInSpriteList(std::string name);
+	void setTextureByClassSpriteType(int classSpriteType);
+	void setClassSpriteType(std::string name);
+	std::vector<std::string> classSpriteList;
 private:
 	float colliderSize;
 	int layer;
 	int spriteType;
+	int classSpriteType;
 	float scale;
 	std::string spritePath;
-	std::list<std::string> spriteList;
-	sf::Texture texture;
+//	std::list<std::string> spriteList;
+	const static std::string spriteList[];
+	const static int spriteCount;
+	const static int textureCount;
+	static sf::Texture textures[];
+	sf::Texture *texture;
 	sf::Sprite sprite;
 };
 

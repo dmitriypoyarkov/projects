@@ -5,7 +5,8 @@ class Camera : public Body
 {
 private:
 	Vector2* destination;
-
+	Body *objectToFollow;
+	static const float smoothness;
 public:
 	Camera();
 	Camera(Body* objectToFollow);

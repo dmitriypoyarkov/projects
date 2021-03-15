@@ -1,6 +1,6 @@
 #include "Planet.h"
 
-Planet::Planet() : Body()
+Planet::Planet(Vector2 position) : Body(position)
 {
 	size = 1.0f;
 	mass = 1000.0f;

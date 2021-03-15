@@ -1,17 +1,19 @@
 #include "Star.h"
 #include "Scene.h"
 #include "MiniPlanet.h"
-Star::Star()
+
+Star::Star(Vector2 position) : Planet(position)
 {
 	setupSprite();
 	isNewStar = true;
 	setIsDynamic(false);
 	MiniPlanet::refreshPlanetList();
+	Scene::starCreatedEvent();
 }
 
-Star::Star(Vector2 position) : Star()
+Star::~Star()
 {
-	this->position = position;
+	Scene::starDestroyedEvent();
 }
 
 bool Star::checkIsNewStar()
@@ -32,12 +34,11 @@ void Star::onDestroy()
 
 float Star::distanceToPlayer()
 {
-	return (position - Scene::getPlayer()->position).magnitude();
+	return (getPosition() - Scene::getPlayer()->getPosition()).magnitude();
 }
-
 void Star::setupSpriteList()
 {
-	addToSpriteList(RES_PATH + "Planet1.png");
+	classSpriteList = { "Planet.png" };
 }
 
 void Star::update()

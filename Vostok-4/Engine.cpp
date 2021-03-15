@@ -1,14 +1,14 @@
 #include "Engine.h"
 
-
-
 Engine::Engine(std::string name)
 {
-	this->name = name;
+	setupSpriteList();
+	setClassSpriteType(name);
 	setupSprite();
 	getSprite()->setOrigin(getSprite()->getOrigin() + sf::Vector2f(65.0f, 0));
-	this->torque = 0;
-	this->force = 0;
+	this->name = name;
+	this->torque = 0.0f;
+	this->force = 0.0f;
 	this->key = sf::Keyboard::Key();
 }
 
@@ -31,8 +31,8 @@ std::string Engine::getName()
 
 void Engine::updateSprite(Body *body)
 {
-	getSprite()->setPosition(body->position);
-	getSprite()->setRotation(body->rotation);
+	getSprite()->setPosition(body->getPosition());
+	getSprite()->setRotation(body->getRotation());
 	getSprite()->setScale(body->getScale(), body->getScale());
 }
 
@@ -54,5 +54,10 @@ void Engine::idle()
 
 void Engine::setupSpriteList()
 {
-	addToSpriteList(RES_PATH + name + ".png");
+	classSpriteList =
+	{
+		"Regular.png",
+		"Interplanetary.png",
+		"Interstellar.png"
+	};
 }

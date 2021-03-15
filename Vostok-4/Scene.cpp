@@ -19,7 +19,9 @@ sf::RenderWindow* Scene::window = nullptr;
 
 int Scene::enemiesNumber = 0;
 int Scene::unclearedPlanetsNumber = 0;
+int Scene::starsNumber = 0;
 bool Scene::gameOver = false;
+bool Scene::createNewStar = false;
 
 void Scene::detectCollision(Body *body)
 {
@@ -31,7 +33,7 @@ void Scene::detectCollision(Body *body)
 		Body* other = *bodyPtr;
 		if (other == body || !other->checkIsMaterial()) continue;
 
-		float distance = (other->position - body->position).magnitude();
+		float distance = (other->getPosition() - body->getPosition()).magnitude();
 		if (distance <= (other->getColliderSize() + body->getColliderSize()) / 2)
 		{
 			body->onCollision(other);
@@ -85,7 +87,7 @@ void Scene::processGraphics()
 	if (camera)
 	{
 		sf::View view = window->getView();
-		view.setCenter(camera->position);
+		view.setCenter(camera->getPosition());
 		sf::Vector2f scale = view.getSize();
 		scale = Vector2(scale.x, scale.y).normalized() * camera->getScale();
 		view.setSize(scale);
@@ -93,6 +95,15 @@ void Scene::processGraphics()
 	}
 
 	window->display();
+}
+
+void Scene::tryCreateNewStar()
+{
+	if (createNewStar && starsNumber == 1)
+	{
+		SceneConstructor::constructStarSystem(rand() % 100);
+		createNewStar = false;
+	}
 }
 
 void Scene::onDestroy() 
@@ -179,7 +190,8 @@ void Scene::starSystemClearedEvent()
 
 	std::cout << "Star System is cleared! Congratulations!" << std::endl;
 	std::cout << "You may now press Y to activate interstellar engine." << std::endl;
-	SceneConstructor::constructStarSystem(rand() % 100);
+	createNewStar = true;
+	tryCreateNewStar();
 }
 
 void Scene::miniPlanetCreatedEvent(Planet *planet, Star *star)
@@ -200,7 +212,14 @@ void Scene::planetClearedEvent(Planet * planet)
 
 void Scene::starCreatedEvent()
 {
+	starsNumber++;
+}
 
+void Scene::starDestroyedEvent()
+{
+	starsNumber--;
+	if (createNewStar)
+		tryCreateNewStar();
 }
 
 void Scene::gameOverEvent()
@@ -209,6 +228,7 @@ void Scene::gameOverEvent()
 	Statistics::reset();
 	std::cout << "Game Over!" << std::endl;
 	Scene::onDestroy();
+
 	SceneConstructor::initiateGameWithStarSystem(rand());
 	gameOver = false;
 }

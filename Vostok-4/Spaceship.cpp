@@ -2,7 +2,7 @@
 #include "Bullet.h"
 #include "Trash.h"
 
-Spaceship::Spaceship() : Body()
+Spaceship::Spaceship(Vector2 position) : Body(position)
 {
 	setupSprite();
 	setIsDynamic(true);
@@ -12,17 +12,16 @@ Spaceship::Spaceship() : Body()
 	planet = nullptr;
 }
 
-Spaceship::Spaceship(Vector2 position, Vector2 velocity) : Spaceship()
+Spaceship::Spaceship(Vector2 position, Vector2 velocity) : Spaceship(position)
 {
-	this->position = position;
 	setVelocity(velocity);
 }
 
-Spaceship::Spaceship(Planet* planet, const float orbit, const float angle, const bool clockwise) : Spaceship()
+Spaceship::Spaceship(Planet* planet, const float orbit, const float angle, const bool clockwise)
+	: Spaceship(planet->getPosition() - Vector2(orbit * sin(angle), orbit * cos(angle)))
 {
-	position = planet->position - Vector2(orbit * sin(angle), orbit * cos(angle));
 	this->planet = planet;
-	Vector2 radius = position - planet->position;
+	Vector2 radius = getPosition() - planet->getPosition();
 	Vector2 tangent = getOrbitTangent();
 	int dir = clockwise ? 1 : -1;
 
@@ -38,9 +37,8 @@ void Spaceship::onDestroy()
 
 void Spaceship::setupSpriteList()
 {
-	addToSpriteList(RES_PATH + "Rocket1.png");
+	classSpriteList = { "Rocket1.png" };
 }
-
 void Spaceship::update()
 {
 	Body::update();
@@ -50,7 +48,7 @@ void Spaceship::update()
 
 Vector2 Spaceship::getOrbitTangent() const
 {
-	Vector2 radius = planet->position - position;
+	Vector2 radius = planet->getPosition() - getPosition();
 	return Vector2(radius.y, -radius.x).normalized();
 }
 
@@ -66,7 +64,7 @@ void Spaceship::tryShoot()
 	float curTime = getLifetime();
 	if (curTime - lastShot >= reloadTime)
 	{
-		new Bullet(position, rotation, getVelocity() + getMovingDirection() * gunForce, this);
+		new Bullet(getPosition(), getRotation(), getVelocity() + getMovingDirection() * gunForce, this);
 		lastShot = curTime;
 	}
 }
@@ -78,4 +76,3 @@ bool Spaceship::checkIsDrawingOrbits()
 
 const float Spaceship::reloadTime = 0.3f;
 const float Spaceship::gunForce = 100.0f;
-

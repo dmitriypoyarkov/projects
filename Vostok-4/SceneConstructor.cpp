@@ -2,26 +2,13 @@
 #include <iostream>
 #include "EnemyShip.h"
 
-void SceneConstructor::constructStage(int seed)
-{
-	Vector2 screenCenter = Vector2(Scene::SCREEN_WIDTH / 2.0f, Scene::SCREEN_HEIGHT / 2.0f);
-
-	StagePlanet* earth = new StagePlanet(screenCenter);
-
-	earth->setScale(1.0f);
-	spawnEnemies(seed, earth);
-	new Camera();
-
-	Spaceship* ship = new PlayerShip(earth, earth->getSurfaceRadius() + 100);
-}
-
 void SceneConstructor::initiateGameWithStarSystem(int seed)
 {
-	Camera *camera = new Camera();
+	new Camera();
 	Star *star = createStar(seed);
 	Scene::setActiveStar(star);
 	createMiniPlanets(seed, star);
-	PlayerShip *player = new PlayerShip(star, star->getSurfaceRadius() + 800);
+	new PlayerShip(star, star->getSurfaceRadius() + 800);
 	starSystemMessage();
 }
 
@@ -29,7 +16,7 @@ void SceneConstructor::constructStarSystem(int seed)
 {
 	float randomAngle = 6.28f * 0.01f * (rand() % 100);
 	Vector2 randomDir = Vector2(cos(randomAngle), sin(randomAngle));
-	currentStarPosition += randomDir * FAR_AWAY_DISTANCE;
+	currentStarPosition += randomDir * FAR_AWAY_DISTANCE_SCALE * PLANET_SPRITE_SIZE;
 	Star *star = createStar(seed);
 	createMiniPlanets(seed, star);
 	starSystemMessage();
@@ -71,7 +58,7 @@ void SceneConstructor::createMiniPlanets(int seed, Star *star)
 			PLANET_SPRITE_SIZE * (MAX_PLANET_SCALE + MIN_PLANET_SCALE +
 			MIN_PLANET_DISTANCE_SCALE + rand() % MAX_PLANET_DISTANCE_SCALE);
 		float angle = 6.28f * (rand() % 11 * 0.1f);
-		int mass = scale * PLANET_MASS_UNIT;
+		float mass = scale * PLANET_MASS_UNIT;
 		MiniPlanet *planet = new MiniPlanet(star, (float)curOrbit, (float)speed / 3, angle);
 		planet->setScale(scale);
 		planet->setMass(mass);
@@ -91,15 +78,15 @@ void SceneConstructor::starSystemMessage()
 
 Vector2 SceneConstructor::currentStarPosition = Vector2(0,0);
 
-const int SceneConstructor::FAR_AWAY_DISTANCE = 200000;
+const int SceneConstructor::FAR_AWAY_DISTANCE_SCALE = 300;
 
 const int SceneConstructor::MIN_ENEMIES = 2;
 const int SceneConstructor::MAX_ENEMIES = 2;
-const int SceneConstructor::MIN_ORBIT = 200;
-const int SceneConstructor::ORBIT_GAP = 170;
+const int SceneConstructor::MIN_ORBIT = 800;
+const int SceneConstructor::ORBIT_GAP = 300;
 const int SceneConstructor::MIN_PLANETS = 3;
 const int SceneConstructor::MAX_PLANETS = 3;
-const int SceneConstructor::PLANET_SPRITE_SIZE = 1000;
+const int SceneConstructor::PLANET_SPRITE_SIZE = 7886;
 const int SceneConstructor::MIN_PLANET_DISTANCE_SCALE = 13;
 const int SceneConstructor::MAX_PLANET_DISTANCE_SCALE = 1;
 const int SceneConstructor::MIN_PLANET_SPEED = 1;
@@ -108,4 +95,4 @@ const int SceneConstructor::MIN_STAR_SCALE = 8;
 const int SceneConstructor::MAX_STAR_SCALE = 5;
 const int SceneConstructor::MIN_PLANET_SCALE = 4;
 const int SceneConstructor::MAX_PLANET_SCALE = 2;
-const int SceneConstructor::PLANET_MASS_UNIT = 50;
+const int SceneConstructor::PLANET_MASS_UNIT = 2000;

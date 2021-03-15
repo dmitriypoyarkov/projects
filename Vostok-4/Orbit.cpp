@@ -19,7 +19,7 @@ void Orbit::virtualUpdate(Vector2 *virtualPosition, Vector2 *virtualVelocity)
 			*virtualVelocity += normal * planet->mass * Body::gravityConst / pow(radius.magnitude(), 2) * orbitScale;
 		planet->update(orbitScale);
 	}
-	Vector2 radius = Scene::getActiveStar()->position - *virtualPosition;
+	Vector2 radius = Scene::getActiveStar()->getPosition() - *virtualPosition;
 	Vector2 normal = radius.normalized();
 	if (radius.magnitude() != 0)
 		*virtualVelocity += normal * Scene::getActiveStar()->getMass() * Body::gravityConst / pow(radius.magnitude(), 2) * orbitScale;
@@ -40,7 +40,7 @@ sf::Color Orbit::getOrbitColor()
 void Orbit::drawOrbit(Spaceship * ship)
 {
 	Planet *planet = ship->planet;
-	Vector2 virtualPosition = Vector2(ship->position);
+	Vector2 virtualPosition = Vector2(ship->getPosition());
 	Vector2 virtualVelocity = Vector2(ship->getVelocity());
 	VirtualPlanet::refreshVirtualPlanets();
 	float pointScale = Scene::window->getView().getSize().x;
@@ -57,7 +57,7 @@ void Orbit::drawOrbit(Spaceship * ship)
 }
 
 const int Orbit::orbitLength = 400;
-const float Orbit::orbitScale = 50.0f;
+const float Orbit::orbitScale = 400.0f;
 const sf::Color Orbit::safeColor = sf::Color::Blue;
 const sf::Color Orbit::crashColor = sf::Color::Red;
 const sf::Color Orbit::flyAwayColor = sf::Color::Magenta;

@@ -29,7 +29,7 @@ void Body::attractTo(Body *bplanet)
 		std::cout << "Object has no planet!" << std::endl;
 		return;
 	}
-	StagePlanet *planet = (StagePlanet *)bplanet;
+	Planet *planet = (Planet *)bplanet;
 	Vector2 radius = planet->position - position;
 	Vector2 normal = radius.normalized();
 	if (radius.magnitude() != 0)
@@ -51,24 +51,18 @@ void Body::attractToPlanets()
 	}
 }
 
-Body::Body() : Drawable()
+Body::Body(Vector2 position) : Drawable()
 {
 	sceneID = Scene::AddBody(this);
-	position = Vector2(0, 0);
 	velocity = Vector2(0, 0);
 	rotationSpeed = 0.0f;
 	rotation = 0.0f;
 	health = 2;
 	instantForce = Vector2(0, 0);
 	instantTorque = 0.0f;
-	colliderSize = 0.0f;
 	isMaterial = true;
 	isDestroyed = false;
 	isDynamic = false;
-}
-
-Body::Body(Vector2 position) : Body()
-{
 	this->position = position;
 }
 
@@ -126,12 +120,17 @@ void Body::onCollision(Body * other)
 
 	health -= 1;
 	std::string type = typeid(*this).name();
-	std::cout << type + " got 1 damage" << std::endl;
+	std::cout << type + " got 1 damage from " + typeid(*other).name() << std::endl;
 }
 
 int Body::getSceneID() const
 {
 	return sceneID;
+}
+
+Vector2 Body::getPosition() const
+{
+	return position;
 }
 
 Vector2 Body::getMovingDirection() const
@@ -169,6 +168,26 @@ void Body::applyForces()
 	instantForce = Vector2(0, 0);
 	rotationSpeed += instantTorque;
 	instantTorque = 0.0f;
+}
+
+void Body::move(Vector2 shift)
+{
+	position += shift;
+}
+
+float Body::getRotation()
+{
+	return rotation;
+}
+
+void Body::setRotation(float rotation)
+{
+	this->rotation = rotation;
+}
+
+void Body::rotate(float angle)
+{
+	rotation += angle;
 }
 
 bool Body::checkIsDestroyed() const

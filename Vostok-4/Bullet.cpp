@@ -1,16 +1,15 @@
 #include "Bullet.h"
 
-Bullet::Bullet() : Body()
+Bullet::Bullet(Vector2 position) : Body(position)
 {
 	setupSprite();
 	setIsDynamic(true);
 	parent = nullptr;
 }
 
-Bullet::Bullet(Vector2 position, float rotation, Vector2 initVelocity, Body *parent) : Bullet()
+Bullet::Bullet(Vector2 position, float rotation, Vector2 initVelocity, Body *parent) : Bullet(position)
 {
-	this->position = position;
-	this->rotation = rotation;
+	setRotation(rotation);
 	setVelocity(initVelocity);
 	this->parent = parent;
 }
@@ -42,5 +41,5 @@ void Bullet::setParent(Body * parent)
 
 void Bullet::setupSpriteList()
 {
-	addToSpriteList(RES_PATH + "Bullet.png");
+	classSpriteList = { "Bullet.png" };
 }

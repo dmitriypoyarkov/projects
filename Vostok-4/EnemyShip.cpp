@@ -24,10 +24,10 @@ void EnemyShip::update()
 	attractTo(planet);
 	addTorque(getAirRotationResistance());
 
-	rotation = Vector2::AngleDeg(Vector2(1,0), getOrbitTangent()) + (dir == -1 ? 180 : 0);
+	setRotation(Vector2::AngleDeg(Vector2(1,0), getOrbitTangent()) + (dir == -1 ? 180 : 0));
 	if (player == nullptr) return;
 
-	Vector2 playerVector = player->position - position;
+	Vector2 playerVector = player->getPosition() - getPosition();
 	if (playerVector.magnitude() > detectionRadius) return;
 	Vector2 toPlayerDirection = playerVector.normalized();
 	Vector2 movingDirection = getMovingDirection();

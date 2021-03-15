@@ -42,6 +42,7 @@ public:
 	static void detectCollision(Body *body);
 	static void processPhysics();
 	static void processGraphics();
+	static void tryCreateNewStar();
 
 	static int getNextSceneID();
 
@@ -55,6 +56,7 @@ public:
 	static void starSystemClearedEvent();
 	static void miniPlanetCreatedEvent(Planet *planet, Star *star);
 	static void starCreatedEvent();
+	static void starDestroyedEvent();
 	static void planetClearedEvent(Planet * planet);
 	static void gameOverEvent();
 
@@ -79,5 +81,7 @@ private:
 	static int enemiesNumber;
 	static int unclearedPlanetsNumber;
 	static bool gameOver;
+	static int starsNumber;
+	static bool createNewStar;
 };
 

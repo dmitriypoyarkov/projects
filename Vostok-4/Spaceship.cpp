@@ -1,4 +1,3 @@
-#include "Spaceship.h"
 #include "Bullet.h"
 #include "Trash.h"
 
@@ -7,7 +6,6 @@ Spaceship::Spaceship(Vector2 position) : Body(position)
 	setupSprite();
 	setIsDynamic(true);
 	lastShot = 0.0f;
-	lastControl = 0.0f;
 	isDrawingOrbits = false;
 	planet = nullptr;
 }
@@ -48,6 +46,8 @@ void Spaceship::update()
 
 Vector2 Spaceship::getOrbitTangent() const
 {
+	if (planet == nullptr) return Vector2(0,1); // let it be vertical
+
 	Vector2 radius = planet->getPosition() - getPosition();
 	return Vector2(radius.y, -radius.x).normalized();
 }

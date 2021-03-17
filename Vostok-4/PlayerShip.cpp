@@ -10,10 +10,15 @@ const sf::Keyboard::Key PlayerShip::rotateUpKey = sf::Keyboard::D;
 const sf::Keyboard::Key PlayerShip::rotateDownKey = sf::Keyboard::A;
 const sf::Keyboard::Key PlayerShip::toggleOrbitDrawingKey = sf::Keyboard::O;
 
+
+PlayerShip::PlayerShip(Vector2 position) : Spaceship(position)
+{
+	Init();
+}
+
 PlayerShip::PlayerShip(Planet *planet, const float orbit) : Spaceship(planet, orbit)
 {
-	setupEngines();
-	currentEngine = *engines.begin();
+	Init();
 	Scene::playerSpawnedEvent(this);
 }
 
@@ -90,6 +95,13 @@ void PlayerShip::draw()
 	Body::draw();
 	currentEngine->updateSprite(this);
 	Scene::window->draw(*(currentEngine->getSprite()));
+}
+
+void PlayerShip::Init()
+{
+	setupEngines();
+	currentEngine = *engines.begin();
+	lastControl = 0.0f;
 }
 
 void PlayerShip::setupEngines()

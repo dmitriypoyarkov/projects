@@ -2,6 +2,7 @@
 #include <list>
 #include "Camera.h"
 #include "PlayerShip.h"
+#include "EnemyShip.h"
 #include "Star.h"
 
 class Scene
@@ -53,7 +54,7 @@ public:
 	static void playerDestroyedEvent();
 	static void playerSpawnedEvent(PlayerShip *ship);
 	static void enemyDestroyedEvent(Planet *planet);
-	static void enemySpawnedEvent(Planet *planet);
+	static void enemySpawnedEvent(EnemyShip *enemy);
 	static void starSystemClearedEvent();
 	static void miniPlanetCreatedEvent(Planet *planet, Star *star);
 	static void starCreatedEvent();

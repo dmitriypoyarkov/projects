@@ -1,7 +1,7 @@
 #pragma once
-#include <iostream>
-#include "SFML/Graphics.hpp"
+#include "Drawable.h"
 #include "Body.h"
+
 class Engine : public Drawable
 {
 public:

@@ -1,5 +1,6 @@
 #include "VirtualPlanet.h"
 #include "Scene.h"
+
 std::list<VirtualPlanet *> VirtualPlanet::virtualPlanets;
 
 VirtualPlanet::VirtualPlanet()

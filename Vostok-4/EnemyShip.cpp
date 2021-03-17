@@ -1,11 +1,16 @@
 #include "EnemyShip.h"
 #include <iostream>
 #include "Scene.h"
+
+EnemyShip::EnemyShip(Vector2 position) : Spaceship(position)
+{
+	Init();
+}
+
 EnemyShip::EnemyShip(Planet *planet, const float orbit, const float angle, const bool clockwise) : Spaceship(planet, orbit, angle, clockwise)
 {
-	player = nullptr;
-	Scene::enemySpawnedEvent(planet);
 	dir = clockwise ? 1 : -1;
+	Init();
 }
 
 EnemyShip::~EnemyShip()
@@ -44,6 +49,13 @@ PlayerShip *EnemyShip::getPlayer()
 void EnemyShip::setPlayer(PlayerShip *player)
 {
 	this->player = player;
+}
+
+void EnemyShip::Init()
+{
+	player = nullptr;
+	dir = 1;
+	Scene::enemySpawnedEvent(this);
 }
 
 const float EnemyShip::detectionDelta = 0.3f;

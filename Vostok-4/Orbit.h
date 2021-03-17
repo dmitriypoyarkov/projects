@@ -1,6 +1,6 @@
 #pragma once
 #include "Spaceship.h"
-#include "Scene.h"
+
 class Orbit
 {
 	Orbit();

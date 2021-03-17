@@ -2,7 +2,6 @@
 #include <iostream>
 #include "Scene.h"
 #include "Bullet.h"
-#include "MiniPlanet.h"
 
 float Body::getAirRotationResistance() const
 {
@@ -22,18 +21,10 @@ void Body::setIsMaterial(bool newState)
 	isMaterial = newState;
 }
 
-void Body::attractTo(Body *bplanet)
+void Body::attractTo(Planet *planet)
 {
-	if (bplanet == nullptr)
-	{
-		std::cout << "Object has no planet!" << std::endl;
-		return;
-	}
-	Planet *planet = (Planet *)bplanet;
-	Vector2 radius = planet->position - position;
-	Vector2 normal = radius.normalized();
-	if (radius.magnitude() != 0)
-		addForce(normal * planet->getMass() * gravityConst / pow(radius.magnitude(), 2));
+	if (planet != nullptr)
+		addForce(planet->getGravityForce(this));
 }
 
 void Body::attractToPlanets()

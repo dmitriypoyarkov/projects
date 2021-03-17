@@ -1,4 +1,6 @@
 #include "Statistics.h"
+#include <iostream>
+#include <string>
 
 bool Statistics::cheatUsingState = false;
 

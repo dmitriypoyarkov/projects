@@ -1,6 +1,5 @@
 #include "Scene.h"
-#include <iostream>
-#include "EnemyShip.h"
+#include <iostream>s
 #include "MiniPlanet.h"
 #include "Orbit.h"
 #include "SceneConstructor.h"
@@ -191,9 +190,11 @@ void Scene::enemyDestroyedEvent(Planet *planet)
 	std::cout << "Total enemies remained: " + std::to_string(Scene::enemiesNumber) << std::endl;
 }
 
-void Scene::enemySpawnedEvent(Planet *planet)
+void Scene::enemySpawnedEvent(EnemyShip *enemy)
 {
-	((MiniPlanet *)planet)->incrementEnemyCount();
+	enemy->setPlayer(player);
+	if (enemy->planet != nullptr)
+		((MiniPlanet *)(enemy->planet))->incrementEnemyCount();
 	enemiesNumber += 1;
 }
 

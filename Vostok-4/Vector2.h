@@ -1,6 +1,7 @@
 #pragma once
 #include <cmath>
 #include <SFML/Graphics.hpp>
+
 class Vector2
 {
 public:

@@ -1,6 +1,5 @@
 #pragma once
 #include "Body.h"
-
 class Camera : public Body
 {
 private:

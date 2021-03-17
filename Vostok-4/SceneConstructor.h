@@ -1,6 +1,7 @@
 #pragma once
 #include "Scene.h"
-#include "MiniPlanet.h"
+#include <iostream>
+#include "EnemyShip.h"
 
 class SceneConstructor
 {

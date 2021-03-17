@@ -124,4 +124,4 @@ const std::string Drawable::spriteList[spriteCount] =
 
 const int Drawable::textureCount = 20;
 sf::Texture Drawable::textures[spriteCount] = {};
-const std::string Drawable::RES_PATH = "resources\\";
+const std::string Drawable::RES_PATH = "..\\resources\\";

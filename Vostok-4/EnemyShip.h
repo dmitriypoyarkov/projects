@@ -4,10 +4,8 @@
 
 class EnemyShip : public Spaceship
 {
-private:
-	int dir;
-	PlayerShip *player;
 public:
+	EnemyShip(Vector2 position = Vector2(0, 0));
 	EnemyShip(Planet *planet, const float orbit, const float angle = 0, const bool clockwise = true);
 	~EnemyShip() override;
 	void onDestroy() override;
@@ -18,5 +16,9 @@ public:
 
 	static const float detectionDelta;
 	static const float detectionRadius;
+private:
+	void Init();
+	int dir;
+	PlayerShip *player;
 };
 

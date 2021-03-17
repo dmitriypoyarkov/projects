@@ -2,6 +2,7 @@
 #include <iostream>
 #include <list>
 #include "SFML/Graphics.hpp"
+
 class Drawable
 {
 public:
@@ -29,7 +30,6 @@ private:
 	int spriteType;
 	int classSpriteType;
 	float scale;
-	std::string spritePath;
 //	std::list<std::string> spriteList;
 	const static std::string spriteList[];
 	const static int spriteCount;

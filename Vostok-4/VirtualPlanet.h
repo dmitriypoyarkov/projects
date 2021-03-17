@@ -1,6 +1,8 @@
 #pragma once
+#include <list>
 #include "Vector2.h"
 #include "MiniPlanet.h"
+
 class VirtualPlanet
 {
 public:

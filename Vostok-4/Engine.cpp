@@ -1,4 +1,7 @@
 #include "Engine.h"
+#include <string>
+#include <SFML/Graphics.hpp>
+
 
 Engine::Engine(std::string name)
 {

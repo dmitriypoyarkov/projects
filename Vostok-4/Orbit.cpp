@@ -1,7 +1,7 @@
 #include "Orbit.h"
 #include <iostream>
-#include "MiniPlanet.h"
 #include "VirtualPlanet.h"
+#include "Scene.h"
 
 Orbit::Orbit()
 {

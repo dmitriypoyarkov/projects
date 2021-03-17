@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 #include "SceneConstructor.h"
+#include "Scene.h"
 
 void showStartMessage()
 {

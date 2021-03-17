@@ -8,6 +8,16 @@ Planet::Planet(Vector2 position) : Body(position)
 
 void Planet::onCollision(Body * other) {}
 
+Vector2 Planet::getGravityForce(Body * body)
+{
+	Vector2 radius = getPosition() - body->getPosition();
+	Vector2 normal = radius.normalized();
+	if (radius.magnitude() != 0.0f)
+		return (normal * mass * gravityConst / pow(radius.magnitude(), 2));
+	else
+		return Vector2(0.0f, 0.0f);
+}
+
 float Planet::getSurfaceRadius()
 {
 	sf::FloatRect rectangle = getSprite()->getLocalBounds();

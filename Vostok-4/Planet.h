@@ -8,6 +8,7 @@ public:
 
 	void onCollision(Body *other) override;
 
+	Vector2 getGravityForce(Body *body);
 	float getSurfaceRadius();
 	float getFirstCosmic(float orbit) const;
 	float getMass() const;

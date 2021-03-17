@@ -3,6 +3,9 @@
 #include <list>
 #include "Drawable.h"
 #include "Vector2.h"
+
+class Planet;
+
 class Body : public Drawable
 {
 public:
@@ -25,9 +28,12 @@ public:
 	Vector2 getMovingDirection() const;
 	Vector2 getVelocity() const;
 	void setVelocity(Vector2 newVelocity);
+	int getHealth() const;
 	void addForce(const Vector2 force);
 	void addTorque(const float torque);
 	void applyForces();
+	void decreaseHealth();
+	void setHealthToZero();
 
 	bool checkIsDestroyed() const;
 	void setIsDestroyed(bool newState);
@@ -42,12 +48,9 @@ public:
 	static const float airResistanceForce;
 	static const float controlDelay;
 protected:
-	int getHealth() const;
-	void decreaseHealth();
-	void setHealthToZero();
 	float getLifetime() const;
 	float getAirRotationResistance() const;
-	void attractTo(Body *planet);
+	void attractTo(Planet *planet);
 	void attractToPlanets();
 private:
 	int sceneID;

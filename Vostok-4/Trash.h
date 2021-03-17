@@ -1,6 +1,7 @@
 #pragma once
 #include "Body.h"
 #include "Spaceship.h"
+
 class Trash : public Body
 {
 public:

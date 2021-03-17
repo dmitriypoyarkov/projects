@@ -1,6 +1,6 @@
 #include "SceneConstructor.h"
 #include <iostream>
-#include "EnemyShip.h"
+
 
 void SceneConstructor::initiateGameWithStarSystem(int seed)
 {

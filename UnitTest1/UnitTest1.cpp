@@ -7,6 +7,7 @@
 #include "../Vostok-4/PlayerShip.h"
 #include "../Vostok-4/MiniPlanet.h"
 #include "../Vostok-4/Bullet.h"
+#include "../Vostok-4/Trash.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -201,7 +202,7 @@ public:
 };
 
 /*abstract class Planet and derived classes Star and MiniPlanet*/
-TEST_CLASS(PlanetTest1)
+TEST_CLASS(PlanetTest)
 {
 	Star *star;
 	MiniPlanet *planet;
@@ -223,7 +224,7 @@ TEST_CLASS(PlanetTest1)
 		Scene::onDestroy();
 	};
 
-	TEST_METHOD(Constructorss)
+	TEST_METHOD(Constructors)
 	{
 		Vector2 expectedPosition = star->getPosition() + Vector2(orbit * cos(angle), orbit * sin(angle));
 		Assert::AreEqual(expectedPosition, star->getPosition() + planet->getPosition());
@@ -231,7 +232,7 @@ TEST_CLASS(PlanetTest1)
 		Assert::IsTrue(error < floatError * speed, L"Speed is not as expected");
 	};
 
-	TEST_METHOD(Orbitingss)
+	TEST_METHOD(Orbiting)
 	{
 		// check if planet goes along orbit
 		Vector2 initialPosition = planet->getPosition();
@@ -245,7 +246,7 @@ TEST_CLASS(PlanetTest1)
 		Assert::IsTrue(newDistance - initialDistance < floatError * newDistance, L"Distance changed"); // orbit is the same (may be not equal - float error)
 		
 		// many updates
-		int updateCount = 500 + rand() % 300; 
+		int updateCount = 500000 + rand() % 300; 
 		for (int i = 0; i < updateCount; i++)
 		{
 			planet->update();
@@ -253,12 +254,10 @@ TEST_CLASS(PlanetTest1)
 		}
 
 		float finalDistance = (planet->getPosition() - star->getPosition()).magnitude();
-		//distanceDifference = finalDistance - initialDistance;
 		Assert::IsTrue(initialDistance - finalDistance < floatError * finalDistance);
-		//Assert::IsTrue(distanceDifference < 0.01f); // still on the same orbit
 	};
 
-	TEST_METHOD(PlanetCollisionss)
+	TEST_METHOD(Collisions)
 	{
 		//planets and stars are not affected by collisions.
 		MiniPlanet *planet1 = new MiniPlanet(planet->getPosition());
@@ -295,5 +294,94 @@ TEST_CLASS(PlanetTest1)
 		star->update();
 		newStar->update();
 		Assert::IsTrue(Scene::getActiveStar() == newStar, L"New star hasn't activated"); //expect to activate new star
-	}
+	};
+};
+
+/*Classes: Spaceship, PlayerShip, EnemyShip*/
+TEST_CLASS(SpaceshipTest)
+{
+	TEST_METHOD_CLEANUP(DestroyScene)
+	{	
+		Scene::onDestroy();
+	};
+
+	TEST_METHOD(Constructors)
+	{
+		//Spaceship constructors
+		Vector2 position = Vector2(23, 44.5f), velocity = Vector2(-25, 59);
+		Spaceship *ship = new Spaceship(position, velocity);
+		Assert::AreEqual(position, ship->getPosition());
+		Assert::AreEqual(velocity, ship->getVelocity());
+
+		Star *star = new Star();
+		float orbit = star->getSurfaceRadius() - 100; //under the surface
+		float angle = 0.5 * 3.14f;
+		Spaceship *ship1 = new Spaceship(star, orbit, angle, false);
+		Vector2 expectedPosition = star->getPosition() - Vector2(orbit * sin(angle), orbit * cos(angle));
+		Assert::AreEqual(expectedPosition, ship1->getPosition());
+		Vector2 movingDirection = Vector2(cos(angle), -sin(angle));
+		Vector2 expectedVelocity = movingDirection * star->getFirstCosmic(orbit) * (-1);
+		Assert::AreEqual(expectedVelocity, ship1->getVelocity());
+
+		//PlayerShip constructor
+		PlayerShip *player = new PlayerShip();
+		Assert::IsTrue(player == Scene::getPlayer(), L"Player hasn't set");
+
+		PlayerShip *player1 = new PlayerShip();
+		Assert::IsTrue(player == Scene::getPlayer(), L"Player changed"); // active player hasn't changed
+	};
+
+	TEST_METHOD(Destruction)
+	{
+		Spaceship *ship = new Spaceship();
+		Assert::AreEqual((int)Scene::bodies.size(), 1);
+		ship->setIsDestroyed(true);
+		ship->update();
+		Scene::processPhysics(); // here all "isDestroyed" object are cleaned
+		for (Body *body : Scene::bodies)
+		{
+			// Since the ship is dead, expect all bodies to be trash left from ship
+			Assert::AreEqual(typeid(Trash).raw_name(), typeid(*body).raw_name());
+		}
+	};
+	
+	TEST_METHOD(AirRotationResistance)
+	{
+		Spaceship *ship = new Spaceship();
+		float torque = 24;
+		ship->addTorque(torque);
+		ship->applyForces();
+		ship->update(); // airRotationResistance here
+		ship->applyForces();
+		ship->travel();
+		Assert::IsTrue(abs(ship->getRotation()) < abs(torque), L"Didn't slow down rotation");
+	};
+
+	TEST_METHOD(EnemyShoot)
+	{
+		//Enemy must shoot if player is in his eyefield
+		EnemyShip *enemy = new EnemyShip();
+		//place player in enemy's eyefield
+		Vector2 playerPosition = enemy->getPosition() + enemy->getMovingDirection() * EnemyShip::detectionRadius * 0.5f;
+		PlayerShip *player = new PlayerShip(playerPosition);
+		int initialBodyCount = Scene::bodies.size();
+		sf::Clock clock = sf::Clock();
+		while (clock.getElapsedTime().asSeconds() <= 0.3f) {} //wait to reload
+
+		enemy->update();
+
+		bool bulletExist = false;
+		for (Body *body : Scene::bodies)
+		{
+			if (typeid(*body) == typeid(Bullet))
+				bulletExist = true;
+		}
+
+		Assert::IsTrue(bulletExist, L"Bullet doesn't exist");
+		Assert::AreEqual(initialBodyCount + 1, (int)Scene::bodies.size());
+
+		enemy->update();
+		// expect not to shoot due to reload
+		Assert::AreEqual(initialBodyCount + 1, (int)Scene::bodies.size()); 
+	};
 };

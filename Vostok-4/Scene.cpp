@@ -155,31 +155,16 @@ void Scene::playerDestroyedEvent()
 {
 	Camera *camera = Scene::getActiveCamera();
 	camera->setObjectToFollow(nullptr);
-	for (auto bodyPtr = Scene::bodies.begin(); bodyPtr != Scene::bodies.end(); ++bodyPtr)
-	{
-		Body *body = *bodyPtr;
-		if (typeid(*body) == typeid(EnemyShip))
-		{
-			((EnemyShip *)body)->setPlayer(nullptr);
-		}
-	}
 	gameOver = true;
 }
 
 void Scene::playerSpawnedEvent(PlayerShip *player)
 {
 	Camera *camera = Scene::getActiveCamera();
-	Scene::player = player;
+	if (Scene::player == nullptr)
+		Scene::player = player;
 	if (camera != nullptr)
 		camera->setObjectToFollow(player);
-	for (auto bodyPtr = Scene::bodies.begin(); bodyPtr != Scene::bodies.end(); ++bodyPtr)
-	{
-		Body *body = *bodyPtr;
-		if (typeid(*body) == typeid(EnemyShip))
-		{
-			((EnemyShip *)body)->setPlayer(player);
-		}
-	}
 }
 
 void Scene::enemyDestroyedEvent(Planet *planet)
@@ -192,7 +177,6 @@ void Scene::enemyDestroyedEvent(Planet *planet)
 
 void Scene::enemySpawnedEvent(EnemyShip *enemy)
 {
-	enemy->setPlayer(player);
 	if (enemy->planet != nullptr)
 		((MiniPlanet *)(enemy->planet))->incrementEnemyCount();
 	enemiesNumber += 1;

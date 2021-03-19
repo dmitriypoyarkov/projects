@@ -5,10 +5,14 @@
 
 float Body::getAirRotationResistance() const
 {
-	if (rotationSpeed != 0)
-		return -pow(rotationSpeed, 3) / abs(rotationSpeed) * airResistanceForce;
+	if (rotationSpeed == 0) return 0.0f;
+
+	float torque = -pow(rotationSpeed, 3) / abs(rotationSpeed) * airResistanceForce;
+	if (abs(torque) < abs(rotationSpeed))
+		return torque;
 	else
-		return 0.0f;
+		return -rotationSpeed;
+
 }
 
 bool Body::checkIsMaterial() const
@@ -80,8 +84,8 @@ void Body::setHealthToZero()
 
 void Body::travel()
 {
-	position = position + velocity;
-	rotation = rotation + rotationSpeed;
+	position += velocity;
+	rotation += rotationSpeed;
 }
 
 void Body::update()

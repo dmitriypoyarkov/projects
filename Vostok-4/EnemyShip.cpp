@@ -28,11 +28,11 @@ void EnemyShip::update()
 	Body::update();
 	attractTo(planet);
 	addTorque(getAirRotationResistance());
+	if (planet != nullptr)
+		setRotation(Vector2::AngleDeg(Vector2(1,0), getOrbitTangent()) + (dir == -1 ? 180 : 0));
+	if (Scene::getPlayer() == nullptr) return;
 
-	setRotation(Vector2::AngleDeg(Vector2(1,0), getOrbitTangent()) + (dir == -1 ? 180 : 0));
-	if (player == nullptr) return;
-
-	Vector2 playerVector = player->getPosition() - getPosition();
+	Vector2 playerVector = Scene::getPlayer()->getPosition() - getPosition();
 	if (playerVector.magnitude() > detectionRadius) return;
 	Vector2 toPlayerDirection = playerVector.normalized();
 	Vector2 movingDirection = getMovingDirection();
@@ -41,22 +41,11 @@ void EnemyShip::update()
 		tryShoot();
 }
 
-PlayerShip *EnemyShip::getPlayer()
-{
-	return player;
-}
-
-void EnemyShip::setPlayer(PlayerShip *player)
-{
-	this->player = player;
-}
-
 void EnemyShip::Init()
 {
-	player = nullptr;
 	dir = 1;
 	Scene::enemySpawnedEvent(this);
 }
 
-const float EnemyShip::detectionDelta = 0.3f;
-const float EnemyShip::detectionRadius = 500;
+const float EnemyShip::detectionDelta = 0.4f;
+const float EnemyShip::detectionRadius = 1000;

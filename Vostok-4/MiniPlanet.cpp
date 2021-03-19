@@ -54,12 +54,12 @@ void MiniPlanet::setTangentVelocity()
 	if (centerObject == nullptr)
 		return;
 	Vector2 radiusVector = getPosition() - centerObject->getPosition();
-	float radius = radiusVector.magnitude();
-	float deltaAngle = speed / radius;
+	double radius = radiusVector.magnitude();
+	double deltaAngle = speed / radius;
 
-	float newX = radiusVector.x * cos(deltaAngle) + radiusVector.y * sin(deltaAngle);
-	float newY = radiusVector.y * cos(deltaAngle) - radiusVector.x * sin(deltaAngle);
-	Vector2 destinationVector = Vector2(newX, newY);
+	double newX = radiusVector.x * cos(deltaAngle) + radiusVector.y * sin(deltaAngle);
+	double newY = radiusVector.y * cos(deltaAngle) - radiusVector.x * sin(deltaAngle);
+	Vector2 destinationVector = Vector2((float)newX, (float)newY);
 	Vector2 tangentVector = destinationVector - radiusVector;
 	setVelocity(tangentVector);
 }

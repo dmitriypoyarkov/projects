@@ -223,9 +223,11 @@ void Scene::planetClearedEvent(Planet * planet)
 		starSystemClearedEvent();
 }
 
-void Scene::starCreatedEvent()
+void Scene::starCreatedEvent(Star *star)
 {
 	starsNumber++;
+	if (activeStar == nullptr)
+		setActiveStar(star);
 }
 
 void Scene::starDestroyedEvent()

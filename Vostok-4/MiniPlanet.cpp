@@ -1,5 +1,7 @@
 #include "MiniPlanet.h"
 #include <iostream>
+#define _USE_MATH_DEFINES
+#include <cmath>
 #include "SceneConstructor.h"
 
 MiniPlanet::MiniPlanet(Vector2 position) : Planet(position)
@@ -49,10 +51,17 @@ void MiniPlanet::update()
 
 void MiniPlanet::setTangentVelocity()
 {
+	if (centerObject == nullptr)
+		return;
 	Vector2 radiusVector = getPosition() - centerObject->getPosition();
-	Vector2 tangent = Vector2(radiusVector.y, -radiusVector.x);
-	Vector2 tangentNorm = tangent.normalized();
-	setVelocity(tangentNorm * speed);
+	float radius = radiusVector.magnitude();
+	float deltaAngle = speed / radius;
+
+	float newX = radiusVector.x * cos(deltaAngle) + radiusVector.y * sin(deltaAngle);
+	float newY = radiusVector.y * cos(deltaAngle) - radiusVector.x * sin(deltaAngle);
+	Vector2 destinationVector = Vector2(newX, newY);
+	Vector2 tangentVector = destinationVector - radiusVector;
+	setVelocity(tangentVector);
 }
 
 void MiniPlanet::refreshPlanetList()

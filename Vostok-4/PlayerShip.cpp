@@ -19,7 +19,6 @@ PlayerShip::PlayerShip(Vector2 position) : Spaceship(position)
 PlayerShip::PlayerShip(Planet *planet, const float orbit) : Spaceship(planet, orbit)
 {
 	Init();
-	Scene::playerSpawnedEvent(this);
 }
 
 PlayerShip::~PlayerShip()
@@ -102,6 +101,7 @@ void PlayerShip::Init()
 	setupEngines();
 	currentEngine = *engines.begin();
 	lastControl = 0.0f;
+	Scene::playerSpawnedEvent(this);
 }
 
 void PlayerShip::setupEngines()

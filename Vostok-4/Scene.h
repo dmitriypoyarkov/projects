@@ -57,7 +57,7 @@ public:
 	static void enemySpawnedEvent(EnemyShip *enemy);
 	static void starSystemClearedEvent();
 	static void miniPlanetCreatedEvent(Planet *planet, Star *star);
-	static void starCreatedEvent();
+	static void starCreatedEvent(Star *star);
 	static void starDestroyedEvent();
 	static void planetClearedEvent(Planet * planet);
 	static void gameOverEvent();

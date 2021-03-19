@@ -39,7 +39,7 @@ void Drawable::setupSprite()
 
 int Drawable::findInSpriteList(std::string name)
 {
-	for (int i = 0; i < textureCount; i++)
+	for (int i = 0; i < spriteCount; i++)
 	{
 		if (spriteList[i].find(name) != std::string::npos)
 		{
@@ -51,7 +51,9 @@ int Drawable::findInSpriteList(std::string name)
 
 void Drawable::loadSprites()
 {
-	for (int i = 0; i < spriteCount; i++)
+	textures.resize(spriteList.size());
+	std::fill(textures.begin(), textures.end(), sf::Texture());
+	for (int i = 0; i < textures.size(); i++)
 	{
 		textures[i].loadFromFile(RES_PATH + spriteList[i]);
 	}
@@ -106,11 +108,11 @@ float Drawable::getColliderSize()
 	return scale * colliderSize;
 }
 
-const int Drawable::spriteCount = 11;
-const std::string Drawable::spriteList[spriteCount] =
+const int Drawable::spriteCount = 12;
+const std::vector <std::string> Drawable::spriteList =
 {
 	"Planet.png",
-	"Planet1.png",
+	"Planet4k.png",
 	"Planet-mini.png",
 	"Rocket.png",
 	"Rocket1.png",
@@ -118,10 +120,10 @@ const std::string Drawable::spriteList[spriteCount] =
 	"Interplanetary.png",
 	"Interstellar.png",
 	"Trash.png",
+	"Planet1.png",
 	"",
 	"Bullet.png"
 };
 
-const int Drawable::textureCount = 20;
-sf::Texture Drawable::textures[spriteCount] = {};
+std::vector <sf::Texture> Drawable::textures;
 const std::string Drawable::RES_PATH = "..\\resources\\";

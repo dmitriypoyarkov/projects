@@ -6,7 +6,6 @@ void SceneConstructor::initiateGameWithStarSystem(int seed)
 {
 	new Camera();
 	Star *star = createStar(seed);
-	Scene::setActiveStar(star);
 	createMiniPlanets(seed, star);
 	new PlayerShip(star, star->getSurfaceRadius() + 800);
 	starSystemMessage();

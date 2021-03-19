@@ -15,6 +15,7 @@ public:
 	float getColliderSize();
 	void setScale(const float newScale);
 	static void loadSprites();
+	static void unloadSprites();
 	static const std::string RES_PATH;
 protected:
 	virtual void setupSpriteList() = 0;
@@ -31,10 +32,9 @@ private:
 	int classSpriteType;
 	float scale;
 //	std::list<std::string> spriteList;
-	const static std::string spriteList[];
+	const static std::vector <std::string> spriteList;
 	const static int spriteCount;
-	const static int textureCount;
-	static sf::Texture textures[];
+	static std::vector <sf::Texture> textures;
 	sf::Texture *texture;
 	sf::Sprite sprite;
 };

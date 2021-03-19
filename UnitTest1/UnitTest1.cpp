@@ -5,7 +5,8 @@
 #include "../Vostok-4/SceneConstructor.h"
 #include "../Vostok-4/EnemyShip.h"
 #include "../Vostok-4/PlayerShip.h"
-#include "MiniPlanet.h"
+#include "../Vostok-4/MiniPlanet.h"
+#include "../Vostok-4/Bullet.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -21,13 +22,22 @@ template<> static std::wstring Microsoft::VisualStudio::CppUnitTestFramework::To
 	return str;
 }
 
-class T1 { int x; public: T1(int x) :x(x) {} };
+static const float floatError = 0.00001f;
 
+TEST_MODULE_INITIALIZE(LoadSprites)
+{
+	Drawable::loadSprites();
+}
 
-/* Abstract class Body - testing on child class Spaceship */
+/* Abstract class Body - testing on child classes */
 TEST_CLASS(BodyTest)
 {
 public:
+	TEST_METHOD_CLEANUP(DestroyScene)
+	{
+		Scene::onDestroy();
+	};
+
 	TEST_METHOD(Constructors)
 	{
 		//Default constructor
@@ -40,7 +50,7 @@ public:
 		Vector2 expectedPosition = Vector2(-20.0f, 1000.0f);
 		Spaceship *ship1 = new Spaceship(expectedPosition);
 		Assert::AreEqual(expectedPosition, ship1->getPosition());
-	}
+	};
 
 	TEST_METHOD(Transforms)
 	{
@@ -59,7 +69,7 @@ public:
 		Assert::AreEqual(initialRotation + rotationShift, ship->getRotation());
 
 		Scene::onDestroy();
-	}
+	};
 
 	TEST_METHOD(Forces)
 	{
@@ -82,7 +92,7 @@ public:
 		ship->applyForces();
 		ship->travel();
 		Assert::AreEqual(addedTorque, ship->getRotation());
-	}
+	};
 
 	TEST_METHOD(Gravity)
 	{
@@ -121,12 +131,10 @@ public:
 		player->applyForces();
 		player->travel();
 		Assert::AreEqual(initialPosition + expectedShift, player->getPosition());
-	}
+	};
+	
 	TEST_METHOD(Collisions)
 	{
-		//onCollision method
-		Drawable::loadSprites(); // collider sizes depend on sprites
-
 		PlayerShip *player = new PlayerShip();
 		player->updateSprite();
 		int initialPlayerHealth = player->getHealth();
@@ -156,7 +164,8 @@ public:
 		//expect health decrease because of collision
 		Assert::AreEqual(initialPlayerHealth - 1, player->getHealth());
 		Assert::AreEqual(initialEnemyHealth - 1, enemy->getHealth());
-	}
+	};
+	
 	TEST_METHOD(Health)
 	{
 		// decreaseHealth method
@@ -171,59 +180,120 @@ public:
 		Assert::AreEqual(0, ship1->getHealth());
 		ship1->update();
 		Assert::AreEqual(ship1->checkIsDestroyed(), true);
-	}
+	};
+	
 	TEST_METHOD(Sprites)
 	{
-		Drawable::loadSprites();
 		//check collider size
-		Spaceship *ship = new Spaceship();
-		float colliderSize = ship->getColliderSize();
-		Assert::IsTrue(colliderSize > 0);
+		MiniPlanet *planet = new MiniPlanet();
+		float colliderSize = planet->getColliderSize();
+		Assert::IsTrue(colliderSize > 0, L"Collider 0");
 		
 		//updateSprite method
-		sf::Vector2f initialSpritePosition = ship->getSprite()->getPosition();
+		sf::Vector2f initialSpritePosition = planet->getSprite()->getPosition();
 		Vector2 shift = Vector2(950, 44);
-		ship->move(shift);
-		ship->updateSprite();
+		planet->move(shift);
+		planet->updateSprite();
 		Assert::AreEqual(initialSpritePosition + (sf::Vector2f) shift,
-			ship->getSprite()->getPosition());
-	}
+			planet->getSprite()->getPosition());
+	};
+
+};
+
+/*abstract class Planet and derived classes Star and MiniPlanet*/
+TEST_CLASS(PlanetTest1)
+{
+	Star *star;
+	MiniPlanet *planet;
+	float orbit;
+	float angle;
+	float speed;
+
+	TEST_METHOD_INITIALIZE(StarAndPlanet)
+	{
+		star = new Star(); // standart Body constructor
+		orbit = star->getColliderSize() + 400;
+		angle = 0.5 * 3.14;
+		speed = 2;
+		planet = new MiniPlanet(star, orbit, speed, angle);
+	};
+
 	TEST_METHOD_CLEANUP(DestroyScene)
 	{
 		Scene::onDestroy();
+	};
+
+	TEST_METHOD(Constructorss)
+	{
+		Vector2 expectedPosition = star->getPosition() + Vector2(orbit * cos(angle), orbit * sin(angle));
+		Assert::AreEqual(expectedPosition, star->getPosition() + planet->getPosition());
+		float error = speed - (planet->getVelocity()).magnitude();
+		Assert::IsTrue(error < floatError * speed, L"Speed is not as expected");
+	};
+
+	TEST_METHOD(Orbitingss)
+	{
+		// check if planet goes along orbit
+		Vector2 initialPosition = planet->getPosition();
+		float initialDistance = (planet->getPosition() - star->getPosition()).magnitude();
+		planet->update();
+		planet->travel();
+		float delta = (planet->getPosition() - initialPosition).magnitude();
+		Assert::IsTrue(speed - delta < floatError * speed, L"Speed is not as expected"); // moved with adjusted speed
+		Assert::IsTrue(planet->getPosition().x > initialPosition.x); // moved to the right
+		float newDistance = (planet->getPosition() - star->getPosition()).magnitude();
+		Assert::IsTrue(newDistance - initialDistance < floatError * newDistance, L"Distance changed"); // orbit is the same (may be not equal - float error)
+		
+		// many updates
+		int updateCount = 500 + rand() % 300; 
+		for (int i = 0; i < updateCount; i++)
+		{
+			planet->update();
+			planet->travel();
+		}
+
+		float finalDistance = (planet->getPosition() - star->getPosition()).magnitude();
+		//distanceDifference = finalDistance - initialDistance;
+		Assert::IsTrue(initialDistance - finalDistance < floatError * finalDistance);
+		//Assert::IsTrue(distanceDifference < 0.01f); // still on the same orbit
+	};
+
+	TEST_METHOD(PlanetCollisionss)
+	{
+		//planets and stars are not affected by collisions.
+		MiniPlanet *planet1 = new MiniPlanet(planet->getPosition());
+		int planetInitialHealth = planet->getHealth();
+		int planet1InitialHealth = planet1->getHealth();
+		Scene::detectCollision(planet);
+		Scene::detectCollision(planet1);
+		planet->update();
+		planet1->update();
+		Assert::AreEqual(planet->getHealth(), planetInitialHealth);
+		Assert::AreEqual(planet1->getHealth(), planet1InitialHealth); 
+
+		Star *star1 = new Star(star->getPosition());
+		int starInitialHealth = star->getHealth();
+		int star1InitialHealth = star1->getHealth();
+		Scene::detectCollision(star);
+		Scene::detectCollision(star1);
+		star->update();
+		star1->update();
+		Assert::AreEqual(star->getHealth(), starInitialHealth);
+		Assert::AreEqual(star1->getHealth(), star1InitialHealth);
+	};
+
+	TEST_METHOD(StarManagement)
+	{
+		Assert::IsTrue(Scene::getActiveStar() == star, L"Star is not ActiveStar");
+		Star *newStar = new Star(Vector2(100000000000, 0)); //far enough from the old one
+		PlayerShip *player = new PlayerShip(star->getPosition() + Vector2(0, 2 * newStar->getSurfaceRadius()));
+		Assert::IsTrue(Scene::getPlayer() == player);
+		star->update();
+		newStar->update();
+		Assert::IsTrue(Scene::getActiveStar() == star, L"Star is not ActiveStar anymore");
+		player->move(newStar->getPosition() - star->getPosition()); //move player to the new star orbit
+		star->update();
+		newStar->update();
+		Assert::IsTrue(Scene::getActiveStar() == newStar, L"New star hasn't activated"); //expect to activate new star
 	}
 };
-
-//#include "Cpp"
-//#include "Scene.h"
-//#include "SceneConstructor.h"
-//#include "Body.h"
-//#include "Spaceship.h"
-//#include "MiniPlanet.h"
-//
-//TEST(PhysicsTest, SpaceshipPhysics)
-//{
-//	Scene *stage = new Scene();
-//	stage->setIsStage(true);
-//	Scene::setActiveScene(stage->getID());
-//
-//	Vector2 screenCenter = Vector2(Scene::SCREEN_WIDTH / 2.0f, Scene::SCREEN_HEIGHT / 2.0f);
-//
-//	StagePlanet* earth = new StagePlanet(screenCenter);
-//
-//	Spaceship* ship = new Spaceship(earth, earth->getSurfaceRadius() + 100);
-//	ship->setVelocity(Vector2(0, 0));
-//	Scene::processPhysics();
-//	EXPECT_EQ(Vector2(0, 0), ship->getVelocity());
-//	EXPECT_EQ(Vector2(earth->getSurfaceRadius() + 100, 0), ship->position);
-//	ship->addForce(Vector2(1, 0));
-//	Scene::processPhysics();
-//	EXPECT_EQ(Vector2(1, 0), ship->getVelocity());
-//	EXPECT_EQ(Vector2(earth->getSurfaceRadius() + 101, 0), ship->position);
-//}
-//
-////int main(int argc, char *argv[])
-////{
-////	testing::InitGoogleTest(&argc, argv);
-////	return RUN_ALL_TESTS();
-////}

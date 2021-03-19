@@ -9,12 +9,12 @@ public:
 	bool checkIsNewStar();
 	void addPlanet(Planet *planet);
 	void onDestroy() override;
+	void update() override;
 private:
 	std::list<Planet *> planets;
 	bool isNewStar;
 	float distanceToPlayer();
 	void setupSpriteList() override;
-	void update() override;
 	void deletePlanets();
 	static const float starSystemRadius;
 };

@@ -8,7 +8,7 @@ Star::Star(Vector2 position) : Planet(position)
 	isNewStar = true;
 	setIsDynamic(false);
 	MiniPlanet::refreshPlanetList();
-	Scene::starCreatedEvent();
+	Scene::starCreatedEvent(this);
 }
 
 Star::~Star()
@@ -38,13 +38,15 @@ float Star::distanceToPlayer()
 }
 void Star::setupSpriteList()
 {
-	classSpriteList = { "Planet.png" };
+	classSpriteList = { "Planet4k.png" };
 }
 
 void Star::update()
 {
 	if (Scene::getActiveStar() == this) return;
 	
+	if (Scene::getPlayer() == nullptr) return;
+
 	if (distanceToPlayer() <= starSystemRadius)
 	{
 		Scene::setActiveStar(this);

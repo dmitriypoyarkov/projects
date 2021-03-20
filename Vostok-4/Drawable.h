@@ -12,10 +12,9 @@ public:
 	float getScale() const;
 	int getLayer() const;
 	void setLayer(const int newLayer);
-	float getColliderSize();
+	float getColliderSize() const;
 	void setScale(const float newScale);
 	static void loadSprites();
-	static void unloadSprites();
 	static const std::string RES_PATH;
 protected:
 	virtual void setupSpriteList() = 0;

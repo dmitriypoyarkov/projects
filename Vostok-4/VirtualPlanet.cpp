@@ -8,15 +8,15 @@ VirtualPlanet::VirtualPlanet()
 	centerObject = Vector2(0,0);
 	position = Vector2(0, 0);
 	orbit = 0;
-	angle = 0;
 	speed = 0;
 	mass = 1000;
+	colliderSize = 0.0f;
 	virtualPlanets.push_back(this);
 }
 
-VirtualPlanet::VirtualPlanet(const MiniPlanet *origin) : VirtualPlanet()
+VirtualPlanet::VirtualPlanet(const Planet *origin) : VirtualPlanet()
 {
-	origin->copyParameters(&position, &centerObject, &orbit, &angle, &speed, &mass);
+	origin->copyParameters(&position, &centerObject, &orbit, &colliderSize, &speed, &mass);
 }
 
 VirtualPlanet::~VirtualPlanet()
@@ -34,15 +34,15 @@ void VirtualPlanet::update(float scale)
 
 void VirtualPlanet::refreshVirtualPlanets()
 {
-	while (virtualPlanets.size() > 0)
+	for (VirtualPlanet *virtualPlanet : virtualPlanets)
 	{
-		delete *virtualPlanets.begin();
-		virtualPlanets.pop_front();
+		delete virtualPlanet;
 	}
-	for (auto ptr = MiniPlanet::planets.begin(); ptr != MiniPlanet::planets.end(); ++ptr)
+	virtualPlanets.clear();
+	for (Planet *planet : Planet::planets)
 	{
-		if (*ptr != nullptr)
-			new VirtualPlanet(*ptr);
+		if (planet != nullptr)
+			new VirtualPlanet(planet);
 	}
 
 }

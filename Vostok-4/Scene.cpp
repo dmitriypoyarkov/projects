@@ -25,11 +25,8 @@ bool Scene::createNewStar = false;
 void Scene::detectCollision(Body *body)
 {
 	if (body->checkIsMaterial() == false) return;
-	for (auto bodyPtr = bodies.begin();
-		bodyPtr != bodies.end();
-		++bodyPtr)
+	for (Body *other : bodies)
 	{
-		Body* other = *bodyPtr;
 		if (other == body || !other->checkIsMaterial()) continue;
 
 		float distance = (other->getPosition() - body->getPosition()).magnitude();

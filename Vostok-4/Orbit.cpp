@@ -19,12 +19,19 @@ void Orbit::virtualUpdate(Vector2 *virtualPosition, Vector2 *virtualVelocity)
 			*virtualVelocity += normal * planet->mass * Body::gravityConst / pow(radius.magnitude(), 2) * orbitScale;
 		planet->update(orbitScale);
 	}
-	Vector2 radius = Scene::getActiveStar()->getPosition() - *virtualPosition;
-	Vector2 normal = radius.normalized();
-	if (radius.magnitude() != 0)
-		*virtualVelocity += normal * Scene::getActiveStar()->getMass() * Body::gravityConst / pow(radius.magnitude(), 2) * orbitScale;
-
 	*virtualPosition += *virtualVelocity * orbitScale;
+}
+
+bool Orbit::hasVirtualCollision(Vector2 virtualPosition, Body *origin)
+{
+	for (VirtualPlanet *planet : VirtualPlanet::virtualPlanets)
+	{
+		float distance = (planet->position - virtualPosition).magnitude();
+		float colliderSize = planet->colliderSize;
+		if (distance < colliderSize * 0.5f)
+			return true;
+	}
+	return false;
 }
 
 void Orbit::setOrbitColor(const sf::Color orbitColor)
@@ -49,6 +56,14 @@ void Orbit::drawOrbit(Spaceship * ship)
 		point.setPosition(virtualPosition);
 		point.setRadius(0.001f * pointScale);
 		point.setPointCount(3);
+
+		if (hasVirtualCollision(virtualPosition, ship))
+		{
+			point.setFillColor(crashColor);
+			point.setRadius(0.004f * pointScale);
+			Scene::window->draw(point);
+			break;
+		}
 		Scene::window->draw(point);
 
 		virtualUpdate(&virtualPosition, &virtualVelocity);

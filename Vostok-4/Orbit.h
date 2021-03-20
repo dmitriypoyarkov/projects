@@ -6,6 +6,7 @@ class Orbit
 	Orbit();
 private:
 	static void virtualUpdate(Vector2 *virtualPosition, Vector2 *virtualVelocity);
+	static bool hasVirtualCollision(Vector2 virtualPosition, Body *origin);
 	const static sf::Color safeColor;
 	const static sf::Color crashColor;
 	const static sf::Color flyAwayColor;

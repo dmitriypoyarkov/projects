@@ -6,7 +6,6 @@ class MiniPlanet : public Planet
 private:
 	Star *centerObject;
 	float orbit;
-	float angle;
 	float speed;
 	float speedFactor;
 	int planetStageSeed;
@@ -15,11 +14,15 @@ public:
 	MiniPlanet(Vector2 position = Vector2(0,0));
 	MiniPlanet(Star * centerObject, float orbit, float speed, float angle = 0);
 
-	void copyParameters(Vector2 *position, Vector2 *centerObject, float *orbit, float *angle, float *speed, float *mass) const;
+	void copyParameters(Vector2 *position,
+						Vector2 *centerObject,
+						float *orbit,
+						float *colliderSize,
+						float *speed,
+						float *mass) const override;
 	void setupSpriteList() override;
 	void update() override;
 	void setTangentVelocity();
-	static void refreshPlanetList();
 
 	int getPlanetStageSeed();
 	bool checkPlanetStageIsCleared();
@@ -28,6 +31,4 @@ public:
 	void decrementEnemyCount();
 
 	bool planetStageIsCleared;
-
-	static std::list<MiniPlanet *> planets;
 };

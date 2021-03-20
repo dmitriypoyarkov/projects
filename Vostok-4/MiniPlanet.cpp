@@ -7,10 +7,8 @@
 MiniPlanet::MiniPlanet(Vector2 position) : Planet(position)
 {
 	setupSprite();
-	MiniPlanet::refreshPlanetList();
 	centerObject = nullptr;
 	orbit = 0.0f;
-	angle = 0.0f;
 	speed = 0.0f;
 	speedFactor = 0.0f;
 	planetStageSeed = rand()%20000;
@@ -29,12 +27,12 @@ MiniPlanet::MiniPlanet(Star * centerObject, float orbit, float speed, float angl
 	Scene::miniPlanetCreatedEvent(this, centerObject);
 }
 
-void MiniPlanet::copyParameters(Vector2 *position, Vector2 *centerObject, float *orbit, float *angle, float *speed, float *mass) const
+void MiniPlanet::copyParameters(Vector2 *position, Vector2 *centerObject, float *orbit, float *colliderSize, float *speed, float *mass) const
 {
 	*position = this->getPosition();
 	*centerObject = this->centerObject->getPosition();
 	*orbit = this->orbit;
-	*angle = this->angle;
+	*colliderSize = this->getColliderSize();
 	*speed = this->speed;
 	*mass = this->getMass();
 }
@@ -64,20 +62,6 @@ void MiniPlanet::setTangentVelocity()
 	setVelocity(tangentVector);
 }
 
-void MiniPlanet::refreshPlanetList()
-{
-	planets.clear();
-	for (auto ptr = Scene::bodies.begin(); ptr != Scene::bodies.end(); ++ptr)
-	{
-		Body *body = *ptr;
-		if (typeid(*body) != typeid(MiniPlanet)) continue;
-		
-		MiniPlanet *planet = (MiniPlanet*)body;
-		if (planet->checkIsDestroyed()) continue;
-		planets.push_back(planet);
-	}
-}
-
 int MiniPlanet::getPlanetStageSeed()
 {
 	return planetStageSeed;
@@ -104,5 +88,3 @@ void MiniPlanet::decrementEnemyCount()
 	if (enemyCount <= 0)
 		Scene::planetClearedEvent(this);
 }
-
-std::list<MiniPlanet *> MiniPlanet::planets;

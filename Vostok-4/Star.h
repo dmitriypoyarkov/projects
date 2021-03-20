@@ -10,6 +10,13 @@ public:
 	void addPlanet(Planet *planet);
 	void onDestroy() override;
 	void update() override;
+
+	void copyParameters(Vector2 *position,
+		Vector2 *centerObject,
+		float *orbit,
+		float *colliderSize,
+		float *speed,
+		float *mass) const override;
 private:
 	std::list<Planet *> planets;
 	bool isNewStar;

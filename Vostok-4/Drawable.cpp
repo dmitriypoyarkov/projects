@@ -103,7 +103,7 @@ sf::Sprite* Drawable::getSprite()
 	return &sprite;
 }
 
-float Drawable::getColliderSize()
+float Drawable::getColliderSize() const
 {
 	return scale * colliderSize;
 }

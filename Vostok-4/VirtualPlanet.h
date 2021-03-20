@@ -8,9 +8,10 @@ class VirtualPlanet
 public:
 	Vector2 position;
 	float mass;
+	float colliderSize;
 
 	VirtualPlanet();
-	VirtualPlanet(const MiniPlanet *origin);
+	VirtualPlanet(const Planet *origin);
 	~VirtualPlanet();
 	void update(float scale = 1.0f);
 	static void refreshVirtualPlanets();
@@ -18,7 +19,6 @@ public:
 private:
 	Vector2 centerObject;
 	float orbit;
-	float angle;
 	float speed;
 };
 

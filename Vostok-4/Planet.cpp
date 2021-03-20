@@ -1,12 +1,19 @@
 #include "Planet.h"
+#include "Scene.h"
 
 Planet::Planet(Vector2 position) : Body(position)
 {
+	Planet::refreshPlanetList();
 	size = 1.0f;
 	mass = 1000.0f;
 }
 
 void Planet::onCollision(Body * other) {}
+
+void Planet::onDestroy()
+{
+	Planet::refreshPlanetList();
+}
 
 Vector2 Planet::getGravityForce(Body * body)
 {
@@ -39,3 +46,17 @@ void Planet::setMass(float mass)
 	this->mass = mass;
 }
 
+void Planet::refreshPlanetList()
+{
+	planets.clear();
+	for (Body *body : Scene::bodies)
+	{
+		if (typeid(*body) != typeid(Star) && typeid(*body) != typeid(MiniPlanet)) continue;
+
+		Planet *planet = (Planet*)body;
+		if (planet->checkIsDestroyed()) continue;
+		planets.push_back(planet);
+	}
+}
+
+std::list<Planet *> Planet::planets;

@@ -7,7 +7,7 @@ EnemyShip::EnemyShip(Vector2 position) : Spaceship(position)
 	Init();
 }
 
-EnemyShip::EnemyShip(Planet *planet, const float orbit, const float angle, const bool clockwise) : Spaceship(planet, orbit, angle, clockwise)
+EnemyShip::EnemyShip(Planet *planet, float orbit, float angle, bool clockwise) : Spaceship(planet, orbit, angle, clockwise)
 {
 	dir = clockwise ? 1 : -1;
 	Init();

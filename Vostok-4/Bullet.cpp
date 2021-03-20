@@ -14,7 +14,7 @@ Bullet::Bullet(Vector2 position, float rotation, Vector2 initVelocity, Body *par
 	this->parent = parent;
 }
 
-void Bullet::onCollision(Body *other)
+void Bullet::onCollision(const Body* other)
 {
 	if (other != parent)
 		setHealthToZero();
@@ -29,12 +29,12 @@ void Bullet::update()
 	}
 }
 
-Body * Bullet::getParent()
+Body *Bullet::getParent() const
 {
 	return parent;
 }
 
-void Bullet::setParent(Body * parent)
+void Bullet::setParent(Body* &parent)
 {
 	this->parent = parent;
 }

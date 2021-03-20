@@ -25,7 +25,7 @@ void Body::setIsMaterial(bool newState)
 	isMaterial = newState;
 }
 
-void Body::attractTo(Planet *planet)
+void Body::attractTo(const Planet* planet)
 {
 	if (planet != nullptr)
 		addForce(planet->getGravityForce(this));
@@ -107,7 +107,7 @@ void Body::draw()
 	Scene::window->draw(*getSprite());
 }
 
-void Body::onCollision(Body * other)
+void Body::onCollision(const Body* other)
 {
 	if (typeid(*other) == typeid(Bullet) && ((Bullet *)other)->getParent() == this) return;
 
@@ -136,17 +136,17 @@ Vector2 Body::getVelocity() const
 	return velocity;
 }
 
-void Body::setVelocity(Vector2 newVelocity)
+void Body::setVelocity(const Vector2 &newVelocity)
 {
 	velocity = newVelocity;
 }
 
-void Body::addForce(const Vector2 force)
+void Body::addForce(const Vector2 &force)
 {
 	instantForce += force;
 }
 
-void Body::addTorque(const float torque)
+void Body::addTorque(float torque)
 {
 	instantTorque += torque;
 }
@@ -163,12 +163,12 @@ void Body::applyForces()
 	instantTorque = 0.0f;
 }
 
-void Body::move(Vector2 shift)
+void Body::move(const Vector2 &shift)
 {
 	position += shift;
 }
 
-float Body::getRotation()
+float Body::getRotation() const
 {
 	return rotation;
 }

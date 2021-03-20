@@ -32,7 +32,7 @@ std::string Engine::getName()
 	return name;
 }
 
-void Engine::updateSprite(Body *body)
+void Engine::updateSprite(const Body *body)
 {
 	getSprite()->setPosition(body->getPosition());
 	getSprite()->setRotation(body->getRotation());

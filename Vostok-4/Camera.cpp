@@ -12,7 +12,7 @@ Camera::Camera()
 	}
 }
 
-Camera::Camera(Body * objectToFollow) : Camera()
+Camera::Camera(Body* &objectToFollow) : Camera()
 {
 	this->objectToFollow = objectToFollow;
 }

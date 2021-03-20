@@ -6,7 +6,7 @@ class Orbit
 	Orbit();
 private:
 	static void virtualUpdate(Vector2 *virtualPosition, Vector2 *virtualVelocity);
-	static bool hasVirtualCollision(Vector2 virtualPosition, Body *origin);
+	static bool hasVirtualCollision(const Vector2 &virtualPosition, const Body *origin);
 	const static sf::Color safeColor;
 	const static sf::Color crashColor;
 	const static sf::Color flyAwayColor;
@@ -14,7 +14,7 @@ private:
 public:
 	void setOrbitColor(const sf::Color orbitColor);
 	sf::Color getOrbitColor();
-	static void drawOrbit(Spaceship *ship);
+	static void drawOrbit(const Spaceship *ship);
 	static const int orbitLength;
 	static const float orbitScale;
 };

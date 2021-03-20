@@ -17,20 +17,20 @@ public:
 	virtual void update();
 	virtual void updateSprite();
 	virtual void draw();
-	virtual void onCollision(Body *other);
+	virtual void onCollision(const Body* other);
 
 	int getSceneID() const;
 	Vector2 getPosition() const;
-	void move(Vector2 shift);
-	float getRotation();
+	void move(const Vector2 &shift);
+	float getRotation() const;
 	void setRotation(float rotation);
 	void rotate(float angle);
 	Vector2 getMovingDirection() const;
 	Vector2 getVelocity() const;
-	void setVelocity(Vector2 newVelocity);
+	void setVelocity(const Vector2 &newVelocity);
 	int getHealth() const;
-	void addForce(const Vector2 force);
-	void addTorque(const float torque);
+	void addForce(const Vector2 &force);
+	void addTorque(float torque);
 	void applyForces();
 	void decreaseHealth();
 	void setHealthToZero();
@@ -50,7 +50,7 @@ public:
 protected:
 	float getLifetime() const;
 	float getAirRotationResistance() const;
-	void attractTo(Planet *planet);
+	void attractTo(const Planet* planet);
 	void attractToPlanets();
 private:
 	int sceneID;

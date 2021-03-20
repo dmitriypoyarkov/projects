@@ -49,10 +49,10 @@ public:
 	static int getNextSceneID();
 
 	static Star *getActiveStar();
-	static void setActiveStar(Star *star);
+	static void setActiveStar(Star* star);
 
 	static void playerDestroyedEvent();
-	static void playerSpawnedEvent(PlayerShip *ship);
+	static void playerSpawnedEvent(PlayerShip* ship);
 	static void enemyDestroyedEvent(Planet *planet);
 	static void enemySpawnedEvent(EnemyShip *enemy);
 	static void starSystemClearedEvent();

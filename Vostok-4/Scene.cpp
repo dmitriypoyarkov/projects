@@ -141,7 +141,7 @@ Star * Scene::getActiveStar()
 	return activeStar;
 }
 
-void Scene::setActiveStar(Star *star)
+void Scene::setActiveStar(Star* star)
 {
 	if (activeStar != nullptr)
 		activeStar->setIsDestroyed(true);
@@ -157,7 +157,7 @@ void Scene::playerDestroyedEvent()
 	gameOver = true;
 }
 
-void Scene::playerSpawnedEvent(PlayerShip *player)
+void Scene::playerSpawnedEvent(PlayerShip* player)
 {
 	Camera *camera = Scene::getActiveCamera();
 	if (Scene::player == nullptr)
@@ -234,7 +234,7 @@ PlayerShip *Scene::getPlayer()
 	return player;
 }
 
-void Scene::setActiveCamera(Camera * newCamera)
+void Scene::setActiveCamera(Camera* newCamera)
 {
 	activeCamera = newCamera;
 }

@@ -26,7 +26,7 @@ void Trash::update()
 		setIsDestroyed(true);
 }
 
-void Trash::onCollision(Body * other)
+void Trash::onCollision(const Body* other)
 {
 	if (typeid(*other) == typeid(Trash) && ((Trash *)other)->originID == originID) return;
 	setHealthToZero();

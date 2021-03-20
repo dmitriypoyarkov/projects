@@ -6,10 +6,10 @@ class Planet : public Body
 public:
 	Planet(Vector2 position = Vector2(0,0));
 
-	void onCollision(Body *other) override;
+	void onCollision(const Body* other) override;
 	void onDestroy() override;
 
-	Vector2 getGravityForce(Body *body);
+	Vector2 getGravityForce(Body *body) const;
 	float getSurfaceRadius();
 	float getFirstCosmic(float orbit) const;
 	float getMass() const;

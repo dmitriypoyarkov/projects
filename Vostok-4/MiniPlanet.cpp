@@ -62,12 +62,12 @@ void MiniPlanet::setTangentVelocity()
 	setVelocity(tangentVector);
 }
 
-int MiniPlanet::getPlanetStageSeed()
+int MiniPlanet::getPlanetStageSeed() const
 {
 	return planetStageSeed;
 }
 
-bool MiniPlanet::checkPlanetStageIsCleared()
+bool MiniPlanet::checkPlanetStageIsCleared() const
 {
 	return planetStageIsCleared;
 }

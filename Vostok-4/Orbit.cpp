@@ -22,7 +22,7 @@ void Orbit::virtualUpdate(Vector2 *virtualPosition, Vector2 *virtualVelocity)
 	*virtualPosition += *virtualVelocity * orbitScale;
 }
 
-bool Orbit::hasVirtualCollision(Vector2 virtualPosition, Body *origin)
+bool Orbit::hasVirtualCollision(const Vector2 &virtualPosition, const Body *origin)
 {
 	for (VirtualPlanet *planet : VirtualPlanet::virtualPlanets)
 	{
@@ -44,7 +44,7 @@ sf::Color Orbit::getOrbitColor()
 	return orbitColor;
 }
 
-void Orbit::drawOrbit(Spaceship * ship)
+void Orbit::drawOrbit(const Spaceship* ship)
 {
 	Vector2 virtualPosition = Vector2(ship->getPosition());
 	Vector2 virtualVelocity = Vector2(ship->getVelocity());

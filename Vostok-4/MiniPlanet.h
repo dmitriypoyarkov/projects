@@ -24,8 +24,8 @@ public:
 	void update() override;
 	void setTangentVelocity();
 
-	int getPlanetStageSeed();
-	bool checkPlanetStageIsCleared();
+	int getPlanetStageSeed() const;
+	bool checkPlanetStageIsCleared() const;
 	void setPlanetStageIsCleared(bool newState);
 	void incrementEnemyCount();
 	void decrementEnemyCount();

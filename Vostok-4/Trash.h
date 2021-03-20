@@ -11,7 +11,7 @@ public:
 	Planet *planet;
 protected:
 	void update() override;
-	void onCollision(Body *other) override;
+	void onCollision(const Body *other) override;
 	void setupSpriteList() override;
 private:
 	int originID;

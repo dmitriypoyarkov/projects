@@ -11,18 +11,17 @@ public:
 	sf::Sprite *getSprite();
 	float getScale() const;
 	int getLayer() const;
-	void setLayer(const int newLayer);
+	void setLayer(int newLayer);
 	float getColliderSize() const;
-	void setScale(const float newScale);
+	void setScale(float newScale);
 	static void loadSprites();
 	static const std::string RES_PATH;
 protected:
 	virtual void setupSpriteList() = 0;
-	void loadSprite(std::string spritePath);
 	void setupSprite();
-	int findInSpriteList(std::string name);
+	int findInSpriteList(const std::string &name);
 	void setTextureByClassSpriteType(int classSpriteType);
-	void setClassSpriteType(std::string name);
+	void setClassSpriteType(const std::string &name);
 	std::vector<std::string> classSpriteList;
 private:
 	float colliderSize;
@@ -30,7 +29,6 @@ private:
 	int spriteType;
 	int classSpriteType;
 	float scale;
-//	std::list<std::string> spriteList;
 	const static std::vector <std::string> spriteList;
 	const static int spriteCount;
 	static std::vector <sf::Texture> textures;

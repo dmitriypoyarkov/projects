@@ -8,14 +8,14 @@ Planet::Planet(Vector2 position) : Body(position)
 	mass = 1000.0f;
 }
 
-void Planet::onCollision(Body * other) {}
+void Planet::onCollision(const Body * other) {}
 
 void Planet::onDestroy()
 {
 	Planet::refreshPlanetList();
 }
 
-Vector2 Planet::getGravityForce(Body * body)
+Vector2 Planet::getGravityForce(Body * body) const
 {
 	Vector2 radius = getPosition() - body->getPosition();
 	Vector2 normal = radius.normalized();

@@ -8,7 +8,7 @@ private:
 	static const float smoothness;
 public:
 	Camera();
-	Camera(Body* objectToFollow);
+	Camera(Body* &objectToFollow);
 	void setupSpriteList();
 	void update() override;
 	void updateSprite() override;

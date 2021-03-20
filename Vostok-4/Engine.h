@@ -10,7 +10,7 @@ public:
 	sf::Keyboard::Key getKey();
 	std::string getName();
 	
-	void updateSprite(Body *body);
+	void updateSprite(const Body *body);
 
 	void thrust(Body *body);
 	void rotate(Body *body, bool clockwise);

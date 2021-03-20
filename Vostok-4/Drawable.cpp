@@ -15,15 +15,6 @@ Drawable::~Drawable()
 	classSpriteList.clear();
 }
 
-void Drawable::loadSprite(std::string spritePath)
-{
-	if (!texture->loadFromFile(spritePath))
-	{
-		std::cout << "failed to load file from " + spritePath;
-	}
-	sprite.setTexture(*texture);
-}
-
 void Drawable::setupSprite()
 {
 	setupSpriteList();
@@ -37,7 +28,7 @@ void Drawable::setupSprite()
 	colliderSize = spriteSize.magnitude() / (float)sqrt(2);
 }
 
-int Drawable::findInSpriteList(std::string name)
+int Drawable::findInSpriteList(const std::string &name)
 {
 	for (int i = 0; i < spriteCount; i++)
 	{
@@ -46,7 +37,7 @@ int Drawable::findInSpriteList(std::string name)
 			return i;
 		}
 	}
-	return 0;
+	return 0; // sprite not found - choose first "error" sprite
 }
 
 void Drawable::loadSprites()
@@ -67,7 +58,7 @@ void Drawable::setTextureByClassSpriteType(int classSpriteType)
 	texture = &textures[spriteIndex];
 }
 
-void Drawable::setClassSpriteType(std::string name)
+void Drawable::setClassSpriteType(const std::string &name)
 {
 	for (auto ptr = classSpriteList.begin(); ptr != classSpriteList.end(); ++ptr)
 	{
@@ -83,7 +74,7 @@ int Drawable::getLayer() const
 	return layer;
 }
 
-void Drawable::setLayer(const int newLayer)
+void Drawable::setLayer(int newLayer)
 {
 	layer = newLayer;
 }
@@ -93,7 +84,7 @@ float Drawable::getScale() const
 	return scale;
 }
 
-void Drawable::setScale(const float newScale)
+void Drawable::setScale(float newScale)
 {
 	scale = newScale;
 }
@@ -121,7 +112,6 @@ const std::vector <std::string> Drawable::spriteList =
 	"Interstellar.png",
 	"Trash.png",
 	"Planet1.png",
-	"",
 	"Bullet.png"
 };
 

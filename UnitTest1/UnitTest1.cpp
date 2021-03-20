@@ -385,3 +385,53 @@ TEST_CLASS(SpaceshipTest)
 		Assert::AreEqual(initialBodyCount + 1, (int)Scene::bodies.size()); 
 	};
 };
+
+TEST_CLASS(SceneTest)
+{
+	TEST_METHOD_CLEANUP(DestroyScene)
+	{
+		Scene::onDestroy();
+	};
+
+	TEST_METHOD(BodyAccount)
+	{
+		Assert::AreEqual(0, (int)Scene::bodies.size());
+		MiniPlanet *body1 = new MiniPlanet();
+		Assert::AreEqual(1, (int)Scene::bodies.size());
+		Bullet *body2 = new Bullet(Vector2(100000, 0));
+		Assert::AreEqual(2, (int)Scene::bodies.size());
+		body2->setIsDestroyed(true);
+		Scene::processPhysics(); // delete destroyed
+		Assert::AreEqual(1, (int)Scene::bodies.size());
+	};
+
+	TEST_METHOD(PlayerEvents)
+	{
+		// playerCreatedEvent and playerDestroyedEvent methods
+		PlayerShip *player = new PlayerShip();
+		Assert::IsTrue(Scene::getPlayer() == player, L"Player wasn't set");
+		player->setIsDestroyed(true);
+		Scene::processPhysics();
+		Assert::IsTrue(Scene::getPlayer() == nullptr, L"Player wasn't removed");
+		DestroyScene();
+	};
+
+	TEST_METHOD(Progress)
+	{
+		Star *star = new Star();
+		MiniPlanet *planet1 = new MiniPlanet(star, star->getSurfaceRadius() + 10000);
+		MiniPlanet *planet2 = new MiniPlanet(star, star->getSurfaceRadius() + 10000, 0, 3.14);
+		EnemyShip *enemy1 = new EnemyShip(planet1, planet1->getSurfaceRadius() + 1000);
+		EnemyShip *enemy2 = new EnemyShip(planet2, planet2->getSurfaceRadius() + 1000);
+		Assert::AreEqual(2, Scene::getUnclearedPlanetsNumber());
+		enemy1->setIsDestroyed(true);
+		enemy2->setIsDestroyed(true);
+		Scene::processPhysics();
+		int initialBodyCount = Scene::bodies.size();
+
+		// when star system is cleared, constructStarSystem initiated.
+		// it creates star, planet, enemies, so we check body count.
+		Scene::manageScene(); // here global events are managed
+		Assert::IsTrue(initialBodyCount < Scene::bodies.size());
+	}
+};

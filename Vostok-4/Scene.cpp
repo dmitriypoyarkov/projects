@@ -151,7 +151,9 @@ void Scene::setActiveStar(Star *star)
 void Scene::playerDestroyedEvent()
 {
 	Camera *camera = Scene::getActiveCamera();
-	camera->setObjectToFollow(nullptr);
+	if (camera != nullptr)
+		camera->setObjectToFollow(nullptr);
+	player = nullptr;
 	gameOver = true;
 }
 

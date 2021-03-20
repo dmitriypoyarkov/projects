@@ -12,7 +12,7 @@ private:
 	int enemyCount;
 public:
 	MiniPlanet(Vector2 position = Vector2(0,0));
-	MiniPlanet(Star * centerObject, float orbit, float speed, float angle = 0);
+	MiniPlanet(Star * centerObject, float orbit, float speed = 0, float angle = 0);
 
 	void copyParameters(Vector2 *position,
 						Vector2 *centerObject,

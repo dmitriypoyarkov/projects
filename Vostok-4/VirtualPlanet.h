@@ -21,4 +21,3 @@ private:
 	float orbit;
 	float speed;
 };
-

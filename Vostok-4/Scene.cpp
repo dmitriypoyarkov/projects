@@ -14,11 +14,11 @@ Star* Scene::activeStar = nullptr;
 Camera* Scene::activeCamera = nullptr;
 
 std::list<Body*> Scene::bodies;
-sf::RenderWindow* Scene::window = nullptr;
 
 int Scene::enemiesNumber = 0;
 int Scene::unclearedPlanetsNumber = 0;
 int Scene::starsNumber = 0;
+std::list<Body*>::iterator Scene::curBodyPtr;
 bool Scene::gameOver = false;
 bool Scene::createNewStar = false;
 
@@ -58,43 +58,43 @@ void Scene::processPhysics()
 
 		body->travel();
 	}
-	Scene::eraseDestroyed(&(Scene::bodies));
 }
 
-void Scene::processGraphics()
-{
-	window->clear(sf::Color::Black);
-	for (auto bodyPtr = Scene::bodies.begin();
-		bodyPtr != Scene::bodies.end();
-		++bodyPtr)
-	{
-		Body* body = *bodyPtr;
-		body->draw();
-
-		if (typeid(*body) == typeid(PlayerShip))
-		{
-			if (((PlayerShip *)body)->checkIsDrawingOrbits() == true)
-				Orbit::drawOrbit(((Spaceship *)body));
-		}
-		UI::draw();
-	}
-	Camera* camera = Scene::getActiveCamera();
-	if (camera)
-	{
-		sf::View view = window->getView();
-		view.setCenter(camera->getPosition());
-		sf::Vector2f scale = view.getSize();
-		scale = Vector2(scale.x, scale.y).normalized() * camera->getScale();
-		view.setSize(scale);
-		window->setView(view);
-	}
-
-	window->display();
-}
+//void Scene::processGraphics()
+//{
+//	window->clear(sf::Color::Black);
+//	for (auto bodyPtr = Scene::bodies.begin();
+//		bodyPtr != Scene::bodies.end();
+//		++bodyPtr)
+//	{
+//		Body* body = *bodyPtr;
+//		body->draw();
+//
+//		if (typeid(*body) == typeid(PlayerShip))
+//		{
+//			if (((PlayerShip *)body)->checkIsDrawingOrbits() == true)
+//				Orbit::drawOrbit(((Spaceship *)body));
+//		}
+//		UI::draw();
+//	}
+//	Camera* camera = Scene::getActiveCamera();
+//	if (camera)
+//	{
+//		sf::View view = window->getView();
+//		view.setCenter(camera->getPosition());
+//		sf::Vector2f scale = view.getSize();
+//		scale = Vector2(scale.x, scale.y).normalized() * camera->getScale();
+//		view.setSize(scale);
+//		window->setView(view);
+//	}
+//
+//	window->display();
+//}
 
 void Scene::manageScene()
 {
-	if (gameOver)
+    Scene::eraseDestroyed(&(Scene::bodies));
+	/*if (gameOver)
 	{
 		gameOverEvent();
 		return;
@@ -103,7 +103,7 @@ void Scene::manageScene()
 	{
 		tryCreateNewStar();
 		return;
-	}
+	}*/
 }
 
 void Scene::tryCreateNewStar()
@@ -263,6 +263,31 @@ int Scene::AddBody(Body* newBody)
 {
 	bodies.push_back(newBody);
 	int bodyID = Scene::getNextSceneID();
-
 	return bodyID;
+}
+
+void Scene::resetBodyIndex()
+{
+    curBodyPtr = bodies.begin();
+}
+
+Body* Scene::getNextBody()
+{
+    if (curBodyPtr == bodies.end())
+    {
+        return nullptr;
+    }
+
+    Body *requiredBody = *curBodyPtr;
+    ++curBodyPtr;
+    return requiredBody;
+}
+
+Body* Scene::getCurBody()
+{
+    if (curBodyPtr == bodies.end())
+    {
+        return nullptr;
+    }
+    return *curBodyPtr;
 }

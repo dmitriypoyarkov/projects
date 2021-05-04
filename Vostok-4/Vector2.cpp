@@ -90,11 +90,6 @@
 		float cosin = a.Dot(b) / (a.magnitude() * b.magnitude());
 		return cosin;
 	}
-
-	Vector2::operator sf::Vector2f() const
-	{
-		return sf::Vector2f(x, y);
-	}
 	
 	bool operator == (const Vector2 left, const Vector2 right)
 	{

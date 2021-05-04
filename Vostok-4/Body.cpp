@@ -2,6 +2,7 @@
 #include <iostream>
 #include "Scene.h"
 #include "Bullet.h"
+#include <ctime>
 
 float Body::getAirRotationResistance() const
 {
@@ -58,6 +59,7 @@ Body::Body(Vector2 position) : Drawable()
 	isMaterial = true;
 	isDestroyed = false;
 	isDynamic = false;
+    creationTime = std::time(nullptr);
 	this->position = position;
 }
 
@@ -92,19 +94,6 @@ void Body::update()
 {
 	if (health <= 0)
 		isDestroyed = true;
-}
-
-void Body::updateSprite()
-{
-	getSprite()->setPosition(position);
-	getSprite()->setRotation(rotation);
-	getSprite()->setScale(getScale(), getScale());
-}
-
-void Body::draw()
-{
-	updateSprite();
-	Scene::window->draw(*getSprite());
 }
 
 void Body::onCollision(const Body* other)
@@ -205,7 +194,7 @@ void Body::setIsDynamic(bool newState)
 
 float Body::getLifetime() const
 {
-	return clock.getElapsedTime().asSeconds();
+	return (float)(std::time(nullptr) - creationTime);
 }
 
 const float Body::controlDelay = 0.1f;

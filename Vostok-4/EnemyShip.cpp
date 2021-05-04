@@ -45,6 +45,7 @@ void EnemyShip::Init()
 {
 	dir = 1;
 	Scene::enemySpawnedEvent(this);
+    setColliderSize(1.0f);
 }
 
 const float EnemyShip::detectionDelta = 0.4f;

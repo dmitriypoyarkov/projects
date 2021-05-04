@@ -6,12 +6,9 @@ class Engine : public Drawable
 {
 public:
 	Engine(std::string name = "Regular");
-	Engine(float force, float torque, std::string name, sf::Keyboard::Key key);
-	sf::Keyboard::Key getKey();
+	Engine(float force, float torque, std::string name);
 	std::string getName();
 	
-	void updateSprite(const Body *body);
-
 	void thrust(Body *body);
 	void rotate(Body *body, bool clockwise);
 	void idle();
@@ -20,6 +17,5 @@ private:
 	float torque;
 	float force;
 	std::string name;
-	sf::Keyboard::Key key;
 };
 

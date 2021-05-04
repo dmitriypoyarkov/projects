@@ -3,7 +3,7 @@
 
 Spaceship::Spaceship(Vector2 position) : Body(position)
 {
-	setupSprite();
+    setupSpriteList();
 	setIsDynamic(true);
 	lastShot = 0.0f;
 	isDrawingOrbits = false;

@@ -5,7 +5,6 @@
 
 Orbit::Orbit()
 {
-	orbitColor = safeColor;
 }
 
 void Orbit::virtualUpdate(Vector2 *virtualPosition, Vector2 *virtualVelocity)
@@ -34,44 +33,33 @@ bool Orbit::hasVirtualCollision(const Vector2 &virtualPosition, const Body *orig
 	return false;
 }
 
-void Orbit::setOrbitColor(const sf::Color orbitColor)
-{
-	this->orbitColor = orbitColor;
-}
 
-sf::Color Orbit::getOrbitColor()
-{
-	return orbitColor;
-}
 
-void Orbit::drawOrbit(const Spaceship* ship)
-{
-	Vector2 virtualPosition = Vector2(ship->getPosition());
-	Vector2 virtualVelocity = Vector2(ship->getVelocity());
-	VirtualPlanet::refreshVirtualPlanets();
-	float pointScale = Scene::window->getView().getSize().x;
-	for (int i = 0; i < orbitLength; i++)
-	{
-		sf::CircleShape point;
-		point.setPosition(virtualPosition);
-		point.setRadius(0.001f * pointScale);
-		point.setPointCount(3);
-
-		if (hasVirtualCollision(virtualPosition, ship))
-		{
-			point.setFillColor(crashColor);
-			point.setRadius(0.004f * pointScale);
-			Scene::window->draw(point);
-			break;
-		}
-		Scene::window->draw(point);
-
-		virtualUpdate(&virtualPosition, &virtualVelocity);
-	}
-}
+//void Orbit::drawOrbit(const Spaceship* ship)
+//{
+//	Vector2 virtualPosition = Vector2(ship->getPosition());
+//	Vector2 virtualVelocity = Vector2(ship->getVelocity());
+//	VirtualPlanet::refreshVirtualPlanets();
+//	float pointScale = Scene::window->getView().getSize().x;
+//	for (int i = 0; i < orbitLength; i++)
+//	{
+//		sf::CircleShape point;
+//		point.setPosition(virtualPosition);
+//		point.setRadius(0.001f * pointScale);
+//		point.setPointCount(3);
+//
+//		if (hasVirtualCollision(virtualPosition, ship))
+//		{
+//			point.setFillColor(crashColor);
+//			point.setRadius(0.004f * pointScale);
+//			Scene::window->draw(point);
+//			break;
+//		}
+//		Scene::window->draw(point);
+//
+//		virtualUpdate(&virtualPosition, &virtualVelocity);
+//	}
+//}
 
 const int Orbit::orbitLength = 400;
 const float Orbit::orbitScale = 400.0f;
-const sf::Color Orbit::safeColor = sf::Color::Blue;
-const sf::Color Orbit::crashColor = sf::Color::Red;
-const sf::Color Orbit::flyAwayColor = sf::Color::Magenta;

@@ -4,10 +4,10 @@
 
 void SceneConstructor::initiateGameWithStarSystem(int seed)
 {
-	new Camera();
+	//new Camera();
 	Star *star = createStar(seed);
-	createMiniPlanets(seed, star);
-	new PlayerShip(star, star->getSurfaceRadius() + 800);
+	//createMiniPlanets(seed, star);
+	new PlayerShip(star, star->getSurfaceRadius() + 100);
 	starSystemMessage();
 }
 
@@ -38,8 +38,8 @@ Star* SceneConstructor::createStar(unsigned seed)
 	srand(seed);
 	float scale = (float)(MIN_STAR_SCALE + rand() % MAX_STAR_SCALE);
 	Star *star = new Star(currentStarPosition);
-	star->setScale(scale);
-	star->setMass(scale * PLANET_MASS_UNIT);
+	star->setScale(1);
+	star->setMass(0.1f*PLANET_MASS_UNIT);
 	return star;
 }
 

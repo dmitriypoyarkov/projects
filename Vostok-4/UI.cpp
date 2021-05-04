@@ -5,22 +5,22 @@ const int UI::aimDistance = 12;
 
 void UI::draw()
 {
-	drawAim();
+	
 }
 
-void UI::drawAim()
-{
-	Vector2 playerPosition = Scene::getPlayer()->getPosition();
-	Vector2 playerDirection = Scene::getPlayer()->getMovingDirection();
-	float aimScale = 0.0015f*Scene::window->getView().getSize().x;
-	Vector2 aimPosition = playerPosition + playerDirection * aimDistance * aimScale;
-	
-	
-	sf::CircleShape point;
-	point.setPosition(aimPosition);
-	point.setRadius(aimScale);
-	point.setPointCount(3);
-	point.setOrigin(aimScale / 2, aimScale / 2);
-	Scene::window->draw(point);
-}
+//void UI::drawAim()
+//{
+//	Vector2 playerPosition = Scene::getPlayer()->getPosition();
+//	Vector2 playerDirection = Scene::getPlayer()->getMovingDirection();
+//	float aimScale = 0.0015f*Scene::window->getView().getSize().x;
+//	Vector2 aimPosition = playerPosition + playerDirection * aimDistance * aimScale;
+//	
+//	
+//	sf::CircleShape point;
+//	point.setPosition(aimPosition);
+//	point.setRadius(aimScale);
+//	point.setPointCount(3);
+//	point.setOrigin(aimScale / 2, aimScale / 2);
+//	Scene::window->draw(point);
+//}
 

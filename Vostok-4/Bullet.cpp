@@ -2,9 +2,10 @@
 
 Bullet::Bullet(Vector2 position) : Body(position)
 {
-	setupSprite();
+    setupSpriteList();
 	setIsDynamic(true);
 	parent = nullptr;
+    setColliderSize(1.0f);
 }
 
 Bullet::Bullet(Vector2 position, float rotation, Vector2 initVelocity, Body *parent) : Bullet(position)

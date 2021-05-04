@@ -3,6 +3,7 @@
 
 Camera::Camera()
 {
+    setupSpriteList();
 	setIsMaterial(false);
 	destination = nullptr;
 	setScale(500.0f);
@@ -10,6 +11,7 @@ Camera::Camera()
 	{
 		Scene::setActiveCamera(this);
 	}
+    setColliderSize(0.0f);
 }
 
 Camera::Camera(Body* &objectToFollow) : Camera()
@@ -19,20 +21,18 @@ Camera::Camera(Body* &objectToFollow) : Camera()
 
 void Camera::setupSpriteList()
 {
-	classSpriteList = { "" };
+	classSpriteList = { "Rocket1.png" };
 }
 
 void Camera::update()
 {
 	if (objectToFollow != nullptr)
 		move((objectToFollow->getPosition() - getPosition()) * smoothness);
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Add))
-		setScale(getScale() / 1.05f);
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Subtract))
-		setScale(getScale() * 1.05f);;
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Add))
+	//	setScale(getScale() / 1.05f);
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Subtract))
+	//	setScale(getScale() * 1.05f);;
 }
-
-void Camera::updateSprite() {}
 
 void Camera::setObjectToFollow(Body * objectToFollow)
 {

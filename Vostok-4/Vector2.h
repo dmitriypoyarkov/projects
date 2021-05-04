@@ -1,6 +1,5 @@
 #pragma once
 #include <cmath>
-#include <SFML/Graphics.hpp>
 
 class Vector2
 {
@@ -34,6 +33,4 @@ public:
 	static float AngleDeg(const Vector2 a, const Vector2 b);
 	static float VectorSin(const Vector2 a, const Vector2 b);
 	static float VectorCos(const Vector2 a, const Vector2 b);
-
-	operator sf::Vector2f() const;
 };

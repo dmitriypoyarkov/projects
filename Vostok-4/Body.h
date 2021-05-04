@@ -15,8 +15,6 @@ public:
 
 	void travel();
 	virtual void update();
-	virtual void updateSprite();
-	virtual void draw();
 	virtual void onCollision(const Body* other);
 
 	int getSceneID() const;
@@ -55,13 +53,13 @@ protected:
 private:
 	int sceneID;
 	int health;
+	int creationTime;
 	Vector2 position;
 	float rotation;
 	Vector2 velocity;
 	float rotationSpeed;
 	Vector2 instantForce;
 	float instantTorque;
-	sf::Clock clock;
 	bool isDestroyed;
 	bool isDynamic;
 	bool isMaterial;

@@ -27,8 +27,7 @@ Vector2 Planet::getGravityForce(Body * body) const
 
 float Planet::getSurfaceRadius()
 {
-	sf::FloatRect rectangle = getSprite()->getLocalBounds();
-	return rectangle.height * getScale() / 2;
+	return getColliderSize();
 }
 
 float Planet::getFirstCosmic(float orbit) const

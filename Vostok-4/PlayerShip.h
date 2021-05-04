@@ -10,19 +10,11 @@ public:
 	~PlayerShip() override;
 	void onDestroy() override;
 	void update() override;
-	void draw() override;
 private:
 	void Init();
 	void setupEngines();
-	void switchEngines();
 	std::list<Engine *> engines;
 	Engine *currentEngine;
 	float lastControl;
-
-	static const sf::Keyboard::Key gunKey;
-	static const sf::Keyboard::Key engineKey;
-	static const sf::Keyboard::Key rotateUpKey;
-	static const sf::Keyboard::Key rotateDownKey;
-	static const sf::Keyboard::Key toggleOrbitDrawingKey;
 };
 

@@ -4,11 +4,11 @@
 #include "Statistics.h"
 #include "EnemyShip.h"
 
-const sf::Keyboard::Key PlayerShip::gunKey = sf::Keyboard::Space;
-const sf::Keyboard::Key PlayerShip::engineKey = sf::Keyboard::LShift;
-const sf::Keyboard::Key PlayerShip::rotateUpKey = sf::Keyboard::D;
-const sf::Keyboard::Key PlayerShip::rotateDownKey = sf::Keyboard::A;
-const sf::Keyboard::Key PlayerShip::toggleOrbitDrawingKey = sf::Keyboard::O;
+//const sf::Keyboard::Key PlayerShip::gunKey = sf::Keyboard::Space;
+//const sf::Keyboard::Key PlayerShip::engineKey = sf::Keyboard::LShift;
+//const sf::Keyboard::Key PlayerShip::rotateUpKey = sf::Keyboard::D;
+//const sf::Keyboard::Key PlayerShip::rotateDownKey = sf::Keyboard::A;
+//const sf::Keyboard::Key PlayerShip::toggleOrbitDrawingKey = sf::Keyboard::O;
 
 
 PlayerShip::PlayerShip(Vector2 position) : Spaceship(position)
@@ -40,7 +40,7 @@ void PlayerShip::update()
 	Vector2 movingDirection = getMovingDirection();
 	currentEngine->idle();
 	float curTime = getLifetime();
-	if (sf::Keyboard::isKeyPressed(engineKey))
+	/*if (sf::Keyboard::isKeyPressed(engineKey))
 	{
 		currentEngine->thrust(this);
 	}
@@ -81,19 +81,12 @@ void PlayerShip::update()
 				}
 			}
 		}
-	}
-	if (curTime - lastControl >= controlDelay)
+	}*/
+	/*if (curTime - lastControl >= controlDelay)
 	{
 		lastControl = curTime;
 		switchEngines();
-	}
-}
-
-void PlayerShip::draw()
-{
-	Body::draw();
-	currentEngine->updateSprite(this);
-	Scene::window->draw(*(currentEngine->getSprite()));
+	}*/
 }
 
 void PlayerShip::Init()
@@ -101,24 +94,25 @@ void PlayerShip::Init()
 	setupEngines();
 	currentEngine = *engines.begin();
 	lastControl = 0.0f;
+    setColliderSize(20.0f);
 	Scene::playerSpawnedEvent(this);
 }
 
 void PlayerShip::setupEngines()
 {
-	engines.push_back(new Engine(0.05f, 1.0f, "Regular", sf::Keyboard::R));
-	engines.push_back(new Engine(1.0f, 1.0f, "Interplanetary", sf::Keyboard::T));
-	engines.push_back(new Engine(10.0f, 1.0f, "Interstellar", sf::Keyboard::Y));
+	engines.push_back(new Engine(0.05f, 1.0f, "Regular"));
+	engines.push_back(new Engine(1.0f, 1.0f, "Interplanetary"));
+	engines.push_back(new Engine(10.0f, 1.0f, "Interstellar"));
 }
 
-void PlayerShip::switchEngines()
-{
-	for (Engine *engine : engines)
-	{
-		if (sf::Keyboard::isKeyPressed(engine->getKey()))
-		{
-			currentEngine = engine;
-			currentEngine->idle();
-		}
-	}
-}
+//void PlayerShip::switchEngines()
+//{
+//	for (Engine *engine : engines)
+//	{
+//		if (sf::Keyboard::isKeyPressed(engine->getKey()))
+//		{
+//			currentEngine = engine;
+//			currentEngine->idle();
+//		}
+//	}
+//}

@@ -6,7 +6,7 @@
 
 MiniPlanet::MiniPlanet(Vector2 position) : Planet(position)
 {
-	setupSprite();
+    setupSpriteList();
 	centerObject = nullptr;
 	orbit = 0.0f;
 	speed = 0.0f;
@@ -14,6 +14,7 @@ MiniPlanet::MiniPlanet(Vector2 position) : Planet(position)
 	planetStageSeed = rand()%20000;
 	planetStageIsCleared = false;
 	setIsDynamic(true);
+    setColliderSize(1.0f);
 }
 
 MiniPlanet::MiniPlanet(Star * centerObject, float orbit, float speed, float angle) 
@@ -39,7 +40,7 @@ void MiniPlanet::copyParameters(Vector2 *position, Vector2 *centerObject, float 
 
 void MiniPlanet::setupSpriteList()
 {
-	classSpriteList = { "Planet.png" };
+	classSpriteList = { "Planet-mini.png" };
 }
 
 void MiniPlanet::update()

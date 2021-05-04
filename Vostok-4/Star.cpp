@@ -4,9 +4,10 @@
 
 Star::Star(Vector2 position) : Planet(position)
 {
-	setupSprite();
+    setupSpriteList();
 	isNewStar = true;
 	setIsDynamic(false);
+    setColliderSize(200.0f);
 	Planet::refreshPlanetList();
 	Scene::starCreatedEvent(this);
 }
@@ -54,7 +55,7 @@ float Star::distanceToPlayer()
 
 void Star::setupSpriteList()
 {
-	classSpriteList = { "Planet4k.png" };
+	classSpriteList = { "Planet-mini.png" };
 }
 
 void Star::update()

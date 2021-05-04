@@ -14,6 +14,7 @@ public:
 		bool increment = true;
 		bool begin = true;
 		auto itemPtr = items->begin();
+        std::cout << "1" << std::endl;
 		T *item;
 		while (true)
 		{
@@ -29,6 +30,8 @@ public:
 
 			if (item->checkIsDestroyed())
 			{
+                std::cout << "2" << std::endl;
+                std::cout << item->getSpriteName() << std::endl;
 				item->onDestroy();
 				auto ptr = items->erase(itemPtr);
 				delete item;
@@ -69,9 +72,13 @@ public:
 	static void incrementUnclearedPlanetsNumber();
 	static bool checkGameOver();
 	static int AddBody(Body* newBody);
+    //for python module
+    static void resetBodyIndex();
+    static Body *getNextBody();
+    static Body *getCurBody();
 
 	static std::list<Body*> bodies;
-	static sf::RenderWindow *window;
+    static std::list<Body*>::iterator curBodyPtr;
 
 	const static int SCREEN_WIDTH;
 	const static int SCREEN_HEIGHT;

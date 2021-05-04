@@ -2,10 +2,11 @@
 
 Trash::Trash(Vector2 position) : Body(position)
 {
+    setupSpriteList();
 	originID = -1;
 	planet = nullptr;
-	setupSprite();
 	setIsDynamic(true);
+    setColliderSize(1.0f);
 }
 
 Trash::Trash(Spaceship *origin) : Trash(origin->getPosition())

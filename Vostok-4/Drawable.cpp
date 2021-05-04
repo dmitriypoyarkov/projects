@@ -15,18 +15,11 @@ Drawable::~Drawable()
 	classSpriteList.clear();
 }
 
-void Drawable::setupSprite()
-{
-	setupSpriteList();
-	setTextureByClassSpriteType(classSpriteType);
-	sprite.setTexture(*texture);
-
-	sf::FloatRect rectangle = sprite.getLocalBounds();
-	Vector2 spriteSize = Vector2(rectangle.width, rectangle.height);
-	sprite.setOrigin(spriteSize / 2);
-
-	colliderSize = spriteSize.magnitude() / (float)sqrt(2);
-}
+//void Drawable::setupSprite()
+//{
+//	setupSpriteList();
+//	setTextureByClassSpriteType(classSpriteType);
+//}
 
 int Drawable::findInSpriteList(const std::string &name)
 {
@@ -38,35 +31,6 @@ int Drawable::findInSpriteList(const std::string &name)
 		}
 	}
 	return 0; // sprite not found - choose first "error" sprite
-}
-
-void Drawable::loadSprites()
-{
-	textures.resize(spriteList.size());
-	std::fill(textures.begin(), textures.end(), sf::Texture());
-	for (int i = 0; i < textures.size(); i++)
-	{
-		textures[i].loadFromFile(RES_PATH + spriteList[i]);
-	}
-}
-
-void Drawable::setTextureByClassSpriteType(int classSpriteType)
-{
-	if (classSpriteType >= classSpriteList.size()) return;
-	std::string classSprite = classSpriteList[classSpriteType];
-	int spriteIndex = findInSpriteList(classSprite);
-	texture = &textures[spriteIndex];
-}
-
-void Drawable::setClassSpriteType(const std::string &name)
-{
-	for (auto ptr = classSpriteList.begin(); ptr != classSpriteList.end(); ++ptr)
-	{
-		if (ptr->find(name) != std::string::npos)
-		{
-			classSpriteType = std::distance(classSpriteList.begin(), ptr);
-		}
-	}
 }
 
 int Drawable::getLayer() const
@@ -89,14 +53,19 @@ void Drawable::setScale(float newScale)
 	scale = newScale;
 }
 
-sf::Sprite* Drawable::getSprite()
-{
-	return &sprite;
-}
-
 float Drawable::getColliderSize() const
 {
 	return scale * colliderSize;
+}
+
+void Drawable::setColliderSize(int colliderSize)
+{
+    this->colliderSize = colliderSize;
+}
+
+std::string Drawable::getSpriteName()
+{
+    return classSpriteList[0];
 }
 
 const int Drawable::spriteCount = 12;
@@ -115,5 +84,4 @@ const std::vector <std::string> Drawable::spriteList =
 	"Bullet.png"
 };
 
-std::vector <sf::Texture> Drawable::textures;
 const std::string Drawable::RES_PATH = "..\\resources\\";
